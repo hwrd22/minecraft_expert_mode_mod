@@ -1,0 +1,18 @@
+{
+  "item.hwrd22expertmode.wither_bow": "Wither Bow",
+  "item.hwrd22expertmode.dragon_bow": "Dragon's Breath",
+  "item.hwrd22expertmode.vex_sword": "Vex Sword",
+  "item.hwrd22expertmode.scythe": "Scythe",
+  "item.hwrd22expertmode.spear": "Spear",
+
+  "key.category.hwrd22expertmode.meters": "Expert Mode",
+  "key.hwrd22expertmode.rage": "Activate Rage Meter",
+  "key.hwrd22expertmode.adrenaline": "Activate Adrenaline Meter",
+
+  "sounds.hwrd22expertmode.rage_filled": "Player Rage Meter filled",
+  "sounds.hwrd22expertmode.rage_used": "Player Rage Meter used",
+  "sounds.hwrd22expertmode.rage_emptied": "Player Rage Meter depleted",
+  "sounds.hwrd22expertmode.adrenaline_filled": "Player Adrenaline Meter filled",
+  "sounds.hwrd22expertmode.adrenaline_used": "Player Adrenaline Meter used",
+  "sounds.hwrd22expertmode.adrenaline_emptied": "Player Adrenaline Meter depleted"
+}

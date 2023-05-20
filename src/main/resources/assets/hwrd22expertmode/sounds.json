@@ -1,0 +1,26 @@
+{
+  "rage_filled": {
+    "subtitle": "sounds.hwrd22expertmode.rage_filled",
+    "sounds": ["hwrd22expertmode:rage_filled"]
+  },
+  "rage_used": {
+    "subtitle": "sounds.hwrd22expertmode.rage_used",
+    "sounds": ["hwrd22expertmode:rage_used"]
+  },
+  "rage_emptied": {
+    "subtitle": "sounds.hwrd22expertmode.rage_emptied",
+    "sounds": ["hwrd22expertmode:rage_emptied"]
+  },
+  "adrenaline_filled": {
+    "subtitle": "sounds.hwrd22expertmode.adrenaline_filled",
+    "sounds": ["hwrd22expertmode:adrenaline_filled"]
+  },
+  "adrenaline_used": {
+    "subtitle": "sounds.hwrd22expertmode.adrenaline_used",
+    "sounds": ["hwrd22expertmode:adrenaline_used"]
+  },
+  "adrenaline_emptied": {
+    "subtitle": "sounds.hwrd22expertmode.adrenaline_emptied",
+    "sounds": ["hwrd22expertmode:adrenaline_emptied"]
+  }
+}

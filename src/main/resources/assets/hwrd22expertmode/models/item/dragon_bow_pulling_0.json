@@ -1,0 +1,6 @@
+{
+  "parent": "hwrd22expertmode:item/dragon_bow",
+  "textures": {
+    "layer0": "hwrd22expertmode:item/dragon_bow_pulling_0"
+  }
+}
