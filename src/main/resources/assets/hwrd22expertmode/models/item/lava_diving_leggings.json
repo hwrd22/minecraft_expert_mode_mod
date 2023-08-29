@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hwrd22expertmode:item/lava_diving_leggings"
+  }
+}

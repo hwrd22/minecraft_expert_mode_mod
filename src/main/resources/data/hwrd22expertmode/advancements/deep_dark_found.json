@@ -1,0 +1,31 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "The Abyss Stares Back",
+            "color": "black",
+            "bold": true
+        },
+        "description": {
+            "text": "Find the Deep Dark biome."
+        },
+        "icon": {
+            "item": "minecraft:sculk"
+        },
+        "frame": "task",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false
+    },
+    "criteria": {
+        "deepDarkFound": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "requirements": [
+        [
+            "deepDarkFound"
+        ]
+    ],
+    "parent": "hwrd22expertmode:root"
+}

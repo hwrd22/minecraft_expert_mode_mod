@@ -1,0 +1,6 @@
+{
+    "parent": "hwrd22expertmode:item/blaze_bow",
+    "textures": {
+        "layer0": "hwrd22expertmode:item/blaze_bow_pulling_2"
+    }
+}

@@ -1,5 +1,8 @@
 {
 	"loader": "forge:separate-perspective",
+	"textures": {
+		"particle": "hwrd22expertmode:item/spear_model_texture"
+	},
 	"gui_light": "front",
 	"base": {
 		"texture_size": [32, 32],

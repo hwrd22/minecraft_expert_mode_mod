@@ -3,6 +3,7 @@ package com.hwrd22.hwrd22expertmode.networking.packet;
 import com.hwrd22.hwrd22expertmode.adrenaline.PlayerAdrenalineProvider;
 import com.hwrd22.hwrd22expertmode.networking.ModMessages;
 import com.hwrd22.hwrd22expertmode.sound.ModSounds;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -35,7 +36,7 @@ public class AdrenalineUseC2SPacket {
                     adrenaline.useAdrenaline();
                 }
                 else {
-                    Minecraft.getInstance().player.displayClientMessage(Component.literal("The Adrenaline Meter is not full."), true);
+                    Minecraft.getInstance().player.displayClientMessage(Component.literal("The Adrenaline Meter is not full.").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD), true);
                     ModMessages.sendToPlayer(new AdrenalineDataSyncS2CPacket(adrenaline.getAdrenaline()), player);
                 }
             });

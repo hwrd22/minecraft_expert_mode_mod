@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "# #",
+        "O O"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:magma_cream"
+        },
+        "O": {
+            "item": "minecraft:obsidian"
+        }
+    },
+    "result": {
+        "item": "hwrd22expertmode:lava_diving_boots",
+        "count": 1
+    }
+}

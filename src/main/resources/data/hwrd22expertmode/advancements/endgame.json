@@ -1,0 +1,45 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "It's Endgame!",
+            "color": "gold",
+            "bold": true,
+            "italic": true,
+            "underlined": false
+        },
+        "description": {
+            "text": "Activate Endgame Mode. Good luck."
+        },
+        "icon": {
+            "item": "minecraft:player_head"
+        },
+        "frame": "challenge",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": true
+    },
+    "criteria": {
+        "killDragon": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:ender_dragon"
+                }
+            }
+        },
+        "killWither": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:wither",
+                    "nbt": "{Tags: [\"phase2\"]}"
+                }
+            }
+        }
+    },
+    "rewards": {
+        "experience": 25000
+    },
+    "parent": "hwrd22expertmode:root"
+}

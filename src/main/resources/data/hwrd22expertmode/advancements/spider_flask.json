@@ -1,0 +1,15 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "criteria": {
+        "spiderFlaskCrafted": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+                "recipe": "hwrd22expertmode:spider_flask"
+            }
+        }
+    },
+    "rewards": {
+        "function": "hwrd22expertmode:spider_flask_crafted"
+    },
+    "parent": "hwrd22expertmode:root"
+}

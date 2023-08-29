@@ -1,0 +1,28 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "The Tale of a Cruel World",
+            "color": "dark_red",
+            "bold": true,
+            "italic": false,
+            "underlined": true
+        },
+        "description": {
+            "text": "Activate Expert Mode."
+        },
+        "icon": {
+            "item": "minecraft:skeleton_skull"
+        },
+        "frame": "task",
+        "show_toast": false,
+        "announce_to_chat": false,
+        "hidden": false,
+        "background": "minecraft:textures/block/nether_bricks.png"
+    },
+    "criteria": {
+        "default": {
+            "trigger": "minecraft:tick"
+        }
+    }
+}

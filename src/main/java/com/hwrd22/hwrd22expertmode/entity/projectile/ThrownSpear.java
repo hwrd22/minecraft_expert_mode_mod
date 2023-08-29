@@ -4,21 +4,18 @@ import javax.annotation.Nullable;
 
 import com.hwrd22.hwrd22expertmode.entity.ModEntityType;
 import com.hwrd22.hwrd22expertmode.item.ModItems;
-import net.minecraft.core.BlockPos;
+import com.hwrd22.hwrd22expertmode.sound.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -90,7 +87,7 @@ public class ThrownSpear extends AbstractArrow {
         Entity entity1 = this.getOwner();
         DamageSource damagesource = this.damageSources().trident(this, (Entity)(entity1 == null ? this : entity1));
         this.dealtDamage = true;
-        SoundEvent soundevent = SoundEvents.TRIDENT_HIT;
+        SoundEvent soundevent = ModSounds.SPEAR_HIT.get();
         if (entity.hurt(damagesource, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {
                 return;
@@ -108,26 +105,10 @@ public class ThrownSpear extends AbstractArrow {
         }
 
         this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01D, -0.1D, -0.01D));
-        float f1 = 1.0F;
-        if (this.level instanceof ServerLevel && this.level.isThundering() && this.isChanneling()) {
-            BlockPos blockpos = entity.blockPosition();
-            if (this.level.canSeeSky(blockpos)) {
-                LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(this.level);
-                if (lightningbolt != null) {
-                    lightningbolt.moveTo(Vec3.atBottomCenterOf(blockpos));
-                    lightningbolt.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer)entity1 : null);
-                    this.level.addFreshEntity(lightningbolt);
-                    soundevent = SoundEvents.TRIDENT_THUNDER;
-                    f1 = 5.0F;
-                }
-            }
-        }
+        float f1 = 0.5F;
+
 
         this.playSound(soundevent, f1, 1.0F);
-    }
-
-    public boolean isChanneling() {
-        return EnchantmentHelper.hasChanneling(this.spearItem);
     }
 
     protected boolean tryPickup(Player p_150196_) {
@@ -135,7 +116,7 @@ public class ThrownSpear extends AbstractArrow {
     }
 
     protected SoundEvent getDefaultHitGroundSoundEvent() {
-        return SoundEvents.TRIDENT_HIT_GROUND;
+        return ModSounds.SPEAR_HIT_GROUND.get();
     }
 
     public void playerTouch(Player p_37580_) {

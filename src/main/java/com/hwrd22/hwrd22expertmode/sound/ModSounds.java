@@ -17,6 +17,13 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> ADRENALINE_FILLED = registerSoundEvent("adrenaline_filled");
     public static final RegistryObject<SoundEvent> ADRENALINE_USED = registerSoundEvent("adrenaline_used");
     public static final RegistryObject<SoundEvent> ADRENALINE_EMPTIED = registerSoundEvent("adrenaline_emptied");
+    public static final RegistryObject<SoundEvent> SPEAR_THROW = registerSoundEvent("spear_throw");
+    public static final RegistryObject<SoundEvent> SPEAR_HIT = registerSoundEvent("spear_hit");
+    public static final RegistryObject<SoundEvent> SPEAR_HIT_GROUND = registerSoundEvent("spear_hit_ground");
+    public static final RegistryObject<SoundEvent> PLAYER_TELEPORTED = registerSoundEvent("player_teleported");
+    public static final RegistryObject<SoundEvent> ICE_CAST = registerSoundEvent("ice_cast");
+    public static final RegistryObject<SoundEvent> LIGHTNING_CAST = registerSoundEvent("lightning_cast");
+    public static final RegistryObject<SoundEvent> GOLD_DAMAGE_NEGATE = registerSoundEvent("gold_damage_negate");
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation id = new ResourceLocation(ExpertMode.MODID, name);

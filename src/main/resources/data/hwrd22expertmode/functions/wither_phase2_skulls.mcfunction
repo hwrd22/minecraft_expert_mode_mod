@@ -1,0 +1,1 @@
+execute as @e[type=minecraft:wither_skull,tag=bullets] run data modify entity @s Motion set value [0.0, -1.5, 0.0]

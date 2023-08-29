@@ -1,0 +1,48 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "Gold Tooth",
+            "color": "gold"
+        },
+        "description": {
+            "text": "Eat either a Golden Apple or an Enchanted Golden Apple."
+        },
+        "icon": {
+            "item": "minecraft:golden_apple"
+        },
+        "frame": "task",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false
+    },
+    "criteria": {
+        "notchEat": {
+            "trigger": "minecraft:consume_item",
+			"conditions": {
+				"item": {
+					"items": [
+						"minecraft:enchanted_golden_apple"
+					]
+				}
+			}
+        },
+        "gappleEat": {
+            "trigger": "minecraft:consume_item",
+			"conditions": {
+				"item": {
+					"items": [
+						"minecraft:golden_apple"
+					]
+				}
+			}
+        }
+    },
+    "requirements": [
+        [
+            "notchEat",
+            "gappleEat"
+        ]
+    ],
+    "parent": "hwrd22expertmode:eat_flesh"
+}

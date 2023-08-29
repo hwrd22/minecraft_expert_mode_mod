@@ -1,0 +1,40 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "Prison Break",
+            "color": "black",
+            "bold": true,
+            "italic": false
+        },
+        "description": {
+            "text": "Kill the Warden."
+        },
+        "icon": {
+            "item": "minecraft:sculk_shrieker"
+        },
+        "frame": "challenge",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false
+    },
+    "criteria": {
+        "killedWarden": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:warden"
+                }
+            }
+        }
+    },
+    "requirements": [
+        [
+            "killedWarden"
+        ]
+    ],
+    "rewards": {
+        "experience": 15000
+    },
+    "parent": "hwrd22expertmode:deep_dark_found"
+}

@@ -1,0 +1,30 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "Palace Under the Water",
+            "color": "aqua"
+        },
+        "description": {
+            "text": "Infiltrate an Ocean Monument."
+        },
+        "icon": {
+            "item": "minecraft:prismarine_bricks"
+        },
+        "frame": "task",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false
+    },
+    "criteria": {
+        "foundMonument": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "requirements": [
+        [
+            "foundMonument"
+        ]
+    ],
+    "parent": "hwrd22expertmode:root"
+}

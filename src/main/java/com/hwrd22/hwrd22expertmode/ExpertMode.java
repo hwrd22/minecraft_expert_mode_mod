@@ -1,8 +1,10 @@
 package com.hwrd22.hwrd22expertmode;
 
+import com.hwrd22.hwrd22expertmode.effect.ModEffects;
 import com.hwrd22.hwrd22expertmode.entity.ModEntityType;
 import com.hwrd22.hwrd22expertmode.item.ModItems;
 import com.hwrd22.hwrd22expertmode.networking.ModMessages;
+import com.hwrd22.hwrd22expertmode.potion.ModPotions;
 import com.hwrd22.hwrd22expertmode.sound.ModSounds;
 import com.hwrd22.hwrd22expertmode.util.ModItemProperties;
 import com.mojang.logging.LogUtils;
@@ -29,6 +31,7 @@ public class ExpertMode
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
+
     public ExpertMode()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -48,6 +51,10 @@ public class ExpertMode
         ModSounds.register(modEventBus);
 
         ModEntityType.ENTITIES.register(modEventBus);
+
+        ModEffects.register(modEventBus);
+
+        ModPotions.register(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -59,13 +66,39 @@ public class ExpertMode
     private void addCreative(CreativeModeTabEvent.BuildContents event)
     {
         if (event.getTab() == CreativeModeTabs.COMBAT) {
+            event.accept(ModItems.KNIFE);
+            event.accept(ModItems.VEX_SWORD);
+            event.accept(ModItems.MOLTEN_AXE);
+            event.accept(ModItems.DAMNED_AXE);
+            event.accept(ModItems.SPEAR);
+            event.accept(ModItems.FAKE_GILDED_TRIDENT);
+            event.accept(ModItems.GILDED_TRIDENT);
+            event.accept(ModItems.POSEIDON_TRIDENT);
+            event.accept(ModItems.BLAZE_BOW);
             event.accept(ModItems.WITHER_BOW);
             event.accept(ModItems.DRAGON_BOW);
-            event.accept(ModItems.VEX_SWORD);
-            event.accept(ModItems.SPEAR);
+            event.accept(ModItems.JITTER_SHOTBOW);
+            event.accept(ModItems.FIRE_STAFF);
+            event.accept(ModItems.ICE_STAFF);
+            event.accept(ModItems.LIGHTNING_STAFF);
+            event.accept(ModItems.COPPER_HELMET);
+            event.accept(ModItems.COPPER_CHESTPLATE);
+            event.accept(ModItems.COPPER_LEGGINGS);
+            event.accept(ModItems.COPPER_BOOTS);
+            event.accept(ModItems.LAVA_DIVING_HELMET);
+            event.accept(ModItems.LAVA_DIVING_CHESTPLATE);
+            event.accept(ModItems.LAVA_DIVING_LEGGINGS);
+            event.accept(ModItems.LAVA_DIVING_BOOTS);
+            event.accept(ModItems.SLIME_BOOTS);
+            event.accept(ModItems.PARADOX_BOOTS);
+            event.accept(ModItems.BRUTE_CHESTPLATE);
+            event.accept(ModItems.ENDER_DRAGON_HEAD);
+            event.accept(ModItems.WITHER_SKULL);
         }
         if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ModItems.SCYTHE);
+            event.accept(ModItems.MOLTEN_AXE);
+            event.accept(ModItems.DAMNED_AXE);
         }
     }
 

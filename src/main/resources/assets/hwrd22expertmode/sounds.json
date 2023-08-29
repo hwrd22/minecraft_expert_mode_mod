@@ -22,5 +22,33 @@
   "adrenaline_emptied": {
     "subtitle": "sounds.hwrd22expertmode.adrenaline_emptied",
     "sounds": ["hwrd22expertmode:adrenaline_emptied"]
+  },
+  "spear_throw": {
+    "subtitle:": "sounds.hwrd22expertmode.spear_throw",
+    "sounds": ["hwrd22expertmode:spear_throw"]
+  },
+  "spear_hit": {
+    "subtitle:": "sounds.hwrd22expertmode.spear_hit",
+    "sounds": ["hwrd22expertmode:spear_hit"]
+  },
+  "spear_hit_ground": {
+    "subtitle:": "sounds.hwrd22expertmode.spear_hit_ground",
+    "sounds": ["hwrd22expertmode:spear_hit_ground"]
+  },
+  "player_teleported": {
+    "subtitle": "sounds.hwrd22expertmode.player_teleported",
+    "sounds": ["hwrd22expertmode:teleport1", "hwrd22expertmode:teleport2"]
+  },
+  "ice_cast": {
+    "subtitle": "sounds.hwrd22expertmode.ice_cast",
+    "sounds": ["hwrd22expertmode:ice_cast"]
+  },
+  "lightning_cast": {
+    "subtitle": "sounds.hwrd22expertmode.lightning_cast",
+    "sounds": ["hwrd22expertmode:lightning_cast"]
+  },
+  "gold_damage_negate": {
+    "subtitle": "sounds.hwrd22expertmode.gold_damage_negate",
+    "sounds": ["hwrd22expertmode:gold_damage_negate"]
   }
 }

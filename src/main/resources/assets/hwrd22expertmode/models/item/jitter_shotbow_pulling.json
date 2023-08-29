@@ -1,0 +1,6 @@
+{
+    "parent": "hwrd22expertmode:item/jitter_shotbow",
+    "textures": {
+        "layer0": "item/crossbow_pulling_2"
+    }
+}

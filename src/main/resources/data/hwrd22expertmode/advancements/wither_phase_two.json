@@ -1,0 +1,25 @@
+{
+    "__comment": "Made with TheDestruc7i0n's advancements generator: https://advancements.thedestruc7i0n.ca",
+    "display": {
+        "title": {
+            "text": "It's Not Over Yet, Kid!",
+            "color": "dark_purple"
+        },
+        "description": {
+            "text": "Begin the real fight against the Wither."
+        },
+        "icon": {
+            "item": "minecraft:nether_star"
+        },
+        "frame": "task",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": true
+    },
+    "criteria": {
+        "witherPhaseTwo": {
+            "trigger": "minecraft:impossible"
+        }
+    },
+    "parent": "hwrd22expertmode:kill_wither"
+}

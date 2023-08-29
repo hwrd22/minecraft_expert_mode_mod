@@ -2,8 +2,10 @@ package com.hwrd22.hwrd22expertmode.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.hwrd22.hwrd22expertmode.sound.ModSounds;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -19,8 +21,11 @@ import com.hwrd22.hwrd22expertmode.entity.projectile.ThrownSpear;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
-public class SpearItem extends TridentItem {
+import java.util.List;
+
+public class SpearItem extends Item implements Vanishable {
     public static final int THROW_THRESHOLD_TIME = 10;
     public static final float BASE_DAMAGE = 8.0F;
     public static final float SHOOT_POWER = 2.5F;
@@ -61,7 +66,7 @@ public class SpearItem extends TridentItem {
                     }
 
                     p_43395_.addFreshEntity(thrownspear);
-                    p_43395_.playSound((Player)null, thrownspear, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    p_43395_.playSound((Player)null, thrownspear, ModSounds.SPEAR_THROW.get(), SoundSource.PLAYERS, 0.25F, 1.0F);
                     if (!player.getAbilities().instabuild) {
                         player.getInventory().removeItem(p_43394_);
                     }
@@ -104,5 +109,9 @@ public class SpearItem extends TridentItem {
 
     public int getEnchantmentValue() {
         return 1;
+    }
+    public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
+        p_41423_.add(Component.literal("Dropped from a Zombie Villager.\nCan be thrown.").withStyle(ChatFormatting.YELLOW, ChatFormatting.ITALIC));
+        super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
     }
 }
