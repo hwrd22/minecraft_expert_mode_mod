@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -23,6 +24,7 @@ public class LightningStaffItem extends ProjectileWeaponItem implements Vanishab
         super(p_43009_);
     }
 
+    @ParametersAreNonnullByDefault
     public void releaseUsing(ItemStack p_40667_, Level p_40668_, LivingEntity p_40669_, int p_40670_) {
         int i = this.getUseDuration(p_40667_) - p_40670_;
         if (i < 0) return;

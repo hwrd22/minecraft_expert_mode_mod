@@ -9,19 +9,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public class LightningArrow extends Arrow {
     public LightningArrow(EntityType<? extends Arrow> p_36858_, Level p_36859_) {
         super(p_36858_, p_36859_);
-    }
-
-    public LightningArrow(Level p_36861_, double p_36862_, double p_36863_, double p_36864_) {
-        super(p_36861_, p_36862_, p_36863_, p_36864_);
     }
 
     public LightningArrow(Level p_36866_, LivingEntity p_36867_) {
         super(p_36866_, p_36867_);
     }
 
+    @ParametersAreNonnullByDefault
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         if (!this.level.isClientSide) {

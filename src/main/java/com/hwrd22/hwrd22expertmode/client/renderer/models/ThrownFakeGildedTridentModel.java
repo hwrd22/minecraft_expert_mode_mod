@@ -6,7 +6,6 @@ package com.hwrd22.hwrd22expertmode.client.renderer.models;
 
 import com.hwrd22.hwrd22expertmode.ExpertMode;
 import com.hwrd22.hwrd22expertmode.entity.projectile.ThrownFakeGildedTrident;
-import com.hwrd22.hwrd22expertmode.entity.projectile.ThrownGildedTrident;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;

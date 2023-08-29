@@ -3,7 +3,6 @@ package com.hwrd22.hwrd22expertmode.effect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.common.extensions.IForgeMobEffect;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class GappleSicknessEffect extends MobEffect implements IForgeMobEffect {
 
     @Override
     public List<ItemStack> getCurativeItems() {  // Modified so milk cannot clear this effect
-        return new ArrayList<ItemStack>();
+        return new ArrayList<>();
     }
 
 

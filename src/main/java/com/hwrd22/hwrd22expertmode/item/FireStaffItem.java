@@ -10,12 +10,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -24,6 +24,7 @@ public class FireStaffItem extends ProjectileWeaponItem implements Vanishable {
         super(p_43009_);
     }
 
+    @ParametersAreNonnullByDefault
     public void releaseUsing(ItemStack p_40667_, Level p_40668_, LivingEntity p_40669_, int p_40670_) {
         int i = this.getUseDuration(p_40667_) - p_40670_;
         if (i < 0) return;

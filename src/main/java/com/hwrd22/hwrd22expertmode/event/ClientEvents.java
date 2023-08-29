@@ -9,15 +9,12 @@ import com.hwrd22.hwrd22expertmode.networking.ModMessages;
 import com.hwrd22.hwrd22expertmode.networking.packet.AdrenalineUseC2SPacket;
 import com.hwrd22.hwrd22expertmode.networking.packet.RageUseC2SPacket;
 import com.hwrd22.hwrd22expertmode.util.KeyBinding;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 

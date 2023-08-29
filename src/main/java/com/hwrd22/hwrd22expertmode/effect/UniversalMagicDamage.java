@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class UniversalMagicDamage extends InstantenousMobEffect {
     protected UniversalMagicDamage(MobEffectCategory p_19451_, int p_19452_) {
@@ -18,6 +19,7 @@ public class UniversalMagicDamage extends InstantenousMobEffect {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void applyInstantenousEffect(@Nullable Entity p_19462_, @Nullable Entity p_19463_, LivingEntity p_19464_, int p_19465_, double p_19466_) {
         int j = (int) (p_19466_ * (double) (6 << p_19465_) + 0.5D);
         if (p_19462_ == null) {

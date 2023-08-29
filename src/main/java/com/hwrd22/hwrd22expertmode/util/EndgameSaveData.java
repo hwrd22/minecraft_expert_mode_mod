@@ -1,8 +1,8 @@
 package com.hwrd22.hwrd22expertmode.util;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 public class EndgameSaveData extends SavedData {
 
@@ -28,6 +28,7 @@ public class EndgameSaveData extends SavedData {
     }
 
     @Override
+    @MethodsReturnNonnullByDefault
     public CompoundTag save(CompoundTag nbt) {
         nbt.putBoolean("endgameEnabled", endgameEnabled);
         return nbt;

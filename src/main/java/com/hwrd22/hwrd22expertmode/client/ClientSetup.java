@@ -7,14 +7,11 @@ import com.hwrd22.hwrd22expertmode.client.renderer.models.ThrownGildedTridentMod
 import com.hwrd22.hwrd22expertmode.client.renderer.models.ThrownPoseidonTridentModel;
 import com.hwrd22.hwrd22expertmode.client.renderer.models.ThrownSpearModel;
 import com.hwrd22.hwrd22expertmode.entity.ModEntityType;
-import com.hwrd22.hwrd22expertmode.entity.projectile.ThrownFakeGildedTrident;
-import com.hwrd22.hwrd22expertmode.entity.projectile.ThrownPoseidonTrident;
 import com.hwrd22.hwrd22expertmode.item.JitterShotbowItem;
 import com.hwrd22.hwrd22expertmode.item.ModItems;
 import net.minecraft.client.renderer.entity.LightningBoltRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;

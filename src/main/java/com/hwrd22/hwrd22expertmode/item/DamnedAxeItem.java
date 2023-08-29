@@ -12,6 +12,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class DamnedAxeItem extends AxeItem {
@@ -19,6 +20,7 @@ public class DamnedAxeItem extends AxeItem {
         super(p_40521_, p_40522_, p_40523_, p_40524_);
     }
 
+    @ParametersAreNonnullByDefault
     public boolean hurtEnemy(ItemStack p_40994_, LivingEntity p_40995_, LivingEntity p_40996_) {
         super.hurtEnemy(p_40994_, p_40995_, p_40996_);
         if (p_40995_.hasEffect(ModEffects.BLEEDING.get()))

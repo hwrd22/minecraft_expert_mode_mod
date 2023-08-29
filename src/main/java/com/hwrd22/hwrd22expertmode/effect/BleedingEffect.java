@@ -3,7 +3,6 @@ package com.hwrd22.hwrd22expertmode.effect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Skeleton;
 
 public class BleedingEffect extends MobEffect {
     protected BleedingEffect(MobEffectCategory p_19451_, int p_19452_) {
