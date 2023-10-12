@@ -98,8 +98,8 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
         if(event.isWasDeath()) {
-            event.getOriginal().getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(oldStore -> { event.getOriginal().getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(newStore -> {newStore.copyFrom(oldStore);});});
-            event.getOriginal().getCapability(PlayerAdrenalineProvider.PLAYER_ADRENALINE).ifPresent(oldStore -> { event.getOriginal().getCapability(PlayerAdrenalineProvider.PLAYER_ADRENALINE).ifPresent(newStore -> {newStore.copyFrom(oldStore);});});
+            event.getOriginal().getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(oldStore -> event.getOriginal().getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(newStore -> newStore.copyFrom(oldStore)));
+            event.getOriginal().getCapability(PlayerAdrenalineProvider.PLAYER_ADRENALINE).ifPresent(oldStore -> event.getOriginal().getCapability(PlayerAdrenalineProvider.PLAYER_ADRENALINE).ifPresent(newStore -> newStore.copyFrom(oldStore)));
         }
     }
 
@@ -289,12 +289,8 @@ public class ModEvents {
     public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
         if (!event.getLevel().isClientSide()) {
             if (event.getEntity() instanceof ServerPlayer player) {
-                player.getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(rage -> {
-                    ModMessages.sendToPlayer(new RageDataSyncS2CPacket(rage.getRage()), player);
-                });
-                player.getCapability(PlayerAdrenalineProvider.PLAYER_ADRENALINE).ifPresent(adrenaline -> {
-                    ModMessages.sendToPlayer(new AdrenalineDataSyncS2CPacket(adrenaline.getAdrenaline()), player);
-                });
+                player.getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(rage -> ModMessages.sendToPlayer(new RageDataSyncS2CPacket(rage.getRage()), player));
+                player.getCapability(PlayerAdrenalineProvider.PLAYER_ADRENALINE).ifPresent(adrenaline -> ModMessages.sendToPlayer(new AdrenalineDataSyncS2CPacket(adrenaline.getAdrenaline()), player));
             }
         }
     }
@@ -303,7 +299,7 @@ public class ModEvents {
     public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
         EndgameSaveData data = new EndgameSaveData();
         if (!event.getLevel().isClientSide) {
-            data = EndgameSaveData.manage(event.getLevel().getServer());
+            data = EndgameSaveData.manage(Objects.requireNonNull(event.getLevel().getServer()));
         }
         if (event.getEntity() instanceof Bat bat) {
             List<Entity> nearbyEntities = bat.getLevel().getEntities(bat, bat.getBoundingBox().inflate(16d));
@@ -318,50 +314,50 @@ public class ModEvents {
         if (event.getEntity() instanceof EnderDragon dragon) {
             List<? extends Player> players = dragon.getLevel().players();
             int numPlayers = players.size() - 1;  // not counting 1 player
-            dragon.getAttribute(Attributes.MAX_HEALTH).setBaseValue(400.0f + numPlayers * 132);  // muahaha
-            dragon.setHealth((float) dragon.getAttribute(Attributes.MAX_HEALTH).getValue());
-            dragon.getAttribute(Attributes.ARMOR).setBaseValue(2.5f);
+            Objects.requireNonNull(dragon.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(400.0f + numPlayers * 132);
+            dragon.setHealth((float) Objects.requireNonNull(dragon.getAttribute(Attributes.MAX_HEALTH)).getValue());
+            Objects.requireNonNull(dragon.getAttribute(Attributes.ARMOR)).setBaseValue(2.5f);
         }
         if (event.getEntity() instanceof WitherBoss wither) {
             if (wither.addTag("phase2")) {
                 wither.removeTag("phase2");
                 List<? extends Player> players = wither.getLevel().players();
                 int numPlayers = players.size() - 1;  // not counting 1 player
-                wither.getAttribute(Attributes.MAX_HEALTH).setBaseValue(300 + numPlayers * 100);  // muahaha
-                wither.setHealth((float) wither.getAttribute(Attributes.MAX_HEALTH).getValue());
+                Objects.requireNonNull(wither.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(300 + numPlayers * 100);
+                wither.setHealth((float) Objects.requireNonNull(wither.getAttribute(Attributes.MAX_HEALTH)).getValue());
                 wither.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
             }
             else {
                 List<? extends Player> players = wither.getLevel().players();
                 int numPlayers = players.size() - 1;  // not counting 1 player
-                wither.getAttribute(Attributes.MAX_HEALTH).setBaseValue(750 + numPlayers * 100);  // muahaha, maxes out at 1024
-                wither.setHealth((float) wither.getAttribute(Attributes.MAX_HEALTH).getValue());
+                Objects.requireNonNull(wither.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(750 + numPlayers * 100);  // maxes out at 1024 due to memory limit
+                wither.setHealth((float) Objects.requireNonNull(wither.getAttribute(Attributes.MAX_HEALTH)).getValue());
                 if (data.get())
                     wither.addTag("endgame");
             }
         }
 
         if (event.getEntity() instanceof Evoker evoker) {
-            evoker.getAttribute(Attributes.MAX_HEALTH).setBaseValue(100.0f );
+            Objects.requireNonNull(evoker.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(100.0f );
             evoker.setHealth(100.0f);
         }
-        if (event.getEntity() instanceof ElderGuardian eguardian) {
-            eguardian.getAttribute(Attributes.MAX_HEALTH).setBaseValue(250.0f);
-            eguardian.setHealth(250.0f);
+        if (event.getEntity() instanceof ElderGuardian elderGuardian) {
+            Objects.requireNonNull(elderGuardian.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(250.0f);
+            elderGuardian.setHealth(250.0f);
         }
-        if (event.getEntity() instanceof PiglinBrute brute) {
-            brute.getAttribute(Attributes.MAX_HEALTH).setBaseValue(100.0f);
-            brute.setHealth(100.0f);
-            brute.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.6125f);
-            brute.getAttribute(Attributes.ARMOR).setBaseValue(5.0f);
-            ItemStack brute_vest = new ItemStack(ModItems.BRUTE_CHESTPLATE.get());
-            brute_vest.enchant(Enchantments.THORNS, 3);
-            brute_vest.enchant(Enchantments.UNBREAKING, 5);
-            brute.setItemSlot(EquipmentSlot.CHEST, brute_vest);
-            brute.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.MOLTEN_AXE.get()));
+        if (event.getEntity() instanceof PiglinBrute piglinBrute) {
+            Objects.requireNonNull(piglinBrute.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(100.0f);
+            piglinBrute.setHealth(100.0f);
+            Objects.requireNonNull(piglinBrute.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.6125f);
+            Objects.requireNonNull(piglinBrute.getAttribute(Attributes.ARMOR)).setBaseValue(5.0f);
+            ItemStack bruteVest = new ItemStack(ModItems.BRUTE_CHESTPLATE.get());
+            bruteVest.enchant(Enchantments.THORNS, 3);
+            bruteVest.enchant(Enchantments.UNBREAKING, 5);
+            piglinBrute.setItemSlot(EquipmentSlot.CHEST, bruteVest);
+            piglinBrute.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.MOLTEN_AXE.get()));
         }
         if (event.getEntity() instanceof Warden warden) {
-            warden.getAttribute(Attributes.MAX_HEALTH).setBaseValue(1024.f);
+            Objects.requireNonNull(warden.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(1024.f);
             warden.setHealth(1024.0f);
         }
         if (event.getEntity() instanceof Zombie zombie && !(event.getEntity() instanceof ZombieVillager || event.getEntity() instanceof Husk || event.getEntity() instanceof Drowned || event.getEntity() instanceof ZombifiedPiglin)) {
@@ -369,38 +365,38 @@ public class ModEvents {
                 zombie.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.OAK_LEAVES, 1));
             if (zombie.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.AIR) {
                 if (data.get()) {
-                    ItemStack knockAxe = new ItemStack(Items.IRON_AXE);
-                    knockAxe.enchant(Enchantments.KNOCKBACK, 1);
-                    zombie.setItemSlot(EquipmentSlot.MAINHAND, knockAxe);
+                    ItemStack knockbackAxe = new ItemStack(Items.IRON_AXE);
+                    knockbackAxe.enchant(Enchantments.KNOCKBACK, 1);
+                    zombie.setItemSlot(EquipmentSlot.MAINHAND, knockbackAxe);
                 }
                 else
                     zombie.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.WOODEN_AXE, 1));
             }
 
             if (data.get()) {  // endgame mode
-                zombie.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40.0);
-                zombie.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(10.0);
-                zombie.getAttribute(Attributes.ARMOR).setBaseValue(4.0);
+                Objects.requireNonNull(zombie.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40.0);
+                Objects.requireNonNull(zombie.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(10.0);
+                Objects.requireNonNull(zombie.getAttribute(Attributes.ARMOR)).setBaseValue(4.0);
             }
             else
-                zombie.getAttribute(Attributes.MAX_HEALTH).setBaseValue(30.0);  // not endgame mode
+                Objects.requireNonNull(zombie.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(30.0);  // not endgame mode
             zombie.setHealth(40.0f);  // also accounts for endgame stat
-            zombie.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.345);
+            Objects.requireNonNull(zombie.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.345);
         }
-        if (event.getEntity() instanceof ZombieVillager zillager) {
-            zillager.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.4025);
+        if (event.getEntity() instanceof ZombieVillager zombieVillager) {
+            Objects.requireNonNull(zombieVillager.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.4025);
             if (data.get()) {
-                zillager.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40.0);
-                zillager.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(10.0);
-                zillager.getAttribute(Attributes.ARMOR).setBaseValue(4.0);
+                Objects.requireNonNull(zombieVillager.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40.0);
+                Objects.requireNonNull(zombieVillager.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(10.0);
+                Objects.requireNonNull(zombieVillager.getAttribute(Attributes.ARMOR)).setBaseValue(4.0);
             }
             else
-                zillager.getAttribute(Attributes.MAX_HEALTH).setBaseValue(30.0);
+                Objects.requireNonNull(zombieVillager.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(30.0);
 
-            zillager.setHealth(40.0f);  // also accounts for endgame stat
+            zombieVillager.setHealth(40.0f);  // also accounts for endgame stat
         }
         if (event.getEntity() instanceof Drowned drowned) {
-            drowned.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.345);
+            Objects.requireNonNull(drowned.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.345);
             ItemStack boots;
             if (drowned.getItemBySlot(EquipmentSlot.FEET).getItem() == Items.AIR)
                 boots = new ItemStack(Items.LEATHER_BOOTS);
@@ -416,12 +412,12 @@ public class ModEvents {
             else
                 trident = drowned.getItemBySlot(EquipmentSlot.MAINHAND);
             if (data.get()) {
-                drowned.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40.0);
-                drowned.getAttribute(Attributes.ARMOR).setBaseValue(4.0);
+                Objects.requireNonNull(drowned.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40.0);
+                Objects.requireNonNull(drowned.getAttribute(Attributes.ARMOR)).setBaseValue(4.0);
                 trident.enchant(Enchantments.IMPALING, 4);
             }
             else {
-                drowned.getAttribute(Attributes.MAX_HEALTH).setBaseValue(30.0);
+                Objects.requireNonNull(drowned.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(30.0);
                 trident.enchant(Enchantments.IMPALING, 1);
             }
             drowned.setItemSlot(EquipmentSlot.MAINHAND, trident);
@@ -429,397 +425,396 @@ public class ModEvents {
         }
 
         if (event.getEntity() instanceof Husk husk) {
-            husk.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.253);
+            Objects.requireNonNull(husk.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.253);
             if (data.get()) {
-                husk.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40.0);
-                husk.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(10.0);
-                husk.getAttribute(Attributes.ARMOR).setBaseValue(10.0);
+                Objects.requireNonNull(husk.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40.0);
+                Objects.requireNonNull(husk.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(10.0);
+                Objects.requireNonNull(husk.getAttribute(Attributes.ARMOR)).setBaseValue(10.0);
                 if (husk.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.AIR)
                     husk.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_AXE));
             }
             else {
-                husk.getAttribute(Attributes.MAX_HEALTH).setBaseValue(30.0);
+                Objects.requireNonNull(husk.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(30.0);
                 if (husk.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.AIR)
                     husk.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.WOODEN_AXE));
             }
             husk.setHealth(40.0f);
         }
 
-        if (event.getEntity() instanceof ZombifiedPiglin zombiepig) {
-            zombiepig.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.345);
-            ItemStack flaming_axe = new ItemStack(Items.GOLDEN_AXE);
-            flaming_axe.enchant(Enchantments.FIRE_ASPECT, 3);
-            zombiepig.setItemSlot(EquipmentSlot.MAINHAND, flaming_axe);
+        if (event.getEntity() instanceof ZombifiedPiglin zombifiedPiglin) {
+            Objects.requireNonNull(zombifiedPiglin.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.345);
+            ItemStack fireAxe = new ItemStack(Items.GOLDEN_AXE);
+            fireAxe.enchant(Enchantments.FIRE_ASPECT, 3);
+            zombifiedPiglin.setItemSlot(EquipmentSlot.MAINHAND, fireAxe);
             if (data.get()) {
-                zombiepig.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40.0);
-                zombiepig.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(14.0);
-                zombiepig.getAttribute(Attributes.ARMOR).setBaseValue(4.0);
+                Objects.requireNonNull(zombifiedPiglin.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40.0);
+                Objects.requireNonNull(zombifiedPiglin.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(14.0);
+                Objects.requireNonNull(zombifiedPiglin.getAttribute(Attributes.ARMOR)).setBaseValue(4.0);
             }
             else
-                zombiepig.getAttribute(Attributes.MAX_HEALTH).setBaseValue(30.0);
-            zombiepig.setHealth(40.0f);
+                Objects.requireNonNull(zombifiedPiglin.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(30.0);
+            zombifiedPiglin.setHealth(40.0f);
         }
 
-        if (event.getEntity() instanceof Skeleton skulltan) {
-            if (skulltan.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR)
-                skulltan.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.OAK_LEAVES));
-            // need rotten/cursed arrow logic here, will likely use custom Arrow entity and Item
+        if (event.getEntity() instanceof Skeleton skeleton) {
+            if (skeleton.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR)
+                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.OAK_LEAVES));
             Random randStack = new Random();
             ItemStack arrows = new ItemStack(Items.TIPPED_ARROW, randStack.nextInt(1, 10));
 
-            skulltan.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.375);
+            Objects.requireNonNull(skeleton.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.375);
             if (data.get()) {
-                skulltan.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40.0);
-                skulltan.getAttribute(Attributes.ARMOR).setBaseValue(4.0);
-                skulltan.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(9.0);
+                Objects.requireNonNull(skeleton.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40.0);
+                Objects.requireNonNull(skeleton.getAttribute(Attributes.ARMOR)).setBaseValue(4.0);
+                Objects.requireNonNull(skeleton.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(9.0);
                 PotionUtils.setPotion(arrows, ModPotions.CURSED.get());
             }
             else {
-                skulltan.getAttribute(Attributes.MAX_HEALTH).setBaseValue(30.0);
-                skulltan.getAttribute(Attributes.ARMOR).setBaseValue(2.0);
+                Objects.requireNonNull(skeleton.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(30.0);
+                Objects.requireNonNull(skeleton.getAttribute(Attributes.ARMOR)).setBaseValue(2.0);
                 PotionUtils.setPotion(arrows, ModPotions.ROTTEN.get());
             }
-            skulltan.setItemInHand(InteractionHand.OFF_HAND, arrows);
-            skulltan.setHealth(40.0f);
+            skeleton.setItemInHand(InteractionHand.OFF_HAND, arrows);
+            skeleton.setHealth(40.0f);
         }
 
-        if (event.getEntity() instanceof WitherSkeleton witherskull) {
-            witherskull.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.PARADOX_BOOTS.get()));
+        if (event.getEntity() instanceof WitherSkeleton witherSkeleton) {
+            witherSkeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.PARADOX_BOOTS.get()));
             Random randStack = new Random();
             ItemStack arrows = new ItemStack(Items.TIPPED_ARROW, randStack.nextInt(1, 10));
             PotionUtils.setPotion(arrows, ModPotions.WITHER.get());
 
             if (data.get()) {
-                witherskull.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40.0f);
-                witherskull.getAttribute(Attributes.ARMOR).setBaseValue(1.5f);
-                witherskull.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(10.0f);
+                Objects.requireNonNull(witherSkeleton.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40.0f);
+                Objects.requireNonNull(witherSkeleton.getAttribute(Attributes.ARMOR)).setBaseValue(1.5f);
+                Objects.requireNonNull(witherSkeleton.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(10.0f);
             }
             else
-                witherskull.getAttribute(Attributes.MAX_HEALTH).setBaseValue(30.0f);
-            witherskull.setHealth(40.0f);
-            witherskull.setItemInHand(InteractionHand.OFF_HAND, arrows);
-            witherskull.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
+                Objects.requireNonNull(witherSkeleton.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(30.0f);
+            witherSkeleton.setHealth(40.0f);
+            witherSkeleton.setItemInHand(InteractionHand.OFF_HAND, arrows);
+            witherSkeleton.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
         }
 
         if (event.getEntity() instanceof Slime slime && !(slime instanceof MagmaCube)) {
             Random rand = new Random();
             if (rand.nextInt(1000) == rand.nextInt(1000)) {  // 1 in 1000 chance
                 slime.setSize(10, true);
-                slime.getAttribute(Attributes.MAX_HEALTH).setBaseValue(181.5);
-                slime.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(16.5);
+                Objects.requireNonNull(slime.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(181.5);
+                Objects.requireNonNull(slime.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(16.5);
                 slime.setCustomName(Component.literal("King Slime"));  // behold, a boss
             }
             // Stats are dependent on size
             if (data.get()) {
                 if (slime.getSize() == 1) {
-                    slime.getAttribute(Attributes.MAX_HEALTH).setBaseValue(4.5);
-                    slime.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(4.5);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(4.5);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(4.5);
                 }
                 if (slime.getSize() == 2) {
-                    slime.getAttribute(Attributes.MAX_HEALTH).setBaseValue(18);
-                    slime.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(9);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(18);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(9);
                 }
                 if (slime.getSize() == 3) {
-                    slime.getAttribute(Attributes.MAX_HEALTH).setBaseValue(72);
-                    slime.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(18);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(72);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(18);
                 }
             }
             else {
                 if (slime.getSize() == 1) {
-                    slime.getAttribute(Attributes.MAX_HEALTH).setBaseValue(1.5);
-                    slime.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(1.5);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(1.5);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(1.5);
                 }
                 if (slime.getSize() == 2) {
-                    slime.getAttribute(Attributes.MAX_HEALTH).setBaseValue(6);
-                    slime.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(3);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(6);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(3);
                 }
                 if (slime.getSize() == 3) {
-                    slime.getAttribute(Attributes.MAX_HEALTH).setBaseValue(24);
-                    slime.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(6);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(24);
+                    Objects.requireNonNull(slime.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(6);
                 }
             }
-            slime.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(1.0);
+            Objects.requireNonNull(slime.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(1.0);
             slime.setHealth(181.5f);
         }
 
-        if (event.getEntity() instanceof MagmaCube cube) {
+        if (event.getEntity() instanceof MagmaCube magmaCube) {
             Random rand = new Random();
             if (rand.nextInt(1000) == rand.nextInt(1000)) {  // 1 in 1000 chance
-                cube.setSize(10, true);
-                cube.getAttribute(Attributes.MAX_HEALTH).setBaseValue(242);
-                cube.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(22);
-                cube.setCustomName(Component.literal("King Magma Cube"));  // behold, a boss
+                magmaCube.setSize(10, true);
+                Objects.requireNonNull(magmaCube.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(242);
+                Objects.requireNonNull(magmaCube.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(22);
+                magmaCube.setCustomName(Component.literal("King Magma Cube"));  // behold, a boss
             }
             // Stats are dependent on size
             if (data.get()) {
-                if (cube.getSize() == 1) {
-                    cube.getAttribute(Attributes.MAX_HEALTH).setBaseValue(5);
-                    cube.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(5);
+                if (magmaCube.getSize() == 1) {
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(5);
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(5);
                 }
-                if (cube.getSize() == 2) {
-                    cube.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20);
-                    cube.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(10);
+                if (magmaCube.getSize() == 2) {
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(20);
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(10);
                 }
-                if (cube.getSize() == 3) {
-                    cube.getAttribute(Attributes.MAX_HEALTH).setBaseValue(80);
-                    cube.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(20);
+                if (magmaCube.getSize() == 3) {
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(80);
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(20);
                 }
             }
             else {
-                if (cube.getSize() == 1) {
-                    cube.getAttribute(Attributes.MAX_HEALTH).setBaseValue(2);
-                    cube.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(2);
+                if (magmaCube.getSize() == 1) {
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(2);
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(2);
                 }
-                if (cube.getSize() == 2) {
-                    cube.getAttribute(Attributes.MAX_HEALTH).setBaseValue(8);
-                    cube.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(4);
+                if (magmaCube.getSize() == 2) {
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(8);
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(4);
                 }
-                if (cube.getSize() == 3) {
-                    cube.getAttribute(Attributes.MAX_HEALTH).setBaseValue(32);
-                    cube.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8);
+                if (magmaCube.getSize() == 3) {
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(32);
+                    Objects.requireNonNull(magmaCube.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(8);
                 }
             }
-            cube.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(1.5);
-            cube.setHealth(242f);
+            Objects.requireNonNull(magmaCube.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(1.5);
+            magmaCube.setHealth(242f);
         }
 
         if (event.getEntity() instanceof Creeper creeper) {
-            creeper.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.375);
+            Objects.requireNonNull(creeper.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.375);
             CompoundTag nbt = creeper.serializeNBT();
             nbt.putBoolean("powered", true);
             nbt.putShort("Fuse", (short) 20);
             if (data.get()) {
-                creeper.getAttribute(Attributes.MAX_HEALTH).setBaseValue(35);
-                creeper.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(creeper.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(35);
+                Objects.requireNonNull(creeper.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
                 nbt.putBoolean("Silent", true);
             }
             else
-                creeper.getAttribute(Attributes.MAX_HEALTH).setBaseValue(25);
+                Objects.requireNonNull(creeper.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(25);
             creeper.deserializeNBT(nbt);
             creeper.setHealth(35f);
         }
 
         if (event.getEntity() instanceof Blaze blaze) {
             if (data.get()) {
-                blaze.getAttribute(Attributes.MAX_HEALTH).setBaseValue(35);
-                blaze.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(9);
-                blaze.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(blaze.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(35);
+                Objects.requireNonNull(blaze.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(9);
+                Objects.requireNonNull(blaze.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else {
-                blaze.getAttribute(Attributes.MAX_HEALTH).setBaseValue(25);
-                blaze.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(7.5);
+                Objects.requireNonNull(blaze.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(25);
+                Objects.requireNonNull(blaze.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(7.5);
             }
             blaze.setHealth(35f);
         }
 
-        if (event.getEntity() instanceof Endermite mite) {
-            mite.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.375);
+        if (event.getEntity() instanceof Endermite endermite) {
+            Objects.requireNonNull(endermite.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.375);
             if (data.get()) {
-                mite.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20);
-                mite.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(9);
-                mite.getAttribute(Attributes.ARMOR).setBaseValue(2);
+                Objects.requireNonNull(endermite.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(20);
+                Objects.requireNonNull(endermite.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(9);
+                Objects.requireNonNull(endermite.getAttribute(Attributes.ARMOR)).setBaseValue(2);
             }
             else {
-                mite.getAttribute(Attributes.MAX_HEALTH).setBaseValue(12);
-                mite.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(3);
-                mite.getAttribute(Attributes.ARMOR).setBaseValue(1);
+                Objects.requireNonNull(endermite.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(12);
+                Objects.requireNonNull(endermite.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(3);
+                Objects.requireNonNull(endermite.getAttribute(Attributes.ARMOR)).setBaseValue(1);
             }
-            mite.setHealth(20f);
+            endermite.setHealth(20f);
         }
 
-        if (event.getEntity() instanceof EnderMan enderboi) {
+        if (event.getEntity() instanceof EnderMan enderMan) {
             if (data.get()) {
-                enderboi.getAttribute(Attributes.MAX_HEALTH).setBaseValue(70);
-                enderboi.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(22);
-                enderboi.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(enderMan.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(70);
+                Objects.requireNonNull(enderMan.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(22);
+                Objects.requireNonNull(enderMan.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else {
-                enderboi.getAttribute(Attributes.MAX_HEALTH).setBaseValue(50);
-                enderboi.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(10.5);
+                Objects.requireNonNull(enderMan.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(50);
+                Objects.requireNonNull(enderMan.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(10.5);
             }
-            enderboi.setHealth(70f);
-            if (enderboi.level.dimension() != Level.END) {
-                enderboi.setCarriedBlock(Blocks.TNT.defaultBlockState());
+            enderMan.setHealth(70f);
+            if (enderMan.level.dimension() != Level.END) {
+                enderMan.setCarriedBlock(Blocks.TNT.defaultBlockState());
             }
         }
 
         if (event.getEntity() instanceof Ghast ghast) {
             if (data.get()) {
-                ghast.getAttribute(Attributes.MAX_HEALTH).setBaseValue(25);
-                ghast.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(ghast.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(25);
+                Objects.requireNonNull(ghast.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else
-                ghast.getAttribute(Attributes.MAX_HEALTH).setBaseValue(15);
+                Objects.requireNonNull(ghast.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(15);
             ghast.setHealth(25f);
         }
 
         if (event.getEntity() instanceof Guardian guardian && !(guardian instanceof ElderGuardian)) {
             if (data.get()) {
-                guardian.getAttribute(Attributes.MAX_HEALTH).setBaseValue(60);
-                guardian.getAttribute(Attributes.ARMOR).setBaseValue(3);
+                Objects.requireNonNull(guardian.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(60);
+                Objects.requireNonNull(guardian.getAttribute(Attributes.ARMOR)).setBaseValue(3);
             }
             else {
-                guardian.getAttribute(Attributes.MAX_HEALTH).setBaseValue(45);
-                guardian.getAttribute(Attributes.ARMOR).setBaseValue(2);
+                Objects.requireNonNull(guardian.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(45);
+                Objects.requireNonNull(guardian.getAttribute(Attributes.ARMOR)).setBaseValue(2);
             }
             guardian.setHealth(60f);
         }
 
         if (event.getEntity() instanceof Hoglin hoglin) {
             if (data.get()) {
-                hoglin.getAttribute(Attributes.MAX_HEALTH).setBaseValue(60);
-                hoglin.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(24);
-                hoglin.getAttribute(Attributes.ARMOR).setBaseValue(2);
+                Objects.requireNonNull(hoglin.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(60);
+                Objects.requireNonNull(hoglin.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(24);
+                Objects.requireNonNull(hoglin.getAttribute(Attributes.ARMOR)).setBaseValue(2);
             }
             else {
-                hoglin.getAttribute(Attributes.MAX_HEALTH).setBaseValue(50);
-                hoglin.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8);
+                Objects.requireNonNull(hoglin.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(50);
+                Objects.requireNonNull(hoglin.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(8);
             }
             hoglin.setHealth(60f);
         }
 
         if (event.getEntity() instanceof Zoglin zoglin) {
             if (data.get()) {
-                zoglin.getAttribute(Attributes.MAX_HEALTH).setBaseValue(60);
-                zoglin.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(24);
-                zoglin.getAttribute(Attributes.ARMOR).setBaseValue(2);
+                Objects.requireNonNull(zoglin.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(60);
+                Objects.requireNonNull(zoglin.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(24);
+                Objects.requireNonNull(zoglin.getAttribute(Attributes.ARMOR)).setBaseValue(2);
             }
             else {
-                zoglin.getAttribute(Attributes.MAX_HEALTH).setBaseValue(50);
-                zoglin.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8);
+                Objects.requireNonNull(zoglin.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(50);
+                Objects.requireNonNull(zoglin.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(8);
             }
             zoglin.setHealth(60f);
         }
 
-        if (event.getEntity() instanceof Phantom ew) {
+        if (event.getEntity() instanceof Phantom phantom) {
             if (data.get()) {
-                ew.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40);
-                ew.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(12);
-                ew.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(phantom.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40);
+                Objects.requireNonNull(phantom.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(12);
+                Objects.requireNonNull(phantom.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else {
-                ew.getAttribute(Attributes.MAX_HEALTH).setBaseValue(30);
-                ew.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(3);
+                Objects.requireNonNull(phantom.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(30);
+                Objects.requireNonNull(phantom.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(3);
             }
-            ew.setHealth(40f);
+            phantom.setHealth(40f);
         }
 
-        if (event.getEntity() instanceof Piglin pig) {
-            if (pig.getItemInHand(InteractionHand.MAIN_HAND).getItem() == Items.GOLDEN_SWORD) {
-                ItemStack goldSword = pig.getItemInHand(InteractionHand.MAIN_HAND);
+        if (event.getEntity() instanceof Piglin piglin) {
+            if (piglin.getItemInHand(InteractionHand.MAIN_HAND).getItem() == Items.GOLDEN_SWORD) {
+                ItemStack goldSword = piglin.getItemInHand(InteractionHand.MAIN_HAND);
                 goldSword.enchant(Enchantments.FIRE_ASPECT, 2);
-                pig.setItemInHand(InteractionHand.MAIN_HAND, goldSword);
+                piglin.setItemInHand(InteractionHand.MAIN_HAND, goldSword);
             }
-            else if (pig.getItemInHand(InteractionHand.MAIN_HAND).getItem() == Items.CROSSBOW) {
-                ItemStack cbow = pig.getItemInHand(InteractionHand.MAIN_HAND);
-                cbow.enchant(Enchantments.QUICK_CHARGE, 3);
-                cbow.enchant(Enchantments.MULTISHOT, 1);
-                pig.setItemInHand(InteractionHand.MAIN_HAND, cbow);
+            else if (piglin.getItemInHand(InteractionHand.MAIN_HAND).getItem() == Items.CROSSBOW) {
+                ItemStack crossbow = piglin.getItemInHand(InteractionHand.MAIN_HAND);
+                crossbow.enchant(Enchantments.QUICK_CHARGE, 3);
+                crossbow.enchant(Enchantments.MULTISHOT, 1);
+                piglin.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
             }
             if (data.get()) {
-                pig.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40);
-                pig.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(14);
-                pig.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(piglin.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40);
+                Objects.requireNonNull(piglin.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(14);
+                Objects.requireNonNull(piglin.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else
-                pig.getAttribute(Attributes.MAX_HEALTH).setBaseValue(24);
-            pig.setHealth(40f);
+                Objects.requireNonNull(piglin.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(24);
+            piglin.setHealth(40f);
         }
 
         if (event.getEntity() instanceof Pillager pillager) {
-            ItemStack cbow = pillager.getItemInHand(InteractionHand.MAIN_HAND);
-            cbow.enchant(Enchantments.PIERCING, 1);
-            cbow.enchant(Enchantments.QUICK_CHARGE, 3);
-            pillager.setItemInHand(InteractionHand.MAIN_HAND, cbow);
-            ItemStack fireworkstar = new ItemStack(Items.FIREWORK_STAR);
-            CompoundTag compoundtagStar = fireworkstar.getOrCreateTagElement("Explosion");
+            ItemStack crossbow = pillager.getItemInHand(InteractionHand.MAIN_HAND);
+            crossbow.enchant(Enchantments.PIERCING, 1);
+            crossbow.enchant(Enchantments.QUICK_CHARGE, 3);
+            pillager.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
+            ItemStack fireworkStar = new ItemStack(Items.FIREWORK_STAR);
+            CompoundTag starCompoundTag = fireworkStar.getOrCreateTagElement("Explosion");
             FireworkRocketItem.Shape fireworkrocketitem$shape = FireworkRocketItem.Shape.SMALL_BALL;
             List<Integer> list = Lists.newArrayList();
             list.add(((DyeItem)Items.GREEN_DYE).getDyeColor().getFireworkColor());
             list.add(((DyeItem)Items.LIME_DYE).getDyeColor().getFireworkColor());
 
-            compoundtagStar.putIntArray("Colors", list);
-            compoundtagStar.putByte("Type", (byte)fireworkrocketitem$shape.getId());
+            starCompoundTag.putIntArray("Colors", list);
+            starCompoundTag.putByte("Type", (byte)fireworkrocketitem$shape.getId());
 
             ItemStack fireworks = new ItemStack(Items.FIREWORK_ROCKET, 5);
-            CompoundTag compoundtag = fireworks.getOrCreateTagElement("Fireworks");
+            CompoundTag fireworksTag = fireworks.getOrCreateTagElement("Fireworks");
             ListTag listtag = new ListTag();
-            CompoundTag compoundtag1 = fireworkstar.getOrCreateTagElement("Explosion");
-            listtag.add(compoundtag1);
+            CompoundTag explosionTag = fireworkStar.getOrCreateTagElement("Explosion");
+            listtag.add(explosionTag);
 
-            compoundtag.putByte("Flight", (byte)3);
-            compoundtag.put("Explosions", listtag);
+            fireworksTag.putByte("Flight", (byte)3);
+            fireworksTag.put("Explosions", listtag);
             pillager.setItemInHand(InteractionHand.OFF_HAND, fireworks);
             if (data.get()) {
-                pillager.getAttribute(Attributes.MAX_HEALTH).setBaseValue(48);
-                pillager.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(pillager.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(48);
+                Objects.requireNonNull(pillager.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else
-                pillager.getAttribute(Attributes.MAX_HEALTH).setBaseValue(36);
+                Objects.requireNonNull(pillager.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(36);
             pillager.setHealth(48f);
         }
 
         if (event.getEntity() instanceof Ravager ravager) {
             if (data.get()) {
-                ravager.getAttribute(Attributes.MAX_HEALTH).setBaseValue(150);
-                ravager.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(22);
-                ravager.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(ravager.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(150);
+                Objects.requireNonNull(ravager.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(22);
+                Objects.requireNonNull(ravager.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else {
-                ravager.getAttribute(Attributes.MAX_HEALTH).setBaseValue(125);
-                ravager.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(18);
+                Objects.requireNonNull(ravager.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(125);
+                Objects.requireNonNull(ravager.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(18);
             }
             ravager.setHealth(150f);
         }
 
-        if (event.getEntity() instanceof Shulker shulk) {
+        if (event.getEntity() instanceof Shulker shulker) {
             if (data.get())
-                shulk.getAttribute(Attributes.MAX_HEALTH).setBaseValue(60);
+                Objects.requireNonNull(shulker.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(60);
             else
-                shulk.getAttribute(Attributes.MAX_HEALTH).setBaseValue(45);
-            shulk.setHealth(60f);
+                Objects.requireNonNull(shulker.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(45);
+            shulker.setHealth(60f);
         }
 
-        if (event.getEntity() instanceof Silverfish bug) {
-            bug.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.375);
+        if (event.getEntity() instanceof Silverfish silverfish) {
+            Objects.requireNonNull(silverfish.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.375);
             if (data.get()) {
-                bug.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20);
-                bug.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(9);
-                bug.getAttribute(Attributes.ARMOR).setBaseValue(2);
+                Objects.requireNonNull(silverfish.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(20);
+                Objects.requireNonNull(silverfish.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(9);
+                Objects.requireNonNull(silverfish.getAttribute(Attributes.ARMOR)).setBaseValue(2);
             }
             else {
-                bug.getAttribute(Attributes.MAX_HEALTH).setBaseValue(12);
-                bug.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(1.5);
-                bug.getAttribute(Attributes.ARMOR).setBaseValue(1);
+                Objects.requireNonNull(silverfish.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(12);
+                Objects.requireNonNull(silverfish.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(1.5);
+                Objects.requireNonNull(silverfish.getAttribute(Attributes.ARMOR)).setBaseValue(1);
             }
-            bug.setHealth(20f);
+            silverfish.setHealth(20f);
         }
 
         if (event.getEntity() instanceof Spider spider && !(spider instanceof CaveSpider)) {
             if (data.get()) {
-                spider.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40);
-                spider.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(12);
-                spider.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(spider.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40);
+                Objects.requireNonNull(spider.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(12);
+                Objects.requireNonNull(spider.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else {
-                spider.getAttribute(Attributes.MAX_HEALTH).setBaseValue(24);
-                spider.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(3);
+                Objects.requireNonNull(spider.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(24);
+                Objects.requireNonNull(spider.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(3);
             }
             spider.setHealth(40f);
         }
 
-        if (event.getEntity() instanceof CaveSpider spider) {
-            spider.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.33);
+        if (event.getEntity() instanceof CaveSpider caveSpider) {
+            Objects.requireNonNull(caveSpider.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.33);
             if (data.get()) {
-                spider.getAttribute(Attributes.MAX_HEALTH).setBaseValue(30);
-                spider.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(12);
-                spider.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(caveSpider.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(30);
+                Objects.requireNonNull(caveSpider.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(12);
+                Objects.requireNonNull(caveSpider.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else {
-                spider.getAttribute(Attributes.MAX_HEALTH).setBaseValue(18);
-                spider.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(3);
+                Objects.requireNonNull(caveSpider.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(18);
+                Objects.requireNonNull(caveSpider.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(3);
             }
-            spider.setHealth(30f);
+            caveSpider.setHealth(30f);
         }
 
         if (event.getEntity() instanceof Stray stray) {
@@ -829,12 +824,12 @@ public class ModEvents {
                 ItemStack bow = stray.getItemInHand(InteractionHand.MAIN_HAND);
                 bow.enchant(Enchantments.POWER_ARROWS, 4);
                 stray.setItemInHand(InteractionHand.MAIN_HAND, bow);
-                stray.getAttribute(Attributes.MAX_HEALTH).setBaseValue(35);
-                stray.getAttribute(Attributes.ARMOR).setBaseValue(4);
+                Objects.requireNonNull(stray.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(35);
+                Objects.requireNonNull(stray.getAttribute(Attributes.ARMOR)).setBaseValue(4);
             }
             else {
-                stray.getAttribute(Attributes.MAX_HEALTH).setBaseValue(25);
-                stray.getAttribute(Attributes.ARMOR).setBaseValue(2);
+                Objects.requireNonNull(stray.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(25);
+                Objects.requireNonNull(stray.getAttribute(Attributes.ARMOR)).setBaseValue(2);
             }
             Random randStack = new Random();
             int stackNumber = randStack.nextInt(1, 10);
@@ -848,34 +843,34 @@ public class ModEvents {
             vex.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.DIAMOND_SWORD));
             vex.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(Items.TOTEM_OF_UNDYING));
             if (data.get()) {
-                vex.getAttribute(Attributes.MAX_HEALTH).setBaseValue(22);
-                vex.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8);
+                Objects.requireNonNull(vex.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(22);
+                Objects.requireNonNull(vex.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(8);
             }
             else
-                vex.getAttribute(Attributes.MAX_HEALTH).setBaseValue(18);
+                Objects.requireNonNull(vex.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(18);
             vex.setHealth(22f);
         }
 
         if (event.getEntity() instanceof Vindicator vindicator) {
             if (data.get()) {
-                vindicator.getAttribute(Attributes.MAX_HEALTH).setBaseValue(48);
-                vindicator.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(10);
-                vindicator.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(vindicator.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(48);
+                Objects.requireNonNull(vindicator.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(10);
+                Objects.requireNonNull(vindicator.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else {
-                vindicator.getAttribute(Attributes.MAX_HEALTH).setBaseValue(36);
-                vindicator.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(7.5);
+                Objects.requireNonNull(vindicator.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(36);
+                Objects.requireNonNull(vindicator.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(7.5);
             }
             vindicator.setHealth(48f);
         }
 
         if (event.getEntity() instanceof Witch witch) {
             if (data.get()) {
-                witch.getAttribute(Attributes.MAX_HEALTH).setBaseValue(38);
-                witch.getAttribute(Attributes.ARMOR).setBaseValue(1.5);
+                Objects.requireNonNull(witch.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(38);
+                Objects.requireNonNull(witch.getAttribute(Attributes.ARMOR)).setBaseValue(1.5);
             }
             else
-                witch.getAttribute(Attributes.MAX_HEALTH).setBaseValue(32);
+                Objects.requireNonNull(witch.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(32);
             witch.setHealth(38f);
         }
 
@@ -889,33 +884,33 @@ public class ModEvents {
             Entity owner1 = arrow.getOwner();
             // Converts arrows to lightning arrows if it is storming in the level.
             if (owner1 instanceof LivingEntity owner && owner.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.COPPER_HELMET.get() && owner.getItemBySlot(EquipmentSlot.CHEST).getItem() == ModItems.COPPER_CHESTPLATE.get() && owner.getItemBySlot(EquipmentSlot.LEGS).getItem() == ModItems.COPPER_LEGGINGS.get() && owner.getItemBySlot(EquipmentSlot.FEET).getItem() == ModItems.COPPER_BOOTS.get() && event.getLevel().isThundering()) {
-                LightningArrow lArrow = new LightningArrow(arrow.getLevel(), owner);
-                lArrow.setPos(arrow.getX(), arrow.getY(), arrow.getZ());
+                LightningArrow lightningArrow = new LightningArrow(arrow.getLevel(), owner);
+                lightningArrow.setPos(arrow.getX(), arrow.getY(), arrow.getZ());
                 int ticks = owner.getTicksUsingItem();
                 if (ticks > 22) {
                     ticks = 22;
                 }
-                lArrow.setDeltaMovement(arrow.getDeltaMovement());
+                lightningArrow.setDeltaMovement(arrow.getDeltaMovement());
                 if (ticks == 22) {
-                    lArrow.setCritArrow(true);
+                    lightningArrow.setCritArrow(true);
                 }
-                int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, owner.getUseItem());
+                int j = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.POWER_ARROWS, owner.getUseItem());
                 if (j > 0) {
-                    lArrow.setBaseDamage(lArrow.getBaseDamage() + (double)j * 0.5D + 0.5D);
+                    lightningArrow.setBaseDamage(lightningArrow.getBaseDamage() + (double)j * 0.5D + 0.5D);
                 }
 
-                int k = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, owner.getUseItem());
+                int k = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.PUNCH_ARROWS, owner.getUseItem());
                 if (k > 0) {
-                    lArrow.setKnockback(k);
+                    lightningArrow.setKnockback(k);
                 }
 
-                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, owner.getUseItem()) > 0) {
-                    lArrow.setSecondsOnFire(100);
+                if (EnchantmentHelper.getTagEnchantmentLevel(Enchantments.FLAMING_ARROWS, owner.getUseItem()) > 0) {
+                    lightningArrow.setSecondsOnFire(100);
                 }
                 arrow.teleportTo(0, -255, 0);
                 arrow.setPos(0, -255, 0);
                 arrow.discard();
-                event.getLevel().addFreshEntity(lArrow);
+                event.getLevel().addFreshEntity(lightningArrow);
             }
         }
 
@@ -947,12 +942,12 @@ public class ModEvents {
                 player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 600, 4));
                 player.addEffect(new MobEffectInstance(MobEffects.HARM));  // Punish player for eating more
                 if (event.getItem().getItem().equals(Items.ENCHANTED_GOLDEN_APPLE))
-                    player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 9));  // Enchanted Gapples will at least full-heal the player
+                    player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 9));  // Enchanted Golden Apples will at least full-heal the player
                 player.displayClientMessage(Component.literal("I knew eating more gold would be a bad idea...").withStyle(ChatFormatting.RED), true);
             }
             else if (event.getItem().getItem().equals(Items.GOLDEN_APPLE) || event.getItem().getItem().equals(Items.ENCHANTED_GOLDEN_APPLE)) {
                 if (event.getItem().getItem().equals(Items.ENCHANTED_GOLDEN_APPLE))
-                    player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 9));  // Enchanted Gapples will at least full-heal the player
+                    player.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 9));  // Enchanted Golden Apples will at least full-heal the player
                 player.addEffect(new MobEffectInstance(ModEffects.GAPPLE_SICKNESS.get(), 2400));
                 player.displayClientMessage(Component.literal("I probably shouldn't eat any gold too soon after that...").withStyle(ChatFormatting.YELLOW), true);
             }
@@ -964,10 +959,10 @@ public class ModEvents {
         if (!event.getEntity().isPassenger()) {
             if (event.getEntity() instanceof Zombie || event.getEntity() instanceof AbstractSkeleton) {
                 List<Entity> nearbyEntities = event.getEntity().getLevel().getEntities(event.getEntity(), event.getEntity().getBoundingBox().inflate(1.0));
-                if (event.getEntity() instanceof AbstractSkeleton skulltan) {
+                if (event.getEntity() instanceof AbstractSkeleton skeleton) {
                     for (Entity entity : nearbyEntities) {
                         if (entity.getPassengers().isEmpty() && (/*entity instanceof AbstractHorse || entity instanceof Pig ||*/ entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear || entity instanceof Spider || entity instanceof Bat)) {
-                            skulltan.startRiding(entity);
+                            skeleton.startRiding(entity);
                             // Entities controlling horses/pigs is broken in 1.19.4. Will restore when porting to 1.20.1
                             /*if (entity instanceof AbstractHorse horse)
                                 horse.setTamed(true);*/
@@ -975,10 +970,10 @@ public class ModEvents {
                         }
                     }
                 }
-                if (event.getEntity() instanceof Zombie zahmbie) {
+                if (event.getEntity() instanceof Zombie zombie) {
                     for (Entity entity : nearbyEntities) {
                         if (entity.getPassengers().isEmpty() && (/*entity instanceof AbstractHorse || entity instanceof Pig ||*/ entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear)) {
-                            zahmbie.startRiding(entity);
+                            zombie.startRiding(entity);
                             // Entities controlling horses/pigs is broken in 1.19.4. Will restore when porting to 1.20.1
                             /*if (entity instanceof AbstractHorse horse)
                                 horse.setTamed(true);*/
@@ -992,9 +987,9 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void zombieBlockTick(LivingEvent.LivingTickEvent event) {
-        if (event.getEntity() instanceof Zombie zahmbie) {
-            if (zahmbie.getLevel().getBlockState(new BlockPos(zahmbie.getBlockX(), zahmbie.getBlockY() + 1, zahmbie.getBlockZ())).getBlock() == Blocks.AIR) {
-                zahmbie.addEffect(new MobEffectInstance(MobEffects.GLOWING));
+        if (event.getEntity() instanceof Zombie zombie) {
+            if (zombie.getLevel().getBlockState(new BlockPos(zombie.getBlockX(), zombie.getBlockY() + 1, zombie.getBlockZ())).getBlock() == Blocks.AIR) {
+                zombie.addEffect(new MobEffectInstance(MobEffects.GLOWING));
             }
         }
     }
@@ -1002,93 +997,93 @@ public class ModEvents {
     @SubscribeEvent
     public static void onEntityTick(LivingEvent.LivingTickEvent event) {
         Random rand = new Random();
-        EndgameSaveData data = new EndgameSaveData();
+        EndgameSaveData data;
         if (!event.getEntity().getLevel().isClientSide) {
             data = EndgameSaveData.manage(Objects.requireNonNull(event.getEntity().getLevel().getServer()));
 
-            if (event.getEntity() instanceof ZombieVillager zillager) {  // moving equipment event here because the on join level event is broken with professions
-                if (zillager.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR) {
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.ARMORER)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.BUTCHER)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.CARTOGRAPHER)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.CLERIC)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.FARMER)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CARVED_PUMPKIN));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.FISHERMAN)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.BARREL));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.FLETCHER)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.LIBRARIAN)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.MASON)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.LEATHERWORKER)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.NITWIT)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIRT, 1));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.SHEPHERD)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.WHITE_WOOL, 1));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.TOOLSMITH)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.WEAPONSMITH)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.NONE)
-                        zillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.OAK_LEAVES, 1));
+            if (event.getEntity() instanceof ZombieVillager zombieVillager) {  // moving equipment event here because the on join level event is broken with professions
+                if (zombieVillager.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR) {
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.ARMORER)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.BUTCHER)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CARTOGRAPHER)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CLERIC)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FARMER)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CARVED_PUMPKIN));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FISHERMAN)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.BARREL));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FLETCHER)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LIBRARIAN)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.MASON)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LEATHERWORKER)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.NITWIT)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIRT, 1));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.SHEPHERD)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.WHITE_WOOL, 1));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.TOOLSMITH)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.WEAPONSMITH)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.NONE)
+                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.OAK_LEAVES, 1));
                 }
-                if (zillager.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.AIR) {
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.ARMORER)
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.BUTCHER)
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.CARTOGRAPHER) {
+                if (zombieVillager.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.AIR) {
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.ARMORER)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.BUTCHER)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CARTOGRAPHER) {
                         ItemStack sharpPaper = new ItemStack(Items.PAPER, 1);
                         sharpPaper.enchant(Enchantments.SHARPNESS, 5);
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, sharpPaper);
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, sharpPaper);
                     }
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.CLERIC) {
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CLERIC) {
                         int staff = rand.nextInt(3);
                         if (staff == 0) {
                             ItemStack fireStaff = new ItemStack(ModItems.FIRE_STAFF.get());  // create new item
                             fireStaff.enchant(Enchantments.FIRE_ASPECT, 2); // enchant created item
-                            zillager.setItemSlot(EquipmentSlot.MAINHAND, fireStaff);
+                            zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, fireStaff);
                         }
                         if (staff == 1)
-                            zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.ICE_STAFF.get()));
+                            zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.ICE_STAFF.get()));
                         if (staff == 2)
-                            zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.LIGHTNING_STAFF.get()));
+                            zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.LIGHTNING_STAFF.get()));
                     }
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.FARMER)
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.SCYTHE.get()));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.FISHERMAN)
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.SPEAR.get()));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.FLETCHER) {
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FARMER)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.SCYTHE.get()));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FISHERMAN)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.SPEAR.get()));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FLETCHER) {
                         ItemStack arrow = new ItemStack(Items.ARROW, 1);
                         arrow.enchant(Enchantments.SHARPNESS, 5);
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, arrow);
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, arrow);
                     }
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.LEATHERWORKER)
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KNIFE.get()));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.LIBRARIAN) {
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LEATHERWORKER)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KNIFE.get()));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LIBRARIAN) {
                         ItemStack sharpBook = new ItemStack(Items.BOOK, 1);  // create a new item
                         sharpBook.enchant(Enchantments.SHARPNESS, 5);  // enchant the created item
                         sharpBook.enchant(Enchantments.FIRE_ASPECT, 2);  // enchant the created item
                         sharpBook.enchant(Enchantments.KNOCKBACK, 1);  // enchant the created item
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, sharpBook);  // set equipment for librarian z.villager
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, sharpBook);  // set equipment for librarian z.villager
                     }
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.MASON)
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KNIFE.get()));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.NITWIT)
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STICK, 1));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.SHEPHERD)
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.TOOLSMITH)
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_PICKAXE));
-                    if (zillager.getVillagerData().getProfession() == VillagerProfession.WEAPONSMITH)
-                        zillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.MASON)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KNIFE.get()));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.NITWIT)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STICK, 1));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.SHEPHERD)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.TOOLSMITH)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_PICKAXE));
+                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.WEAPONSMITH)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
                 }
             }
             if (event.getEntity() instanceof Husk husk) {
@@ -1126,8 +1121,8 @@ public class ModEvents {
                 }
             }
 
-            if (event.getEntity() instanceof EnderMan enderboi) {
-                List<Entity> entities = enderboi.getLevel().getEntities(enderboi, enderboi.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
+            if (event.getEntity() instanceof EnderMan enderMan) {
+                List<Entity> entities = enderMan.getLevel().getEntities(enderMan, enderMan.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
                 for (Entity entity : entities) {
                     if (entity instanceof ServerPlayer player) {
                         player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 40));  // 2 secs
@@ -1139,60 +1134,60 @@ public class ModEvents {
                 spider.addEffect(new MobEffectInstance(MobEffects.JUMP, 1, 2));  // jump boost
             }
 
-            if (event.getEntity() instanceof Skeleton skulltan) {
+            if (event.getEntity() instanceof Skeleton skeleton) {
                 boolean nearbyPlayer = false;
-                List<Entity> entities = skulltan.getLevel().getEntities(skulltan, skulltan.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
+                List<Entity> entities = skeleton.getLevel().getEntities(skeleton, skeleton.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
                 for (Entity entity : entities) {
                     if (entity instanceof ServerPlayer player && !(player.isCreative() || player.isSpectator())) {
                         nearbyPlayer = true;
                         break;
                     }
                 }
-                if (nearbyPlayer && skulltan.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.BOW) {
+                if (nearbyPlayer && skeleton.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.BOW) {
                     if (data.get()) {
                         ItemStack sword = new ItemStack(Items.IRON_SWORD);
                         sword.enchant(Enchantments.KNOCKBACK, 2);
-                        skulltan.setItemInHand(InteractionHand.MAIN_HAND, sword);
+                        skeleton.setItemInHand(InteractionHand.MAIN_HAND, sword);
                     } else {
                         ItemStack sword = new ItemStack(Items.STONE_SWORD);
                         sword.enchant(Enchantments.KNOCKBACK, 2);
-                        skulltan.setItemInHand(InteractionHand.MAIN_HAND, sword);
+                        skeleton.setItemInHand(InteractionHand.MAIN_HAND, sword);
                     }
-                } else if (!nearbyPlayer && ((skulltan.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.STONE_SWORD) || (skulltan.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.IRON_SWORD))) {
+                } else if (!nearbyPlayer && ((skeleton.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.STONE_SWORD) || (skeleton.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.IRON_SWORD))) {
                     if (data.get()) {
                         ItemStack bow = new ItemStack(Items.BOW);
                         bow.enchant(Enchantments.PUNCH_ARROWS, 2);
                         bow.enchant(Enchantments.POWER_ARROWS, 4);
-                        skulltan.setItemInHand(InteractionHand.MAIN_HAND, bow);
+                        skeleton.setItemInHand(InteractionHand.MAIN_HAND, bow);
                     } else {
                         ItemStack bow = new ItemStack(Items.BOW);
                         bow.enchant(Enchantments.PUNCH_ARROWS, 2);
-                        skulltan.setItemInHand(InteractionHand.MAIN_HAND, bow);
+                        skeleton.setItemInHand(InteractionHand.MAIN_HAND, bow);
                     }
                 }
             }
 
-            if (event.getEntity() instanceof WitherSkeleton witherskull) {
+            if (event.getEntity() instanceof WitherSkeleton witherSkeleton) {
                 boolean nearbyPlayer = false;
-                List<Entity> entities = witherskull.getLevel().getEntities(witherskull, witherskull.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
+                List<Entity> entities = witherSkeleton.getLevel().getEntities(witherSkeleton, witherSkeleton.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
                 for (Entity entity : entities) {
                     if (entity instanceof ServerPlayer player && !(player.isCreative() || player.isSpectator())) {
                         nearbyPlayer = true;
                         break;
                     }
                 }
-                if (nearbyPlayer && witherskull.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.BOW) {
+                if (nearbyPlayer && witherSkeleton.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.BOW) {
                     ItemStack axe = new ItemStack(Items.STONE_AXE);
                     axe.enchant(Enchantments.FIRE_ASPECT, 2);
-                    witherskull.setItemInHand(InteractionHand.MAIN_HAND, axe);
-                } else if (!nearbyPlayer && witherskull.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.STONE_AXE) {
+                    witherSkeleton.setItemInHand(InteractionHand.MAIN_HAND, axe);
+                } else if (!nearbyPlayer && witherSkeleton.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.STONE_AXE) {
                     ItemStack bow = new ItemStack(Items.BOW);
                     if (data.get()) {
                         bow.enchant(Enchantments.POWER_ARROWS, 4);
-                        witherskull.setItemInHand(InteractionHand.MAIN_HAND, bow);
+                        witherSkeleton.setItemInHand(InteractionHand.MAIN_HAND, bow);
                     } else {
                         bow.enchant(Enchantments.POWER_ARROWS, 2);
-                        witherskull.setItemInHand(InteractionHand.MAIN_HAND, bow);
+                        witherSkeleton.setItemInHand(InteractionHand.MAIN_HAND, bow);
                     }
                 }
             }
@@ -1223,23 +1218,23 @@ public class ModEvents {
                 }
             }
 
-            if (event.getEntity() instanceof ElderGuardian eguardian) {
-                if (eguardian.tickCount % 200 == 0) {
-                    ServerPlayer player = (ServerPlayer) eguardian.getLevel().getNearestPlayer(eguardian, 10.0);
+            if (event.getEntity() instanceof ElderGuardian elderGuardian) {
+                if (elderGuardian.tickCount % 200 == 0) {
+                    ServerPlayer player = (ServerPlayer) elderGuardian.getLevel().getNearestPlayer(elderGuardian, 10.0);
                     if (player != null) {
-                        ItemStack gildTrid = new ItemStack(ModItems.GILDED_TRIDENT.get());
-                        gildTrid.enchant(Enchantments.CHANNELING, 1);
-                        gildTrid.enchant(Enchantments.IMPALING, 2);
-                        ThrownGildedTrident trident = new ThrownGildedTrident(eguardian.level, eguardian, gildTrid);
-                        trident.setPos(eguardian.getX(), eguardian.getY(), eguardian.getZ());
-                        trident.teleportTo(eguardian.getX(), eguardian.getY(), eguardian.getZ());
-                        double d0 = player.getX() - eguardian.getX();
+                        ItemStack gildedTrident = new ItemStack(ModItems.GILDED_TRIDENT.get());
+                        gildedTrident.enchant(Enchantments.CHANNELING, 1);
+                        gildedTrident.enchant(Enchantments.IMPALING, 2);
+                        ThrownGildedTrident trident = new ThrownGildedTrident(elderGuardian.level, elderGuardian, gildedTrident);
+                        trident.setPos(elderGuardian.getX(), elderGuardian.getY(), elderGuardian.getZ());
+                        trident.teleportTo(elderGuardian.getX(), elderGuardian.getY(), elderGuardian.getZ());
+                        double d0 = player.getX() - elderGuardian.getX();
                         double d1 = player.getY(0.3333333333333333D) - trident.getY();
-                        double d2 = player.getZ() - eguardian.getZ();
+                        double d2 = player.getZ() - elderGuardian.getZ();
                         double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-                        trident.shoot(d0, d1 + d3 * (double) 0.2F, d2, 1.6F, (float) (14 - eguardian.level.getDifficulty().getId() * 4));
-                        eguardian.playSound(SoundEvents.TRIDENT_THROW, 1.0F, 1.0F / (eguardian.getRandom().nextFloat() * 0.4F + 0.8F));
-                        eguardian.level.addFreshEntity(trident);
+                        trident.shoot(d0, d1 + d3 * (double) 0.2F, d2, 1.6F, (float) (14 - elderGuardian.level.getDifficulty().getId() * 4));
+                        elderGuardian.playSound(SoundEvents.TRIDENT_THROW, 1.0F, 1.0F / (elderGuardian.getRandom().nextFloat() * 0.4F + 0.8F));
+                        elderGuardian.level.addFreshEntity(trident);
                     }
                 }
             }
@@ -1260,7 +1255,7 @@ public class ModEvents {
                     }
                 }
                 List<? extends Player> nearbyPlayers = players.stream().distinct().filter(nearbyEntities::contains).collect(Collectors.toSet()).stream().toList();  // intersection
-                if (nearbyPlayers.size() > 0) {
+                if (!nearbyPlayers.isEmpty()) {
                     ServerPlayer randomPlayer = (ServerPlayer) nearbyPlayers.get(randPlayer.nextInt(nearbyPlayers.size()));
                     if (dragon.tickCount % 200 == 0) {
                         Vec3 vec3 = dragon.getViewVector(1.0F);
@@ -1384,9 +1379,7 @@ public class ModEvents {
     public static void onPlayerFall(LivingFallEvent event) {
         if (event.getEntity() instanceof ServerPlayer player && player.getItemBySlot(EquipmentSlot.FEET).getItem() == ModItems.SLIME_BOOTS.get() && event.getDistance() > 3.0f) {
             event.setDamageMultiplier(0f);
-            player.getItemBySlot(EquipmentSlot.FEET).hurtAndBreak(1, player, (p_276007_) -> {
-                p_276007_.broadcastBreakEvent(EquipmentSlot.FEET);
-            });
+            player.getItemBySlot(EquipmentSlot.FEET).hurtAndBreak(1, player, (p_276007_) -> p_276007_.broadcastBreakEvent(EquipmentSlot.FEET));
             event.setCanceled(true);
         }
     }
@@ -1397,10 +1390,10 @@ public class ModEvents {
         EnchantedBookItem.addEnchantment(mendingBook, new EnchantmentInstance(Enchantments.MENDING, 1));
         Random mendChance1 = new Random();
         Random mendChance2 = new Random();
-        boolean dropMending = mendChance1.nextInt(10) == mendChance2.nextInt(10);
+        boolean dropMending = mendChance1.nextInt(10) == mendChance2.nextInt(10); // 1 in 10 chance
         EndgameSaveData data = new EndgameSaveData();
         if (!event.getEntity().getLevel().isClientSide) {
-            data = EndgameSaveData.manage(event.getEntity().getServer());
+            data = EndgameSaveData.manage(Objects.requireNonNull(event.getEntity().getServer()));
         }
         if (event.getEntity() instanceof WitherBoss wither && event.getSource().getEntity() instanceof ServerPlayer) {
             wither.spawnAtLocation(ModItems.WITHER_BOW.get());
@@ -1464,25 +1457,25 @@ public class ModEvents {
         if (event.getEntity() instanceof Warden warden && event.getSource().getEntity() instanceof ServerPlayer) {
             warden.spawnAtLocation(ModItems.JITTER_SHOTBOW.get());
 
-            ItemStack fireworkstar = new ItemStack(Items.FIREWORK_STAR);
-            CompoundTag compoundtagStar = fireworkstar.getOrCreateTagElement("Explosion");
+            ItemStack fireworkStar = new ItemStack(Items.FIREWORK_STAR);
+            CompoundTag starCompoundTag = fireworkStar.getOrCreateTagElement("Explosion");
             FireworkRocketItem.Shape fireworkrocketitem$shape = FireworkRocketItem.Shape.BURST;
             List<Integer> list = Lists.newArrayList();
             list.add(((DyeItem)Items.BLACK_DYE).getDyeColor().getFireworkColor());
             list.add(((DyeItem)Items.CYAN_DYE).getDyeColor().getFireworkColor());
             list.add(((DyeItem)Items.BLUE_DYE).getDyeColor().getFireworkColor());
 
-            compoundtagStar.putIntArray("Colors", list);
-            compoundtagStar.putByte("Type", (byte)fireworkrocketitem$shape.getId());
+            starCompoundTag.putIntArray("Colors", list);
+            starCompoundTag.putByte("Type", (byte)fireworkrocketitem$shape.getId());
             Random randStack = new Random();
             ItemStack fireworks = new ItemStack(Items.FIREWORK_ROCKET, randStack.nextInt(50, 64));
-            CompoundTag compoundtag = fireworks.getOrCreateTagElement("Fireworks");
+            CompoundTag fireworksTag = fireworks.getOrCreateTagElement("Fireworks");
             ListTag listtag = new ListTag();
-            CompoundTag compoundtag1 = fireworkstar.getOrCreateTagElement("Explosion");
-            listtag.add(compoundtag1);
+            CompoundTag explosionTag = fireworkStar.getOrCreateTagElement("Explosion");
+            listtag.add(explosionTag);
 
-            compoundtag.putByte("Flight", (byte)5);
-            compoundtag.put("Explosions", listtag);
+            fireworksTag.putByte("Flight", (byte)5);
+            fireworksTag.put("Explosions", listtag);
             warden.spawnAtLocation(fireworks);
 
             warden.spawnAtLocation(mendingBook);  // Always drops a mending book, superboss status
@@ -1494,9 +1487,9 @@ public class ModEvents {
             slime.spawnAtLocation(ModItems.SLIME_BOOTS.get());
         }
 
-        if (event.getEntity() instanceof MagmaCube cube && event.getSource().getEntity() instanceof ServerPlayer && cube.getSize() == 10) {
+        if (event.getEntity() instanceof MagmaCube magmaCube && event.getSource().getEntity() instanceof ServerPlayer && magmaCube.getSize() == 10) {
             if (dropMending)
-                cube.spawnAtLocation(mendingBook);
+                magmaCube.spawnAtLocation(mendingBook);
             Random divingChance = new Random();
             List<ItemLike> armors = new ArrayList<>();
             armors.add(ModItems.LAVA_DIVING_HELMET.get());
@@ -1504,14 +1497,14 @@ public class ModEvents {
             armors.add(ModItems.LAVA_DIVING_LEGGINGS.get());
             armors.add(ModItems.LAVA_DIVING_BOOTS.get());
             int armorDropped = divingChance.nextInt(4);
-            cube.spawnAtLocation(armors.get(armorDropped));
+            magmaCube.spawnAtLocation(armors.get(armorDropped));
         }
 
-        if (event.getEntity() instanceof MagmaCube cube && cube.getSize() == 1 && !cube.getLevel().isClientSide) {
-            BlockPos cubePos = cube.getOnPos();
+        if (event.getEntity() instanceof MagmaCube magmaCube && magmaCube.getSize() == 1 && !magmaCube.getLevel().isClientSide) {
+            BlockPos cubePos = magmaCube.getOnPos();
             BlockPos lavaPos = new BlockPos(cubePos.getX(), cubePos.getY() + 1, cubePos.getZ());
             // Spawn temporary lava
-            cube.getLevel().setBlockAndUpdate(lavaPos, Blocks.LAVA.defaultBlockState().setValue(BlockStateProperties.LEVEL, Integer.valueOf(1)));
+            magmaCube.getLevel().setBlockAndUpdate(lavaPos, Blocks.LAVA.defaultBlockState().setValue(BlockStateProperties.LEVEL, 1));
         }
     }
 }
