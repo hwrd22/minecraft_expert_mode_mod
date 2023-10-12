@@ -46,17 +46,17 @@ public class WitherBowItem extends BowItem {
                             witherarrow.setCritArrow(true);
                         }
 
-                        int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, p_40667_);
+                        int j = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.POWER_ARROWS, p_40667_);
                         if (j > 0) {
                             witherarrow.setBaseDamage(witherarrow.getBaseDamage() + (double)j * 0.5D + 0.5D);
                         }
 
-                        int k = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, p_40667_);
+                        int k = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.PUNCH_ARROWS, p_40667_);
                         if (k > 0) {
                             witherarrow.setKnockback(k);
                         }
 
-                        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, p_40667_) > 0) {
+                        if (EnchantmentHelper.getTagEnchantmentLevel(Enchantments.FLAMING_ARROWS, p_40667_) > 0) {
                             witherarrow.setSecondsOnFire(100);
                         }
 

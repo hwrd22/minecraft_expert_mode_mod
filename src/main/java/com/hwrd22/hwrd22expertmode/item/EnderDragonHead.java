@@ -70,8 +70,7 @@ public class EnderDragonHead extends ArmorItem {
     }
     static class ModelSupplier implements IClientItemExtensions {
         public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
-            EnderDragonHeadModel dargonhead = new EnderDragonHeadModel(Minecraft.getInstance().getEntityModels().bakeLayer(EnderDragonHeadModel.LAYER_LOCATION));
-            return dargonhead;
+            return new EnderDragonHeadModel(Minecraft.getInstance().getEntityModels().bakeLayer(EnderDragonHeadModel.LAYER_LOCATION));
         }
         public ResourceLocation getArmorTexture() {
             return new ResourceLocation("minecraft:textures/entity/enderdragon/dragon.png");

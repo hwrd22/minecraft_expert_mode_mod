@@ -24,67 +24,66 @@ public class RageHudOverlay {
     public static final ResourceLocation EMPTY_RAGE = new ResourceLocation(ExpertMode.MODID, "textures/rage/rage_empty.png");
 
     public static final IGuiOverlay HUD_RAGE = ((gui, poseStack, partialTick, screenWidth, screenHeight) -> {
-        int y = screenHeight;
 
         RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, EMPTY_RAGE);
         for (int i = 0; i < 10; i++) {
-            GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+            GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
         }
         RenderSystem.setShaderTexture(0, FILLED_RAGE);
         for (int i = 0; i < 10; i++) {
             if ((ClientRageData.get() / 1000) > i) {
-                GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
             }
             else {
                 if ((ClientRageData.get() - (i * 1000)) > 923) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_12);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000)) > 846) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_11);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000)) > 769) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_10);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000)) > 692) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_9);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000)) > 615) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_8);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000)) > 538) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_7);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000)) > 461) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_6);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000)) > 384) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_5);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000)) > 307) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_4);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000) > 230)) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_3);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000) > 153)) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_2);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 else if ((ClientRageData.get() - (i * 1000) > 76)) {
                     RenderSystem.setShaderTexture(0, RAGE_PARTIAL_1);
-                    GuiComponent.blit(poseStack, 16 + (i * 12), y - 16, 0, 0, 12, 12, 12, 12);
+                    GuiComponent.blit(poseStack, 16 + (i * 12), screenHeight - 16, 0, 0, 12, 12, 12, 12);
                 }
                 break;
             }

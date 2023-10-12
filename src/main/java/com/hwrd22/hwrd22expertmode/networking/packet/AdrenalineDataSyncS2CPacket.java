@@ -21,11 +21,10 @@ public class AdrenalineDataSyncS2CPacket {
         buf.writeInt(adrenaline);
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> supplier) {
+    public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ClientAdrenalineData.set(adrenaline);
         });
-        return true;
     }
 }

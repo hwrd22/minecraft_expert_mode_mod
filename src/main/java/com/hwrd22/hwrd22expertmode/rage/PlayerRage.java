@@ -5,8 +5,6 @@ import net.minecraft.nbt.CompoundTag;
 public class PlayerRage {
     private int rage;
     private boolean rage_used = false;
-    private final int MIN_RAGE = 0;
-    private final int MAX_RAGE = 10000;
 
     public int getRage() {
         return rage;
@@ -19,10 +17,12 @@ public class PlayerRage {
     public void resetRageUse() { this.rage_used = false; }
 
     public void addRage(int increment) {
+        int MAX_RAGE = 10000;
         this.rage = Math.min(rage + increment, MAX_RAGE);
     }
 
     public void subtractRage(int increment) {
+        int MIN_RAGE = 0;
         this.rage = Math.max(rage - increment, MIN_RAGE);
     }
 

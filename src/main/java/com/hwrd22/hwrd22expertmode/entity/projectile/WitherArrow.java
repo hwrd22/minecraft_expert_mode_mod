@@ -28,7 +28,7 @@ import java.util.Set;
 public class WitherArrow extends AbstractArrow {
     private static final double ARROW_BASE_DAMAGE = 4.0D;
     private final Set<MobEffectInstance> effects = Sets.newHashSet();
-    private Potion potion = Potions.EMPTY;
+    private final Potion potion = Potions.EMPTY;
     public WitherArrow(EntityType<? extends WitherArrow> p_36858_, Level p_36859_) {
         super(p_36858_, p_36859_);
     }

@@ -21,11 +21,10 @@ public class RageDataSyncS2CPacket {
         buf.writeInt(rage);
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> supplier) {
+    public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ClientRageData.set(rage);
         });
-        return true;
     }
 }

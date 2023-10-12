@@ -24,7 +24,7 @@ public class WitherSkullBarrier extends WitherSkull {
                     this.discard();
                 }
                 List<Entity> entities = this.getLevel().getEntities(this, this.getBoundingBox());
-                if (entities.size() > 0) {  // entity collision
+                if (!entities.isEmpty()) {  // entity collision
                     this.level.explode(this, this.getX(), this.getY(), this.getZ(), 1.0F, false, Level.ExplosionInteraction.MOB);
                     this.discard();
                 }

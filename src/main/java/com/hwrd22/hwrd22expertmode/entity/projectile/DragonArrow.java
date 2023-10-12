@@ -23,7 +23,7 @@ import java.util.Set;
 public class DragonArrow extends AbstractArrow {
     private static final double ARROW_BASE_DAMAGE = 6.0D;
     private final Set<MobEffectInstance> effects = Sets.newHashSet();
-    private Potion potion = Potions.EMPTY;
+    private final Potion potion = Potions.EMPTY;
     public DragonArrow(EntityType<? extends DragonArrow> p_36858_, Level p_36859_) {
         super(p_36858_, p_36859_);
     }

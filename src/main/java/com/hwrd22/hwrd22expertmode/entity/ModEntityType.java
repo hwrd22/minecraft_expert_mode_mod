@@ -14,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public final class ModEntityType {
     private ModEntityType() {}
-    public static DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, ExpertMode.MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, ExpertMode.MODID);
     public static final RegistryObject<EntityType<ThrownSpear>> SPEAR = ENTITIES.register("spear", () -> EntityType.Builder.of((EntityType.EntityFactory<ThrownSpear>)ThrownSpear::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20).build(new ResourceLocation(ExpertMode.MODID, "spear").toString()));
     public static final RegistryObject<EntityType<ThrownGildedTrident>> GILDED_TRIDENT = ENTITIES.register("gilded_trident", () -> EntityType.Builder.of((EntityType.EntityFactory<ThrownGildedTrident>)ThrownGildedTrident::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20).build(new ResourceLocation(ExpertMode.MODID, "gilded_trident").toString()));
     public static final RegistryObject<EntityType<ThrownFakeGildedTrident>> FAKE_GILDED_TRIDENT = ENTITIES.register("fake_gilded_trident", () -> EntityType.Builder.of((EntityType.EntityFactory<ThrownFakeGildedTrident>)ThrownFakeGildedTrident::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20).build(new ResourceLocation(ExpertMode.MODID, "fake_gilded_trident").toString()));

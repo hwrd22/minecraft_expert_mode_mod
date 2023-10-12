@@ -6,7 +6,6 @@ public class PlayerAdrenaline {
     private int adrenaline;
     private boolean adrenaline_used = false;
     private final int MIN_ADRENALINE = 0;
-    private final int MAX_ADRENALINE = 600;
 
     public int getAdrenaline() {
         return adrenaline;
@@ -19,6 +18,7 @@ public class PlayerAdrenaline {
     public void resetAdrenalineUse() { this.adrenaline_used = false; }
 
     public void addAdrenaline(int increment) {
+        int MAX_ADRENALINE = 600;
         this.adrenaline = Math.min(adrenaline + increment, MAX_ADRENALINE);
     }
 

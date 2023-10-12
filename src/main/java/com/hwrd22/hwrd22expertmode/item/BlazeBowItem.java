@@ -25,7 +25,7 @@ public class BlazeBowItem extends BowItem {
     @ParametersAreNonnullByDefault
     public void releaseUsing(ItemStack p_40667_, Level p_40668_, LivingEntity p_40669_, int p_40670_) {
         if (p_40669_ instanceof Player player) {
-            boolean flag = player.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, p_40667_) > 0;
+            boolean flag = player.getAbilities().instabuild || EnchantmentHelper.getTagEnchantmentLevel(Enchantments.INFINITY_ARROWS, p_40667_) > 0;
             ItemStack itemstack = player.getProjectile(p_40667_);
 
             int i = this.getUseDuration(p_40667_) - p_40670_;
@@ -48,17 +48,17 @@ public class BlazeBowItem extends BowItem {
                             flameArrow.setCritArrow(true);
                         }
 
-                        int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, p_40667_);
+                        int j = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.POWER_ARROWS, p_40667_);
                         if (j > 0) {
                             flameArrow.setBaseDamage(flameArrow.getBaseDamage() + (double)j * 0.5D + 0.5D);
                         }
 
-                        int k = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, p_40667_);
+                        int k = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.PUNCH_ARROWS, p_40667_);
                         if (k > 0) {
                             flameArrow.setKnockback(k);
                         }
 
-                        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, p_40667_) > 0) {
+                        if (EnchantmentHelper.getTagEnchantmentLevel(Enchantments.FLAMING_ARROWS, p_40667_) > 0) {
                             flameArrow.setArrowBaseDamage();
                         }
 

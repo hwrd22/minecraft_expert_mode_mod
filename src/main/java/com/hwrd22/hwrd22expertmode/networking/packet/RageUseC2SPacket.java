@@ -27,7 +27,7 @@ public class RageUseC2SPacket {
 
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> supplier) {
+    public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
@@ -46,6 +46,5 @@ public class RageUseC2SPacket {
             });
 
         });
-        return true;
     }
 }

@@ -211,14 +211,14 @@ public class ModItems {
     public static final RegistryObject<JitterShotbowItem> JITTER_SHOTBOW = ITEMS.register("jitter_shotbow", () -> new JitterShotbowItem(new Item.Properties().durability(930).rarity(DEEP_DARK).fireResistant()));
 
     public static class ArmorTiers {
-        static int[] copper_armor_points = {1, 4, 5, 1};
+        static final int[] copper_armor_points = {1, 4, 5, 1};
         public static final ArmorMaterial COPPER = new ModArmorMaterials("copper", 13, copper_armor_points, 10, SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.0f, new Supplier<Ingredient>() {
             @Override
             public Ingredient get() {
                 return Ingredient.of(Items.COPPER_INGOT);
             }
         });
-        static int[] lava_diving_armor_points = {2, 4, 5, 2};
+        static final int[] lava_diving_armor_points = {2, 4, 5, 2};
         public static final ArmorMaterial LAVA_DIVING = new ModArmorMaterials("lava_diving", 25, lava_diving_armor_points, 8, SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.1f, new Supplier<Ingredient>() {
             @Override
             public Ingredient get() {
@@ -226,7 +226,7 @@ public class ModItems {
             }
         });
 
-        static int[] dragon_armor_point = {0, 0, 0, 4};
+        static final int[] dragon_armor_point = {0, 0, 0, 4};
         public static final ArmorMaterial DRAGON = new ModArmorMaterials("dragon", 100, dragon_armor_point, 10, SoundEvents.ARMOR_EQUIP_GENERIC, 4.0f, 0.2f, new Supplier<Ingredient>() {
             @Override
             public Ingredient get() {
@@ -234,7 +234,7 @@ public class ModItems {
             }
         });
 
-        static int[] wither_armor_point = {0, 0, 0, 5};
+        static final int[] wither_armor_point = {0, 0, 0, 5};
         public static final ArmorMaterial WITHER = new ModArmorMaterials("wither", 150, wither_armor_point, 15, SoundEvents.ARMOR_EQUIP_GENERIC, 4.0f, 0.4f, new Supplier<Ingredient>() {
             @Override
             public Ingredient get() {
@@ -242,7 +242,7 @@ public class ModItems {
             }
         });
 
-        static int[] slime_armor_point = {0, 0, 0, 0};  // only purpose is to stop fall damage
+        static final int[] slime_armor_point = {0, 0, 0, 0};  // only purpose is to stop fall damage
         public static final ArmorMaterial SLIME = new ModArmorMaterials("slime", 1, slime_armor_point, 1, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0f, 0.0f, new Supplier<Ingredient>() {
             @Override
             public Ingredient get() {

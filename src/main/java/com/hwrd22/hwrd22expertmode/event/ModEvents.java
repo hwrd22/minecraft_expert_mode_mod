@@ -1243,18 +1243,22 @@ public class ModEvents {
                 boolean noCrystals = true;  // checking for crystals
                 Random randPlayer = new Random();
                 List<? extends Player> players = dragon.getLevel().players();
-                for (Player player : players) {
-                    if (player.isCreative() || player.isSpectator())
-                        players.remove(player);  // removes all creative/spectator players, only survival/adventure players can be targeted by the fireballs
+                List<Player> survivalPlayers = new ArrayList<>();
+                if (!players.isEmpty()) {
+                    for (Player player : players) {
+                        if (!player.isCreative() && !player.isSpectator()) {
+                            survivalPlayers.add(player);
+                        }
+                    }
                 }
-                List<Entity> nearbyEntities = dragon.getLevel().getEntities(dragon, dragon.getBoundingBox().inflate(200d));
+                List<Entity> nearbyEntities = dragon.getLevel().getEntities(dragon, dragon.getBoundingBox().inflate(200f));
                 for (Entity entity : nearbyEntities) {
                     if (entity instanceof EndCrystal) {  // checking for crystals
                         noCrystals = false;
                         break;
                     }
                 }
-                List<? extends Player> nearbyPlayers = players.stream().distinct().filter(nearbyEntities::contains).collect(Collectors.toSet()).stream().toList();  // intersection
+                List<? extends Player> nearbyPlayers = survivalPlayers.stream().distinct().filter(nearbyEntities::contains).collect(Collectors.toSet()).stream().toList();  // intersection
                 if (!nearbyPlayers.isEmpty()) {
                     ServerPlayer randomPlayer = (ServerPlayer) nearbyPlayers.get(randPlayer.nextInt(nearbyPlayers.size()));
                     if (dragon.tickCount % 200 == 0) {
