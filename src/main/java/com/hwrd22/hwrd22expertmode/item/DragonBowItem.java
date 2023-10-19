@@ -61,9 +61,7 @@ public class DragonBowItem extends BowItem {
                             dargonArrow.setSecondsOnFire(100);
                         }
 
-                        p_40667_.hurtAndBreak(1, player, (p_276007_) -> {
-                            p_276007_.broadcastBreakEvent(player.getUsedItemHand());
-                        });
+                        p_40667_.hurtAndBreak(1, player, (p_276007_) -> p_276007_.broadcastBreakEvent(player.getUsedItemHand()));
                         if (flag1 || player.getAbilities().instabuild && (itemstack.is(Items.SPECTRAL_ARROW) || itemstack.is(Items.TIPPED_ARROW))) {
                             dargonArrow.pickup = DragonArrow.Pickup.CREATIVE_ONLY;
                         }

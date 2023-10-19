@@ -31,8 +31,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.UUID;
 
-import static net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH;
-
 public class EnderDragonHead extends ArmorItem {
     private static final EnumMap<Type, UUID> ARMOR_MODIFIER_UUID_PER_TYPE = Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266744_) -> {
         p_266744_.put(ArmorItem.Type.BOOTS, UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"));
@@ -71,9 +69,6 @@ public class EnderDragonHead extends ArmorItem {
     static class ModelSupplier implements IClientItemExtensions {
         public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
             return new EnderDragonHeadModel(Minecraft.getInstance().getEntityModels().bakeLayer(EnderDragonHeadModel.LAYER_LOCATION));
-        }
-        public ResourceLocation getArmorTexture() {
-            return new ResourceLocation("minecraft:textures/entity/enderdragon/dragon.png");
         }
     }
 

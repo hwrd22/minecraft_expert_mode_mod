@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GappleSicknessEffect extends MobEffect implements IForgeMobEffect {
-    protected GappleSicknessEffect(MobEffectCategory p_19451_, int p_19452_) {
-        super(p_19451_, p_19452_);
+    protected GappleSicknessEffect() {
+        super(MobEffectCategory.HARMFUL, 8228616);
     }
 
     public boolean isDurationEffectTick(int p_19455_, int p_19456_) {

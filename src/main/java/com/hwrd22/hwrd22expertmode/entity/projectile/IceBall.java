@@ -31,14 +31,6 @@ public class IceBall extends AbstractHurtingProjectile {
         super(p_36833_, p_36834_);
     }
 
-    public IceBall(EntityType<? extends AbstractHurtingProjectile> p_36817_, double p_36818_, double p_36819_, double p_36820_, double p_36821_, double p_36822_, double p_36823_, Level p_36824_) {
-        super(p_36817_, p_36818_, p_36819_, p_36820_, p_36821_, p_36822_, p_36823_, p_36824_);
-    }
-
-    public IceBall(EntityType<? extends AbstractHurtingProjectile> p_36826_, LivingEntity p_36827_, double p_36828_, double p_36829_, double p_36830_, Level p_36831_) {
-        super(p_36826_, p_36827_, p_36828_, p_36829_, p_36830_, p_36831_);
-    }
-
     public IceBall(Level p_37375_, LivingEntity p_37376_, double p_37377_, double p_37378_, double p_37379_) {
         super(ModEntityType.ICE_BALL.get(), p_37376_, p_37377_, p_37378_, p_37379_, p_37375_);
     }
@@ -67,7 +59,6 @@ public class IceBall extends AbstractHurtingProjectile {
             float f = this.getInertia();
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
-                    float f1 = 0.25F;
                     this.level.addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * 0.25D, d1 - vec3.y * 0.25D, d2 - vec3.z * 0.25D, vec3.x, vec3.y, vec3.z);
                 }
 

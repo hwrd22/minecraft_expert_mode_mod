@@ -23,8 +23,6 @@ public class RageDataSyncS2CPacket {
 
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            ClientRageData.set(rage);
-        });
+        context.enqueueWork(() -> ClientRageData.set(rage));
     }
 }

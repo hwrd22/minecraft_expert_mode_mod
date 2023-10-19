@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PlayerRageProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static final Capability<PlayerRage> PLAYER_RAGE = CapabilityManager.get(new CapabilityToken<PlayerRage>() {
+    public static final Capability<PlayerRage> PLAYER_RAGE = CapabilityManager.get(new CapabilityToken<>() {
     });
 
     private PlayerRage rage = null;

@@ -5,8 +5,8 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
 public class BleedingEffect extends MobEffect {
-    protected BleedingEffect(MobEffectCategory p_19451_, int p_19452_) {
-        super(p_19451_, p_19452_);
+    protected BleedingEffect() {
+        super(MobEffectCategory.HARMFUL, 8847360);
     }
 
     @Override

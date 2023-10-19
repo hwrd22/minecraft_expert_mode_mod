@@ -35,11 +35,8 @@ public class JitterShotbowItem extends CrossbowItem {
     private static final String TAG_CHARGED = "Charged";
     private static final String TAG_CHARGED_PROJECTILES = "ChargedProjectiles";
     private static final int MAX_CHARGE_DURATION = 1;
-    public static final int DEFAULT_RANGE = 8;
     private boolean startSoundPlayed = false;
     private boolean midLoadSoundPlayed = false;
-    private static final float START_SOUND_PERCENT = 0.2F;
-    private static final float MID_SOUND_PERCENT = 0.5F;
     private static final float ARROW_POWER = 4.725F;
     private static final float FIREWORK_POWER = 2.4F;
     public JitterShotbowItem(Properties p_43009_) {
@@ -71,12 +68,12 @@ public class JitterShotbowItem extends CrossbowItem {
     }
 
     private static float getShootingPower(ItemStack p_40946_) {
-        return containsChargedProjectile(p_40946_, Items.FIREWORK_ROCKET) ? 2.4F : 4.725F;
+        return containsChargedProjectile(p_40946_, Items.FIREWORK_ROCKET) ? FIREWORK_POWER : ARROW_POWER;
     }
 
     public void releaseUsing(ItemStack p_40875_, Level p_40876_, LivingEntity p_40877_, int p_40878_) {
         int i = this.getUseDuration(p_40875_) - p_40878_;
-        float f = getPowerForTime(i, p_40875_);
+        float f = getPowerForTime(i);
         if (f >= 1.0F && !isCharged(p_40875_) && tryLoadProjectiles(p_40877_, p_40875_)) {
             setCharged(p_40875_, true);
             SoundSource soundsource = p_40877_ instanceof Player ? SoundSource.PLAYERS : SoundSource.HOSTILE;
@@ -131,19 +128,19 @@ public class JitterShotbowItem extends CrossbowItem {
 
     public static boolean isCharged(ItemStack p_40933_) {
         CompoundTag compoundtag = p_40933_.getTag();
-        return compoundtag != null && compoundtag.getBoolean("Charged");
+        return compoundtag != null && compoundtag.getBoolean(TAG_CHARGED);
     }
 
     public static void setCharged(ItemStack p_40885_, boolean p_40886_) {
         CompoundTag compoundtag = p_40885_.getOrCreateTag();
-        compoundtag.putBoolean("Charged", p_40886_);
+        compoundtag.putBoolean(TAG_CHARGED, p_40886_);
     }
 
     private static void addChargedProjectile(ItemStack p_40929_, ItemStack p_40930_) {
         CompoundTag compoundtag = p_40929_.getOrCreateTag();
         ListTag listtag;
-        if (compoundtag.contains("ChargedProjectiles", 9)) {
-            listtag = compoundtag.getList("ChargedProjectiles", 10);
+        if (compoundtag.contains(TAG_CHARGED_PROJECTILES, 9)) {
+            listtag = compoundtag.getList(TAG_CHARGED_PROJECTILES, 10);
         } else {
             listtag = new ListTag();
         }
@@ -151,14 +148,14 @@ public class JitterShotbowItem extends CrossbowItem {
         CompoundTag compoundtag1 = new CompoundTag();
         p_40930_.save(compoundtag1);
         listtag.add(compoundtag1);
-        compoundtag.put("ChargedProjectiles", listtag);
+        compoundtag.put(TAG_CHARGED_PROJECTILES, listtag);
     }
 
     private static List<ItemStack> getChargedProjectiles(ItemStack p_40942_) {
         List<ItemStack> list = Lists.newArrayList();
         CompoundTag compoundtag = p_40942_.getTag();
-        if (compoundtag != null && compoundtag.contains("ChargedProjectiles", 9)) {
-            ListTag listtag = compoundtag.getList("ChargedProjectiles", 10);
+        if (compoundtag != null && compoundtag.contains(TAG_CHARGED_PROJECTILES, 9)) {
+            ListTag listtag = compoundtag.getList(TAG_CHARGED_PROJECTILES, 10);
             if (listtag != null) {
                 for(int i = 0; i < listtag.size(); ++i) {
                     CompoundTag compoundtag1 = listtag.getCompound(i);
@@ -181,9 +178,7 @@ public class JitterShotbowItem extends CrossbowItem {
     }
 
     public static boolean containsChargedProjectile(ItemStack p_40872_, Item p_40873_) {
-        return getChargedProjectiles(p_40872_).stream().anyMatch((p_40870_) -> {
-            return p_40870_.is(p_40873_);
-        });
+        return getChargedProjectiles(p_40872_).stream().anyMatch((p_40870_) -> p_40870_.is(p_40873_));
     }
 
     private static void shootProjectile(Level p_40895_, LivingEntity p_40896_, InteractionHand p_40897_, ItemStack p_40898_, ItemStack p_40899_, float p_40900_, boolean p_40901_, float p_40902_, float p_40903_, float p_40904_) {
@@ -193,14 +188,13 @@ public class JitterShotbowItem extends CrossbowItem {
             if (flag) {
                 projectile = new FireworkRocketEntity(p_40895_, p_40899_, p_40896_, p_40896_.getX(), p_40896_.getEyeY() - (double)0.15F, p_40896_.getZ(), true);
             } else {
-                projectile = getArrow(p_40895_, p_40896_, p_40898_, p_40899_);
+                projectile = getArrow(p_40895_, p_40896_, p_40899_);
                 if (p_40901_ || p_40904_ != 0.0F) {
                     ((AbstractArrow)projectile).pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                 }
             }
 
-            if (p_40896_ instanceof CrossbowAttackMob) {
-                CrossbowAttackMob crossbowattackmob = (CrossbowAttackMob)p_40896_;
+            if (p_40896_ instanceof CrossbowAttackMob crossbowattackmob) {
                 crossbowattackmob.shootCrossbowProjectile(crossbowattackmob.getTarget(), p_40898_, projectile, p_40904_);
             } else {
                 Vec3 vec31 = p_40896_.getUpVector(1.0F);
@@ -210,15 +204,13 @@ public class JitterShotbowItem extends CrossbowItem {
                 projectile.shoot((double)vector3f.x(), (double)vector3f.y(), (double)vector3f.z(), p_40902_, p_40903_);
             }
 
-            p_40898_.hurtAndBreak(flag ? 3 : 1, p_40896_, (p_40858_) -> {
-                p_40858_.broadcastBreakEvent(p_40897_);
-            });
+            p_40898_.hurtAndBreak(flag ? 3 : 1, p_40896_, (p_40858_) -> p_40858_.broadcastBreakEvent(p_40897_));
             p_40895_.addFreshEntity(projectile);
             p_40895_.playSound((Player)null, p_40896_.getX(), p_40896_.getY(), p_40896_.getZ(), SoundEvents.CROSSBOW_SHOOT, SoundSource.PLAYERS, 1.0F, p_40900_);
         }
     }
 
-    private static AbstractArrow getArrow(Level p_40915_, LivingEntity p_40916_, ItemStack p_40917_, ItemStack p_40918_) {
+    private static AbstractArrow getArrow(Level p_40915_, LivingEntity p_40916_, ItemStack p_40918_) {
         ArrowItem arrowitem = (ArrowItem)(p_40918_.getItem() instanceof ArrowItem ? p_40918_.getItem() : Items.ARROW);
         AbstractArrow abstractarrow = arrowitem.createArrow(p_40915_, p_40918_, p_40916_);
         abstractarrow.setCritArrow(true);  // defaults to crit arrow regardless of entity
@@ -275,9 +267,9 @@ public class JitterShotbowItem extends CrossbowItem {
 
     public void onUseTick(Level p_40910_, LivingEntity p_40911_, ItemStack p_40912_, int p_40913_) {
         if (!p_40910_.isClientSide) {
-            SoundEvent soundevent = this.getStartSound();
+            SoundEvent soundevent = SoundEvents.CROSSBOW_LOADING_START;
             SoundEvent soundevent1 = SoundEvents.CROSSBOW_LOADING_MIDDLE;
-            float f = (float)(p_40912_.getUseDuration() - p_40913_) / (float)getChargeDuration(p_40912_);
+            float f = (float)(p_40912_.getUseDuration() - p_40913_) / (float)getChargeDuration();
             if (f < 0.2F) {
                 this.startSoundPlayed = false;
                 this.midLoadSoundPlayed = false;
@@ -298,23 +290,15 @@ public class JitterShotbowItem extends CrossbowItem {
     }
 
     public int getUseDuration(ItemStack p_40938_) {
-        return getChargeDuration(p_40938_) + 3;
+        return getChargeDuration() + 3;
     }
 
-    public static int getChargeDuration(ItemStack p_40940_) {
-        return 1;
+    public static int getChargeDuration() {
+        return MAX_CHARGE_DURATION;
     }
 
-    public UseAnim getUseAnimation(ItemStack p_40935_) {
-        return UseAnim.CROSSBOW;
-    }
-
-    private SoundEvent getStartSound() {
-        return SoundEvents.CROSSBOW_LOADING_START;
-    }
-
-    private static float getPowerForTime(int p_40854_, ItemStack p_40855_) {
-        float f = (float)p_40854_ / (float)getChargeDuration(p_40855_);
+    private static float getPowerForTime(int p_40854_) {
+        float f = (float)p_40854_ / (float)getChargeDuration();
         if (f > 1.0F) {
             f = 1.0F;
         }
@@ -332,9 +316,7 @@ public class JitterShotbowItem extends CrossbowItem {
                 List<Component> list1 = Lists.newArrayList();
                 Items.FIREWORK_ROCKET.appendHoverText(itemstack, p_40881_, list1, p_40883_);
                 if (!list1.isEmpty()) {
-                    for(int i = 0; i < list1.size(); ++i) {
-                        list1.set(i, Component.literal("  ").append(list1.get(i)).withStyle(ChatFormatting.GRAY));
-                    }
+                    list1.replaceAll(p130942 -> Component.literal("  ").append(p130942).withStyle(ChatFormatting.GRAY));
 
                     p_40882_.addAll(list1);
                 }
@@ -343,12 +325,4 @@ public class JitterShotbowItem extends CrossbowItem {
         }
     }
 
-    public boolean useOnRelease(ItemStack p_150801_) {
-        return p_150801_.is(this);
-    }
-
-    @Override
-    public int getDefaultProjectileRange() {
-        return 8;
-    }
 }

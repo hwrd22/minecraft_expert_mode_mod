@@ -36,9 +36,7 @@ public class FakeGildedTridentItem extends TridentItem {
                 int j = EnchantmentHelper.getRiptide(p_43394_);
                 if (j <= 0 || player.isInWaterOrRain()) {
                     if (!p_43395_.isClientSide) {
-                        p_43394_.hurtAndBreak(1, player, (p_43388_) -> {
-                            p_43388_.broadcastBreakEvent(p_43396_.getUsedItemHand());
-                        });
+                        p_43394_.hurtAndBreak(1, player, (p_43388_) -> p_43388_.broadcastBreakEvent(p_43396_.getUsedItemHand()));
                         if (j == 0) {
                             ThrownFakeGildedTrident throwntrident = new ThrownFakeGildedTrident(p_43395_, player, p_43394_);
                             throwntrident.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F + (float)j * 0.5F, 1.0F);
@@ -69,7 +67,6 @@ public class FakeGildedTridentItem extends TridentItem {
                         player.push((double)f1, (double)f2, (double)f3);
                         player.startAutoSpinAttack(20);
                         if (player.isOnGround()) {
-                            float f6 = 1.1999999F;
                             player.move(MoverType.SELF, new Vec3(0.0D, (double)1.1999999F, 0.0D));
                         }
 

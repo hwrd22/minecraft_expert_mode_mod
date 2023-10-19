@@ -40,7 +40,7 @@ public class ExpertMode
         ModItems.register(modEventBus);
 
         // Register the commonSetup method for modloading
-        modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener((FMLCommonSetupEvent event) -> commonSetup());
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -57,7 +57,7 @@ public class ExpertMode
         ModPotions.register(modEventBus);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
+    private void commonSetup()
     {
         ModItemProperties.addCustomItemProperties();
         ModMessages.register();

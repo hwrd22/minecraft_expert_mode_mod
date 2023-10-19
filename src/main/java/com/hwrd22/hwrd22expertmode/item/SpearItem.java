@@ -27,14 +27,14 @@ import java.util.List;
 
 public class SpearItem extends Item implements Vanishable {
     public static final int THROW_THRESHOLD_TIME = 10;
-    public static final float BASE_DAMAGE = 8.0F;
+    public static final float BASE_DAMAGE = 6.0F;
     public static final float SHOOT_POWER = 2.5F;
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
 
     public SpearItem(Item.Properties p_43381_) {
         super(p_43381_);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 6.0D, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", BASE_DAMAGE, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", (double)-2.75F, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = builder.build();
     }
@@ -54,13 +54,11 @@ public class SpearItem extends Item implements Vanishable {
     public void releaseUsing(ItemStack p_43394_, Level p_43395_, LivingEntity p_43396_, int p_43397_) {
         if (p_43396_ instanceof Player player) {
             int i = this.getUseDuration(p_43394_) - p_43397_;
-            if (i >= 10) {
+            if (i >= THROW_THRESHOLD_TIME) {
                 if (!p_43395_.isClientSide) {
-                    p_43394_.hurtAndBreak(1, player, (p_43388_) -> {
-                        p_43388_.broadcastBreakEvent(p_43396_.getUsedItemHand());
-                    });
+                    p_43394_.hurtAndBreak(1, player, (p_43388_) -> p_43388_.broadcastBreakEvent(p_43396_.getUsedItemHand()));
                     ThrownSpear thrownspear = new ThrownSpear(p_43395_, player, p_43394_);
-                    thrownspear.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F, 1.0F);
+                    thrownspear.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, SHOOT_POWER, 1.0F);
                     if (player.getAbilities().instabuild) {
                         thrownspear.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                     }
@@ -87,17 +85,13 @@ public class SpearItem extends Item implements Vanishable {
     }
 
     public boolean hurtEnemy(ItemStack p_43390_, LivingEntity p_43391_, LivingEntity p_43392_) {
-        p_43390_.hurtAndBreak(1, p_43392_, (p_43414_) -> {
-            p_43414_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-        });
+        p_43390_.hurtAndBreak(1, p_43392_, (p_43414_) -> p_43414_.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         return true;
     }
 
     public boolean mineBlock(ItemStack p_43399_, Level p_43400_, BlockState p_43401_, BlockPos p_43402_, LivingEntity p_43403_) {
         if ((double)p_43401_.getDestroySpeed(p_43400_, p_43402_) != 0.0D) {
-            p_43399_.hurtAndBreak(2, p_43403_, (p_43385_) -> {
-                p_43385_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-            });
+            p_43399_.hurtAndBreak(2, p_43403_, (p_43385_) -> p_43385_.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         }
 
         return true;

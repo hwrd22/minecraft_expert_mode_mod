@@ -227,6 +227,9 @@ public class ModEvents {
             if (event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.IRON_HELMET && event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() == Items.IRON_CHESTPLATE && event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() == Items.IRON_LEGGINGS && event.player.getItemBySlot(EquipmentSlot.FEET).getItem() == Items.IRON_BOOTS) {
                 event.player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1));
             }
+            if (event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.CHAINMAIL_HELMET && event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() == Items.CHAINMAIL_CHESTPLATE && event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() == Items.CHAINMAIL_LEGGINGS && event.player.getItemBySlot(EquipmentSlot.FEET).getItem() == Items.CHAINMAIL_BOOTS) {
+                event.player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 1));
+            }
             if ((event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.DIAMOND_HELMET || event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.WITHER_SKULL.get() || event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.ENDER_DRAGON_HEAD.get()) && event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() == Items.DIAMOND_CHESTPLATE && event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() == Items.DIAMOND_LEGGINGS && event.player.getItemBySlot(EquipmentSlot.FEET).getItem() == Items.DIAMOND_BOOTS) {
                 event.player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 1));
             }

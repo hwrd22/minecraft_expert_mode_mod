@@ -39,9 +39,7 @@ public class FireStaffItem extends ProjectileWeaponItem implements Vanishable {
                 MagicFireball fireball = new MagicFireball(p_40668_, p_40669_, -d2, -d3, -d4);
                 fireball.setPos(p_40669_.getEyePosition());
                 fireball.shootFromRotation(p_40669_, p_40669_.getXRot(), p_40669_.getYRot(), 0.0f, f * 0.5F, 0.0f);
-                p_40667_.hurtAndBreak(1, p_40669_, (p_276007_) -> {
-                    p_276007_.broadcastBreakEvent(p_40669_.getUsedItemHand());
-                });
+                p_40667_.hurtAndBreak(1, p_40669_, (p_276007_) -> p_276007_.broadcastBreakEvent(p_40669_.getUsedItemHand()));
                 p_40668_.addFreshEntity(fireball);
             }
             if (p_40669_ instanceof Player player) {

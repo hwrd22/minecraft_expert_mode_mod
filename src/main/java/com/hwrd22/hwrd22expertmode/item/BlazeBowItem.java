@@ -62,9 +62,7 @@ public class BlazeBowItem extends BowItem {
                             flameArrow.setArrowBaseDamage();
                         }
 
-                        p_40667_.hurtAndBreak(1, player, (p_276007_) -> {
-                            p_276007_.broadcastBreakEvent(player.getUsedItemHand());
-                        });
+                        p_40667_.hurtAndBreak(1, player, (p_276007_) -> p_276007_.broadcastBreakEvent(player.getUsedItemHand()));
                         if (flag1 || player.getAbilities().instabuild && (itemstack.is(Items.SPECTRAL_ARROW) || itemstack.is(Items.TIPPED_ARROW))) {
                             flameArrow.pickup = FlameArrow.Pickup.CREATIVE_ONLY;
                         }

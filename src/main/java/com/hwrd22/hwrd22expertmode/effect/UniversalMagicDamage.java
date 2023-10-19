@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class UniversalMagicDamage extends InstantenousMobEffect {
-    protected UniversalMagicDamage(MobEffectCategory p_19451_, int p_19452_) {
-        super(p_19451_, p_19452_);
+    protected UniversalMagicDamage() {
+        super(MobEffectCategory.HARMFUL, 0);
     }
 
     @Override

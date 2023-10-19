@@ -6,8 +6,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Skeleton;
 
 public class FrostburnEffect extends MobEffect {
-    protected FrostburnEffect(MobEffectCategory p_19451_, int p_19452_) {
-        super(p_19451_, p_19452_);
+    protected FrostburnEffect() {
+        super(MobEffectCategory.HARMFUL, 12121087);
     }
 
     @Override

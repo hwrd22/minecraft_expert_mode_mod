@@ -40,7 +40,6 @@ public class LightningArrow extends Arrow {
         if (!this.level.isClientSide) {
             Entity entity = this.getOwner();
             if (!(entity instanceof Mob) || net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, entity)) {
-                BlockPos blockpos = result.getBlockPos().relative(result.getDirection());
                 ArrowBolt bolt = ModEntityType.LIGHTNING_BOLT_ARROW.get().create(this.level);
                 bolt.setPos(this.getBlockX(), this.getBlockY(), this.getBlockZ());
                 this.level.addFreshEntity(bolt);

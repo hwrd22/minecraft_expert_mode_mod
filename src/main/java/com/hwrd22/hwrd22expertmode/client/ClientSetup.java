@@ -48,24 +48,12 @@ public class ClientSetup {
     @SubscribeEvent
     public static void propertyOverrideRegistry(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            ItemProperties.register(ModItems.SPEAR.get(), new ResourceLocation(ExpertMode.MODID, "raising"), (stack, level, living, id) -> {
-                return living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f;
-            });
-            ItemProperties.register(ModItems.GILDED_TRIDENT.get(), new ResourceLocation(ExpertMode.MODID, "raising"), (stack, level, living, id) -> {
-                return living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f;
-            });
-            ItemProperties.register(ModItems.BLAZE_BOW.get(), new ResourceLocation(ExpertMode.MODID, "pulling"), (stack, level, living, id) -> {
-                return living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f;
-            });
-            ItemProperties.register(ModItems.JITTER_SHOTBOW.get(), new ResourceLocation(ExpertMode.MODID, "pulling"), (stack, level, living, id) -> {
-                return living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f;
-            });
-            ItemProperties.register(ModItems.JITTER_SHOTBOW.get(), new ResourceLocation(ExpertMode.MODID, "charged"), (stack, level, living, id) -> {
-                return living != null && JitterShotbowItem.isCharged(stack) ? 1.0f : 0.0f;
-            });
-            ItemProperties.register(ModItems.JITTER_SHOTBOW.get(), new ResourceLocation(ExpertMode.MODID, "firework"), (stack, level, living, id) -> {
-                return living != null && JitterShotbowItem.containsChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.0f : 0.0f;
-            });
+            ItemProperties.register(ModItems.SPEAR.get(), new ResourceLocation(ExpertMode.MODID, "raising"), (stack, level, living, id) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f);
+            ItemProperties.register(ModItems.GILDED_TRIDENT.get(), new ResourceLocation(ExpertMode.MODID, "raising"), (stack, level, living, id) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f);
+            ItemProperties.register(ModItems.BLAZE_BOW.get(), new ResourceLocation(ExpertMode.MODID, "pulling"), (stack, level, living, id) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f);
+            ItemProperties.register(ModItems.JITTER_SHOTBOW.get(), new ResourceLocation(ExpertMode.MODID, "pulling"), (stack, level, living, id) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0f : 0.0f);
+            ItemProperties.register(ModItems.JITTER_SHOTBOW.get(), new ResourceLocation(ExpertMode.MODID, "charged"), (stack, level, living, id) -> living != null && JitterShotbowItem.isCharged(stack) ? 1.0f : 0.0f);
+            ItemProperties.register(ModItems.JITTER_SHOTBOW.get(), new ResourceLocation(ExpertMode.MODID, "firework"), (stack, level, living, id) -> living != null && JitterShotbowItem.containsChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.0f : 0.0f);
             ItemProperties.register(ModItems.BLAZE_BOW.get(), new ResourceLocation(ExpertMode.MODID, "pull"), (stack, level, living, id) -> {
                 if (living != null && living.isUsingItem()) {
                     if (living.getTicksUsingItem() >= 22)

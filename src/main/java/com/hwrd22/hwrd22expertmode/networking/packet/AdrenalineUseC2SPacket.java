@@ -18,9 +18,6 @@ public class AdrenalineUseC2SPacket {
     public AdrenalineUseC2SPacket() {
     }
 
-    public AdrenalineUseC2SPacket(FriendlyByteBuf friendlyByteBuf) {
-    }
-
     public void toBytes(FriendlyByteBuf buf) {
 
     }

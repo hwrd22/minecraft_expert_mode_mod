@@ -212,43 +212,18 @@ public class ModItems {
 
     public static class ArmorTiers {
         static final int[] copper_armor_points = {1, 4, 5, 1};
-        public static final ArmorMaterial COPPER = new ModArmorMaterials("copper", 13, copper_armor_points, 10, SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.0f, new Supplier<Ingredient>() {
-            @Override
-            public Ingredient get() {
-                return Ingredient.of(Items.COPPER_INGOT);
-            }
-        });
+        public static final ArmorMaterial COPPER = new ModArmorMaterials("copper", 13, copper_armor_points, 10, SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.0f, () -> Ingredient.of(Items.COPPER_INGOT));
         static final int[] lava_diving_armor_points = {2, 4, 5, 2};
-        public static final ArmorMaterial LAVA_DIVING = new ModArmorMaterials("lava_diving", 25, lava_diving_armor_points, 8, SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.1f, new Supplier<Ingredient>() {
-            @Override
-            public Ingredient get() {
-                return Ingredient.of(Items.OBSIDIAN);
-            }
-        });
+        public static final ArmorMaterial LAVA_DIVING = new ModArmorMaterials("lava_diving", 25, lava_diving_armor_points, 8, SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.1f, () -> Ingredient.of(Items.OBSIDIAN));
 
         static final int[] dragon_armor_point = {0, 0, 0, 4};
-        public static final ArmorMaterial DRAGON = new ModArmorMaterials("dragon", 100, dragon_armor_point, 10, SoundEvents.ARMOR_EQUIP_GENERIC, 4.0f, 0.2f, new Supplier<Ingredient>() {
-            @Override
-            public Ingredient get() {
-                return Ingredient.of(Items.DRAGON_BREATH);
-            }
-        });
+        public static final ArmorMaterial DRAGON = new ModArmorMaterials("dragon", 100, dragon_armor_point, 10, SoundEvents.ARMOR_EQUIP_GENERIC, 4.0f, 0.2f, () -> Ingredient.of(Items.DRAGON_BREATH));
 
         static final int[] wither_armor_point = {0, 0, 0, 5};
-        public static final ArmorMaterial WITHER = new ModArmorMaterials("wither", 150, wither_armor_point, 15, SoundEvents.ARMOR_EQUIP_GENERIC, 4.0f, 0.4f, new Supplier<Ingredient>() {
-            @Override
-            public Ingredient get() {
-                return Ingredient.of(Items.WITHER_SKELETON_SKULL);
-            }
-        });
+        public static final ArmorMaterial WITHER = new ModArmorMaterials("wither", 150, wither_armor_point, 15, SoundEvents.ARMOR_EQUIP_GENERIC, 4.0f, 0.4f, () -> Ingredient.of(Items.WITHER_SKELETON_SKULL));
 
         static final int[] slime_armor_point = {0, 0, 0, 0};  // only purpose is to stop fall damage
-        public static final ArmorMaterial SLIME = new ModArmorMaterials("slime", 1, slime_armor_point, 1, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0f, 0.0f, new Supplier<Ingredient>() {
-            @Override
-            public Ingredient get() {
-                return Ingredient.of(Items.SLIME_BALL);
-            }
-        });
+        public static final ArmorMaterial SLIME = new ModArmorMaterials("slime", 1, slime_armor_point, 1, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0f, 0.0f, () -> Ingredient.of(Items.SLIME_BALL));
     }
 
     public static final RegistryObject<FireStaffItem> FIRE_STAFF = ITEMS.register("fire_staff", () -> new FireStaffItem(new Item.Properties().defaultDurability(32).rarity(Rarity.UNCOMMON)));

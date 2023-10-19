@@ -25,7 +25,7 @@ public class ModMessages {
         INSTANCE = net;
 
         net.messageBuilder(RageUseC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER).decoder(RageUseC2SPacket::new).encoder(RageUseC2SPacket::toBytes).consumerMainThread(RageUseC2SPacket::handle).add();
-        net.messageBuilder(AdrenalineUseC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER).decoder(AdrenalineUseC2SPacket::new).encoder(AdrenalineUseC2SPacket::toBytes).consumerMainThread(AdrenalineUseC2SPacket::handle).add();
+        net.messageBuilder(AdrenalineUseC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER).decoder(friendlyByteBuf -> new AdrenalineUseC2SPacket()).encoder(AdrenalineUseC2SPacket::toBytes).consumerMainThread(AdrenalineUseC2SPacket::handle).add();
 
         net.messageBuilder(RageDataSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT).decoder(RageDataSyncS2CPacket::new).encoder(RageDataSyncS2CPacket::toBytes).consumerMainThread(RageDataSyncS2CPacket::handle).add();
         net.messageBuilder(AdrenalineDataSyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT).decoder(AdrenalineDataSyncS2CPacket::new).encoder(AdrenalineDataSyncS2CPacket::toBytes).consumerMainThread(AdrenalineDataSyncS2CPacket::handle).add();

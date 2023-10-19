@@ -29,7 +29,7 @@ public class PoseidonTridentItem extends TridentItem {
     public PoseidonTridentItem(Properties p_43381_) {
         super(p_43381_);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 12.0D, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", BASE_DAMAGE, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -2.9F, AttributeModifier.Operation.ADDITION));
         this.defaultModifiers = builder.build();
     }
@@ -41,9 +41,7 @@ public class PoseidonTridentItem extends TridentItem {
                 int j = EnchantmentHelper.getRiptide(p_43394_);
                 if (j <= 0 || player.isInWaterOrRain()) {
                     if (!p_43395_.isClientSide) {
-                        p_43394_.hurtAndBreak(1, player, (p_43388_) -> {
-                            p_43388_.broadcastBreakEvent(p_43396_.getUsedItemHand());
-                        });
+                        p_43394_.hurtAndBreak(1, player, (p_43388_) -> p_43388_.broadcastBreakEvent(p_43396_.getUsedItemHand()));
                         if (j == 0) {
                             ThrownPoseidonTrident throwntrident = new ThrownPoseidonTrident(p_43395_, player, p_43394_);
                             throwntrident.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F + (float)j * 0.5F, 1.0F);

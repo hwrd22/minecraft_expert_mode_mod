@@ -60,9 +60,7 @@ public class WitherBowItem extends BowItem {
                             witherarrow.setSecondsOnFire(100);
                         }
 
-                        p_40667_.hurtAndBreak(1, player, (p_276007_) -> {
-                            p_276007_.broadcastBreakEvent(player.getUsedItemHand());
-                        });
+                        p_40667_.hurtAndBreak(1, player, (p_276007_) -> p_276007_.broadcastBreakEvent(player.getUsedItemHand()));
                         if (flag1 || player.getAbilities().instabuild && (itemstack.is(Items.SPECTRAL_ARROW) || itemstack.is(Items.TIPPED_ARROW))) {
                             witherarrow.pickup = WitherArrow.Pickup.CREATIVE_ONLY;
                         }
