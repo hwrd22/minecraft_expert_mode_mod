@@ -5,8 +5,8 @@ plugins {
 }
 
 version = '1.0'
-group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+group = 'com.hwrd22.hwrd22expertmode' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'hwrd22expertmode'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -104,7 +104,7 @@ minecraft {
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                hwrd22expertmode {
                     source sourceSets.main
                 }
             }
@@ -146,12 +146,12 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "examplemod",
-                "Specification-Vendor"    : "examplemodsareus",
+                "Specification-Title"     : "Expert Mode Mod",
+                "Specification-Vendor"    : "hwrd22",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "examplemodsareus",
+                "Implementation-Vendor"   : "hwrd22",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
