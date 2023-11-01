@@ -1283,7 +1283,7 @@ public class ModEvents {
                         dragon.playSound(SoundEvents.ENDER_DRAGON_SHOOT, 1.0F, 1.0F / (dragon.getRandom().nextFloat() * 0.4F + 0.8F));
                         dragon.level.addFreshEntity(fireball);
                     }
-                    if (dragon.tickCount % 200 == 0 && noCrystals) {
+                    if (dragon.tickCount % 200 == 0 && noCrystals) {  // Shulker bullet on player
                         ShulkerBullet bullet = new ShulkerBullet(dragon.level, dragon, randomPlayer, Direction.Axis.Y);
                         bullet.setPos(randomPlayer.getX(), randomPlayer.getY() + 10, randomPlayer.getZ());
                         bullet.setDeltaMovement(0.0, -2.5, 0.0);
@@ -1295,7 +1295,7 @@ public class ModEvents {
                         Random randDirection = new Random();
                         DragonFireball fireball = new DragonFireball(dragon.level, dragon, 0, 0, 0);
                         fireball.setPos(dragon.getX() + vec3.x * 16.0D, dragon.getEyeY(), fireball.getZ() + vec3.z * 16.0D);
-                        fireball.setDeltaMovement(randDirection.nextDouble(-1.0, 1.0), randDirection.nextDouble(-5, -1), randDirection.nextDouble(-1.0, 1.0));
+                        fireball.setDeltaMovement(randDirection.nextDouble(-1.0, 1.0), randDirection.nextDouble(-10, -5), randDirection.nextDouble(-1.0, 1.0));
                         dragon.playSound(SoundEvents.ENDER_DRAGON_SHOOT, 1.0F, 1.0F / (dragon.getRandom().nextFloat() * 0.4F + 0.8F));
                         dragon.level.addFreshEntity(fireball);
                     }
