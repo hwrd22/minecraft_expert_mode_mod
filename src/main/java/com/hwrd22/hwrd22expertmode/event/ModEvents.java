@@ -163,9 +163,16 @@ public class ModEvents {
             });
             event.player.getCapability(PlayerAdrenalineProvider.PLAYER_ADRENALINE).ifPresent(adrenaline -> {
                 boolean nearbyBosses = false;
-                List<Entity> entities = event.player.getLevel().getEntities(event.player, event.player.getBoundingBox().inflate(160.0D, 160.0D, 160.0D));
-                for (Entity entity : entities) {
-                    if (entity instanceof Evoker || entity instanceof ElderGuardian || entity instanceof WitherBoss || entity instanceof EnderDragon || entity instanceof Warden || entity instanceof PiglinBrute) {
+                List<Entity> bossScan = event.player.getLevel().getEntities(event.player, event.player.getBoundingBox().inflate(160.0D, 160.0D, 160.0D));  // Long range for bosses with health bars (Dragon/Wither)
+                List<Entity> minibossScan = event.player.getLevel().getEntities(event.player, event.player.getBoundingBox().inflate(29.0D, 29.0D, 29.0D));  // Shorter range for "bosses" without health bars
+                for (Entity entity : bossScan) {
+                    if (entity instanceof WitherBoss || entity instanceof EnderDragon) {
+                        nearbyBosses = true;
+                        break;
+                    }
+                }
+                for (Entity entity : minibossScan) {
+                    if (entity instanceof Evoker || entity instanceof ElderGuardian || entity instanceof Warden || entity instanceof PiglinBrute) {
                         nearbyBosses = true;
                         break;
                     }
