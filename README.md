@@ -3,7 +3,6 @@ An in-progress mod for Minecraft: Java Edition that aims to make the game more s
 Based off of a Minecraft datapack I created.
 
 <b>Minecraft Version: 1.20.2</b>
-
 <b>Modloader: NeoForge 1.20.2-20.2.86+</b>
 
 ## Installation
