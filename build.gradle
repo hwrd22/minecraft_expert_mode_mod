@@ -4,7 +4,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-version = '1.0.0-alpha-3 (1.19.4)'
+version = '1.0.0-alpha-4 (1.19.4)'
 group = 'com.hwrd22.hwrd22expertmode' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'hwrd22expertmode'
 
