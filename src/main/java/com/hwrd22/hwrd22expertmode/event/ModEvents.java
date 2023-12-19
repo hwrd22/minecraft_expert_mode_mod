@@ -210,6 +210,10 @@ public class ModEvents {
             }
             if (event.player.level().dimension() == Level.NETHER && !event.player.hasEffect(MobEffects.NIGHT_VISION))
                 event.player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60));
+            if (event.player.level().dimension() == Level.NETHER && event.player.hasEffect(MobEffects.FIRE_RESISTANCE) && event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() != ModItems.LAVA_DIVING_HELMET.get() && event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() != ModItems.LAVA_DIVING_CHESTPLATE.get() && event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() != ModItems.LAVA_DIVING_LEGGINGS.get() && event.player.getItemBySlot(EquipmentSlot.FEET).getItem() != ModItems.LAVA_DIVING_BOOTS.get()) {
+                event.player.removeEffect(MobEffects.FIRE_RESISTANCE);
+                event.player.displayClientMessage(Component.literal("You feel the Fire Resistance melt away in the Nether...").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), true);
+            }
             ServerPlayer advancementChecker = (ServerPlayer) event.player;
             AdvancementProgress progress = advancementChecker.getAdvancements().getOrStartProgress(advancementChecker.createCommandSourceStack().getAdvancement(new ResourceLocation("minecraft", "nether/root")));
             if (event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR && event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() == Items.AIR && event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() == Items.AIR && event.player.getItemBySlot(EquipmentSlot.FEET).getItem() == Items.AIR && event.player.isCrouching() && !progress.isDone()) {
