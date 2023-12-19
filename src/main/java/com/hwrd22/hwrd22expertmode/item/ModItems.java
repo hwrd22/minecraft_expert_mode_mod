@@ -11,8 +11,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
-
 public class ModItems {
     // Rarities
     public static final Rarity ILLAGER = Rarity.create("illager", ChatFormatting.GREEN);
@@ -229,6 +227,7 @@ public class ModItems {
     public static final RegistryObject<FireStaffItem> FIRE_STAFF = ITEMS.register("fire_staff", () -> new FireStaffItem(new Item.Properties().defaultDurability(32).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<IceStaffItem> ICE_STAFF = ITEMS.register("ice_staff", () -> new IceStaffItem(new Item.Properties().defaultDurability(32).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<LightningStaffItem> LIGHTNING_STAFF = ITEMS.register("lightning_staff", () -> new LightningStaffItem(new Item.Properties().defaultDurability(32).rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<ThiefGloveItem> THIEF_GLOVE = ITEMS.register("thief_glove", () -> new ThiefGloveItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

@@ -66,6 +66,7 @@ public class ExpertMode
     private void addCreative(CreativeModeTabEvent.BuildContents event)
     {
         if (event.getTab() == CreativeModeTabs.COMBAT) {
+            event.accept(ModItems.THIEF_GLOVE);
             event.accept(ModItems.KNIFE);
             event.accept(ModItems.VEX_SWORD);
             event.accept(ModItems.MOLTEN_AXE);
