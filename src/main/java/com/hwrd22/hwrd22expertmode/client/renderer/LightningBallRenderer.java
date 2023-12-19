@@ -12,8 +12,9 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -26,11 +27,11 @@ public class LightningBallRenderer extends EntityRenderer<LightningBall> {
         super(p_174008_);
     }
 
-    protected int getBlockLightLevel(LightningBall p_114087_, BlockPos p_114088_) {
+    protected int getBlockLightLevel(@NotNull LightningBall p_114087_, @NotNull BlockPos p_114088_) {
         return 15;
     }
 
-    public void render(LightningBall p_114080_, float p_114081_, float p_114082_, PoseStack p_114083_, MultiBufferSource p_114084_, int p_114085_) {
+    public void render(@NotNull LightningBall p_114080_, float p_114081_, float p_114082_, PoseStack p_114083_, MultiBufferSource p_114084_, int p_114085_) {
         p_114083_.pushPose();
         p_114083_.scale(0.5F, 0.5F, 0.5F);
         p_114083_.mulPose(this.entityRenderDispatcher.cameraOrientation());
@@ -52,7 +53,7 @@ public class LightningBallRenderer extends EntityRenderer<LightningBall> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(LightningBall p_114482_) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull LightningBall p_114482_) {
         return TEXTURE_LOCATION;
     }
 }

@@ -1,5 +1,5 @@
 {
-	"loader": "forge:separate-perspective",
+	"loader": "neoforge:separate_transforms",
 	"gui_light": "front",
 	"textures": {
 		"particle": "hwrd22expertmode:item/poseidon_trident_texture"

@@ -2,7 +2,6 @@ package com.hwrd22.hwrd22expertmode.entity.projectile;
 
 import com.hwrd22.hwrd22expertmode.entity.ArrowBolt;
 import com.hwrd22.hwrd22expertmode.entity.ModEntityType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.damagesource.DamageSource;
@@ -14,6 +13,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class LightningBall extends AbstractHurtingProjectile {
     private int life = 0;
@@ -36,11 +36,11 @@ public class LightningBall extends AbstractHurtingProjectile {
         }
 
         Entity entity = this.getOwner();
-        if (this.level.isClientSide || (entity == null || !entity.isRemoved()) && this.level.hasChunkAt(this.blockPosition())) {
+        if (this.level().isClientSide || (entity == null || !entity.isRemoved()) && this.level().isLoaded(this.blockPosition())) {
             super.tick();
 
-            HitResult hitresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
-            if (hitresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) {
+            HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
+            if (hitresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, hitresult)) {
                 this.onHit(hitresult);
             }
 
@@ -53,53 +53,53 @@ public class LightningBall extends AbstractHurtingProjectile {
             float f = this.getInertia();
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
-                    float f1 = 0.25F;
-                    this.level.addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * 0.25D, d1 - vec3.y * 0.25D, d2 - vec3.z * 0.25D, vec3.x, vec3.y, vec3.z);
+                    this.level().addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * 0.25D, d1 - vec3.y * 0.25D, d2 - vec3.z * 0.25D, vec3.x, vec3.y, vec3.z);
                 }
 
                 f = 0.8F;
             }
 
-            this.setDeltaMovement(vec3.add(this.xPower, this.yPower, this.zPower).scale((double) f));
-            this.level.addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
+            this.setDeltaMovement(vec3.add(this.xPower, this.yPower, this.zPower).scale(f));
+            this.level().addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             this.setPos(d0, d1, d2);
         } else {
             this.discard();
         }
     }
 
-    protected void onHitEntity(EntityHitResult p_37386_) {
+    protected void onHitEntity(@NotNull EntityHitResult p_37386_) {
         super.onHitEntity(p_37386_);
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             Entity entity = p_37386_.getEntity();
             Entity entity1 = this.getOwner();
             if (entity1 instanceof LivingEntity) {
-                ArrowBolt bolt = ModEntityType.LIGHTNING_BOLT_ARROW.get().create(this.level);
+                ArrowBolt bolt = ModEntityType.LIGHTNING_BOLT_ARROW.get().create(this.level());
+                assert bolt != null;
                 bolt.setPos(this.getX(), this.getY(), this.getZ());
-                this.level.addFreshEntity(bolt);
+                this.level().addFreshEntity(bolt);
                 this.doEnchantDamageEffects((LivingEntity)entity1, entity);
             }
         }
         this.discard();
     }
 
-    protected void onHitBlock(BlockHitResult p_37384_) {
+    protected void onHitBlock(@NotNull BlockHitResult p_37384_) {
         super.onHitBlock(p_37384_);
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             Entity entity = this.getOwner();
-            if (!(entity instanceof Mob) || net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, entity)) {
-                BlockPos blockpos = p_37384_.getBlockPos().relative(p_37384_.getDirection());
-                ArrowBolt bolt = ModEntityType.LIGHTNING_BOLT_ARROW.get().create(this.level);
+            if (!(entity instanceof Mob) || net.neoforged.neoforge.event.EventHooks.getMobGriefingEvent(this.level(), entity)) {
+                ArrowBolt bolt = ModEntityType.LIGHTNING_BOLT_ARROW.get().create(this.level());
+                assert bolt != null;
                 bolt.setPos(this.getBlockX(), this.getBlockY(), this.getBlockZ());
-                this.level.addFreshEntity(bolt);
+                this.level().addFreshEntity(bolt);
             }
         }
         this.discard();
     }
 
-    protected void onHit(HitResult p_37388_) {
+    protected void onHit(@NotNull HitResult p_37388_) {
         super.onHit(p_37388_);
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.discard();
         }
 
@@ -109,7 +109,7 @@ public class LightningBall extends AbstractHurtingProjectile {
         return false;
     }
 
-    public boolean hurt(DamageSource p_37381_, float p_37382_) {
+    public boolean hurt(@NotNull DamageSource p_37381_, float p_37382_) {
         return false;
     }
 
@@ -117,7 +117,7 @@ public class LightningBall extends AbstractHurtingProjectile {
         return false;
     }
 
-    protected ParticleOptions getTrailParticle() {
+    protected @NotNull ParticleOptions getTrailParticle() {
         return ParticleTypes.ELECTRIC_SPARK;
     }
 

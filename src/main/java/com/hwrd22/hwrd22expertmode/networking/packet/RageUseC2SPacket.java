@@ -12,9 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class RageUseC2SPacket {
     public RageUseC2SPacket() {
@@ -27,11 +25,11 @@ public class RageUseC2SPacket {
 
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
+    public void handle(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
-            ServerLevel level = player.getLevel();
+            assert player != null;
+            ServerLevel level = player.serverLevel();
             player.getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(rage -> {
                 if (rage.getRage() == 10000) {
                     player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 180, 4));
@@ -40,6 +38,7 @@ public class RageUseC2SPacket {
                     rage.useRage();
                 }
                 else {
+                    assert Minecraft.getInstance().player != null;
                     Minecraft.getInstance().player.displayClientMessage(Component.literal("The Rage Meter is not full.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), true);
                     ModMessages.sendToPlayer(new RageDataSyncS2CPacket(rage.getRage()), player);
                 }

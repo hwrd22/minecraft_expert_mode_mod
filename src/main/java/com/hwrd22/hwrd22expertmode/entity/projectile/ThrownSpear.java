@@ -24,7 +24,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.network.NetworkHooks;
 
 public class ThrownSpear extends AbstractArrow {
     private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(com.hwrd22.hwrd22expertmode.entity.projectile.ThrownSpear.class, EntityDataSerializers.BOOLEAN);

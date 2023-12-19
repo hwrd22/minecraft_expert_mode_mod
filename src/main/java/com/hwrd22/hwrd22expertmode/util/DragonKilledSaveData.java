@@ -1,9 +1,9 @@
 package com.hwrd22.hwrd22expertmode.util;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.NotNull;
 
 public class DragonKilledSaveData extends SavedData {
 
@@ -29,13 +29,13 @@ public class DragonKilledSaveData extends SavedData {
     }
 
     @Override
-    @MethodsReturnNonnullByDefault
-    public CompoundTag save(CompoundTag nbt) {
+    public @NotNull CompoundTag save(CompoundTag nbt) {
         nbt.putBoolean("dragonKilled", dragonKilled);
         return nbt;
     }
 
     public static DragonKilledSaveData manage(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(DragonKilledSaveData::load, DragonKilledSaveData::create, "dragonKilled");
+        Factory<DragonKilledSaveData> dragonKilledSaveDataFactory = new Factory<>(DragonKilledSaveData::create, DragonKilledSaveData::load);
+        return server.overworld().getDataStorage().computeIfAbsent(dragonKilledSaveDataFactory, "dragonKilled");
     }
 }

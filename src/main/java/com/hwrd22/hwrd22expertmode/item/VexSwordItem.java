@@ -62,11 +62,11 @@ public class VexSwordItem extends SwordItem {
 
         do {
             BlockPos blockpos1 = blockpos.below();
-            BlockState blockstate = user.getLevel().getBlockState(blockpos1);
-            if (blockstate.isFaceSturdy(user.getLevel(), blockpos1, Direction.UP)) {
-                if (!user.getLevel().isEmptyBlock(blockpos)) {
-                    BlockState blockstate1 = user.getLevel().getBlockState(blockpos);
-                    VoxelShape voxelshape = blockstate1.getCollisionShape(user.getLevel(), blockpos);
+            BlockState blockstate = user.level().getBlockState(blockpos1);
+            if (blockstate.isFaceSturdy(user.level(), blockpos1, Direction.UP)) {
+                if (!user.level().isEmptyBlock(blockpos)) {
+                    BlockState blockstate1 = user.level().getBlockState(blockpos);
+                    VoxelShape voxelshape = blockstate1.getCollisionShape(user.level(), blockpos);
                     if (!voxelshape.isEmpty()) {
                         d0 = voxelshape.max(Direction.Axis.Y);
                     }
@@ -80,7 +80,7 @@ public class VexSwordItem extends SwordItem {
         } while(blockpos.getY() >= Mth.floor(p_32675_) - 1);
 
         if (flag) {
-            user.getLevel().addFreshEntity(new EvokerFangs(user.getLevel(), p_32673_, (double)blockpos.getY() + d0, p_32674_, p_32677_, p_32678_, user));
+            user.level().addFreshEntity(new EvokerFangs(user.level(), p_32673_, (double)blockpos.getY() + d0, p_32674_, p_32677_, p_32678_, user));
         }
 
     }

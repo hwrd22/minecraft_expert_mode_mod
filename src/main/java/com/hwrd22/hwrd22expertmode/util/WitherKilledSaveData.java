@@ -3,6 +3,7 @@ package com.hwrd22.hwrd22expertmode.util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.NotNull;
 
 public class WitherKilledSaveData extends SavedData {
 
@@ -28,12 +29,13 @@ public class WitherKilledSaveData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbt) {
+    public @NotNull CompoundTag save(CompoundTag nbt) {
         nbt.putBoolean("witherKilled", witherKilled);
         return nbt;
     }
 
     public static WitherKilledSaveData manage(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(WitherKilledSaveData::load, WitherKilledSaveData::create, "witherKilled");
+        Factory<WitherKilledSaveData> witherKilledSaveDataFactory = new Factory<>(WitherKilledSaveData::create, WitherKilledSaveData::load);
+        return server.overworld().getDataStorage().computeIfAbsent(witherKilledSaveDataFactory, "witherKilled");
     }
 }

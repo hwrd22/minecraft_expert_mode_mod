@@ -60,7 +60,7 @@ public class ThrownFakeGildedTrident extends AbstractArrow {
         int i = this.entityData.get(ID_LOYALTY);
         if (i > 0 && (this.dealtDamage || this.isNoPhysics()) && entity != null) {
             if (!this.isAcceptibleReturnOwner()) {
-                if (!this.level.isClientSide && this.pickup == Pickup.ALLOWED) {
+                if (!this.level().isClientSide && this.pickup == Pickup.ALLOWED) {
                     this.spawnAtLocation(this.getPickupItem(), 0.1F);
                 }
 
@@ -69,7 +69,7 @@ public class ThrownFakeGildedTrident extends AbstractArrow {
                 this.setNoPhysics(true);
                 Vec3 vec3 = entity.getEyePosition().subtract(this.position());
                 this.setPosRaw(this.getX(), this.getY() + vec3.y * 0.015D * (double)i, this.getZ());
-                if (this.level.isClientSide) {
+                if (this.level().isClientSide) {
                     this.yOld = this.getY();
                 }
 
@@ -136,14 +136,14 @@ public class ThrownFakeGildedTrident extends AbstractArrow {
 
         this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01D, -0.1D, -0.01D));
         float f1 = 1.0F;
-        if (this.level instanceof ServerLevel && this.level.isThundering() && this.isChanneling()) {
+        if (this.level() instanceof ServerLevel && this.level().isThundering() && this.isChanneling()) {
             BlockPos blockpos = entity.blockPosition();
-            if (this.level.canSeeSky(blockpos)) {
-                LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(this.level);
+            if (this.level().canSeeSky(blockpos)) {
+                LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(this.level());
                 if (lightningbolt != null) {
                     lightningbolt.moveTo(Vec3.atBottomCenterOf(blockpos));
                     lightningbolt.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer)entity1 : null);
-                    this.level.addFreshEntity(lightningbolt);
+                    this.level().addFreshEntity(lightningbolt);
                     soundevent = SoundEvents.TRIDENT_THUNDER;
                     f1 = 5.0F;
                 }

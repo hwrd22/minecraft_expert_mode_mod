@@ -42,11 +42,11 @@ public class IceBall extends AbstractHurtingProjectile {
         }
 
         Entity entity = this.getOwner();
-        if (this.level.isClientSide || (entity == null || !entity.isRemoved()) && this.level.hasChunkAt(this.blockPosition())) {
+        if (this.level().isClientSide || (entity == null || !entity.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
             super.tick();
 
-            HitResult hitresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
-            if (hitresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) {
+            HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
+            if (hitresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, hitresult)) {
                 this.onHit(hitresult);
             }
 
@@ -59,14 +59,14 @@ public class IceBall extends AbstractHurtingProjectile {
             float f = this.getInertia();
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
-                    this.level.addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * 0.25D, d1 - vec3.y * 0.25D, d2 - vec3.z * 0.25D, vec3.x, vec3.y, vec3.z);
+                    this.level().addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * 0.25D, d1 - vec3.y * 0.25D, d2 - vec3.z * 0.25D, vec3.x, vec3.y, vec3.z);
                 }
 
                 f = 0.8F;
             }
 
             this.setDeltaMovement(vec3.add(this.xPower, this.yPower, this.zPower).scale((double) f));
-            this.level.addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
+            this.level().addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             this.setPos(d0, d1, d2);
         } else {
             this.discard();
@@ -75,13 +75,13 @@ public class IceBall extends AbstractHurtingProjectile {
 
     protected void onHitEntity(EntityHitResult p_37386_) {
         super.onHitEntity(p_37386_);
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             Entity entity = p_37386_.getEntity();
             Entity entity1 = this.getOwner();
             if (entity1 instanceof LivingEntity) {
                 if (entity instanceof LivingEntity) {
-                    this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ICE.withPropertiesOf(Blocks.REDSTONE_ORE.defaultBlockState())), this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
-                    this.level.playSound((Player) null, p_37386_.getEntity().getOnPos(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
+                    this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ICE.withPropertiesOf(Blocks.REDSTONE_ORE.defaultBlockState())), this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
+                    this.level().playSound((Player) null, p_37386_.getEntity().getOnPos(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
                     MobEffectInstance slow = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 600, 2);
                     MobEffectInstance freezing = new MobEffectInstance(ModEffects.FROSTBURN.get(), 200, 0);
                     if (((LivingEntity) entity).hasEffect(ModEffects.FROSTBURN.get()))
@@ -98,15 +98,15 @@ public class IceBall extends AbstractHurtingProjectile {
 
     protected void onHitBlock(BlockHitResult p_37384_) {
         super.onHitBlock(p_37384_);
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             Entity entity = this.getOwner();
-            if (!(entity instanceof Mob) || net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, entity)) {
+            if (!(entity instanceof Mob) || net.neoforged.neoforge.event.EventHooks.getMobGriefingEvent(this.level(), entity)) {
                 BlockPos blockpos = p_37384_.getBlockPos().relative(p_37384_.getDirection());
-                if (this.level.isEmptyBlock(blockpos)) {
-                    this.level.setBlockAndUpdate(blockpos, Blocks.POWDER_SNOW.defaultBlockState());
+                if (this.level().isEmptyBlock(blockpos)) {
+                    this.level().setBlockAndUpdate(blockpos, Blocks.POWDER_SNOW.defaultBlockState());
                 }
             }
-            this.level.playSound((Player) null, p_37384_.getBlockPos(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
+            this.level().playSound((Player) null, p_37384_.getBlockPos(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1.0f, 1.0f);
 
         }
         this.discard();
@@ -114,7 +114,7 @@ public class IceBall extends AbstractHurtingProjectile {
 
     protected void onHit(HitResult p_37388_) {
         super.onHit(p_37388_);
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.discard();
         }
 

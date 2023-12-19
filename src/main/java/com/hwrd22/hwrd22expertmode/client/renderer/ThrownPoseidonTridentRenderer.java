@@ -13,8 +13,9 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class ThrownPoseidonTridentRenderer extends EntityRenderer<ThrownPoseidonTrident> {
@@ -25,7 +26,7 @@ public class ThrownPoseidonTridentRenderer extends EntityRenderer<ThrownPoseidon
         this.model = new ThrownPoseidonTridentModel(context.bakeLayer(ThrownPoseidonTridentModel.LAYER_LOCATION));
     }
 
-    public void render(ThrownPoseidonTrident p_116111_, float p_116112_, float p_116113_, PoseStack p_116114_, MultiBufferSource p_116115_, int p_116116_) {
+    public void render(ThrownPoseidonTrident p_116111_, float p_116112_, float p_116113_, PoseStack p_116114_, @NotNull MultiBufferSource p_116115_, int p_116116_) {
         p_116114_.pushPose();
         p_116114_.mulPose(Axis.YP.rotationDegrees(Mth.lerp(p_116113_, p_116111_.yRotO, p_116111_.getYRot()) - 90.0F));
         p_116114_.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(p_116113_, p_116111_.xRotO, p_116111_.getXRot()) + 90.0F));
@@ -36,7 +37,7 @@ public class ThrownPoseidonTridentRenderer extends EntityRenderer<ThrownPoseidon
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ThrownPoseidonTrident p_114482_) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull ThrownPoseidonTrident p_114482_) {
         return TEXTURE;
     }
 }
