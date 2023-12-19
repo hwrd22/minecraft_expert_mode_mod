@@ -976,9 +976,8 @@ public class ModEvents {
                 List<Entity> nearbyEntities = event.getEntity().level().getEntities(event.getEntity(), event.getEntity().getBoundingBox().inflate(1.0));
                 if (event.getEntity() instanceof AbstractSkeleton skeleton) {
                     for (Entity entity : nearbyEntities) {
-                        if (entity.getPassengers().isEmpty() && (/*entity instanceof AbstractHorse || entity instanceof Pig ||*/ entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear || entity instanceof Spider || entity instanceof Bat)) {
+                        if (entity.getPassengers().isEmpty() && (entity instanceof AbstractHorse || entity instanceof Pig || entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear || entity instanceof Spider || entity instanceof Bat)) {
                             skeleton.startRiding(entity);
-                            // Entities controlling horses/pigs is broken in 1.19.4. Will restore when porting to 1.20.1
                             if (entity instanceof AbstractHorse horse)
                                 horse.setTamed(true);
                             break;
@@ -987,9 +986,8 @@ public class ModEvents {
                 }
                 if (event.getEntity() instanceof Zombie zombie) {
                     for (Entity entity : nearbyEntities) {
-                        if (entity.getPassengers().isEmpty() && (/*entity instanceof AbstractHorse || entity instanceof Pig ||*/ entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear)) {
+                        if (entity.getPassengers().isEmpty() && (entity instanceof AbstractHorse || entity instanceof Pig || entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear)) {
                             zombie.startRiding(entity);
-                            // Entities controlling horses/pigs is broken in 1.19.4. Will restore when porting to 1.20.1
                             if (entity instanceof AbstractHorse horse)
                                 horse.setTamed(true);
                             break;
