@@ -13,6 +13,7 @@ import com.hwrd22.hwrd22expertmode.entity.projectile.LightningArrow;
 import com.hwrd22.hwrd22expertmode.entity.projectile.ThrownGildedTrident;
 import com.hwrd22.hwrd22expertmode.entity.projectile.WitherArrow;
 import com.hwrd22.hwrd22expertmode.item.ModItems;
+import com.hwrd22.hwrd22expertmode.item.ThiefGloveItem;
 import com.hwrd22.hwrd22expertmode.networking.ModMessages;
 import com.hwrd22.hwrd22expertmode.networking.packet.AdrenalineDataSyncS2CPacket;
 import com.hwrd22.hwrd22expertmode.networking.packet.RageDataSyncS2CPacket;
@@ -1387,9 +1388,34 @@ public class ModEvents {
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100));
             if (event.getSource().getEntity() instanceof Husk)
                 player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100));
+            if (event.getSource().getEntity() instanceof LivingEntity damagingEntity) {
+                if (damagingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof SwordItem || damagingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof AxeItem) {
+                    if (player.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR && player.getItemBySlot(EquipmentSlot.CHEST).getItem() == Items.AIR && player.getItemBySlot(EquipmentSlot.LEGS).getItem() == Items.AIR && player.getItemBySlot(EquipmentSlot.FEET).getItem() == Items.AIR) {
+                        player.addEffect(new MobEffectInstance(ModEffects.BLEEDING.get(), 2000));
+                    } else {
+                        Random random = new Random();
+                        if (random.nextInt(100) < 5) {
+                            player.addEffect(new MobEffectInstance(ModEffects.BLEEDING.get(), random.nextInt(100, 600)));
+                        }
+                    }
+                }
+            }
         }
         if (event.getEntity() instanceof Villager villager && event.getSource().getEntity() instanceof ZombieVillager)
             villager.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN));
+        if (event.getSource().getEntity() instanceof LivingEntity damagingEntity) {
+            if (event.getEntity().getItemInHand(InteractionHand.MAIN_HAND).getItem() != Items.AIR && damagingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ThiefGloveItem && !(event.getEntity() instanceof ServerPlayer)) {
+                damagingEntity.setItemInHand(InteractionHand.MAIN_HAND, event.getEntity().getItemInHand(InteractionHand.MAIN_HAND));
+                event.getEntity().setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.AIR));
+                damagingEntity.playSound(SoundEvents.ITEM_PICKUP);
+            }
+            if (damagingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof SwordItem || damagingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof AxeItem) {
+                Random random = new Random();
+                if (random.nextInt(100) < 5) {
+                    event.getEntity().addEffect(new MobEffectInstance(ModEffects.BLEEDING.get(), random.nextInt(100, 600)));
+                }
+            }
+        }
     }
 
     @SubscribeEvent

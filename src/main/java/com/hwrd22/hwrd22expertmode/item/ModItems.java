@@ -60,9 +60,9 @@ public class ModItems {
         }
     }, 0, -2.25f, new Item.Properties().rarity(ILLAGER).fireResistant()));
 
-    public static final Supplier<SpearItem> SPEAR = (Supplier<SpearItem>) ITEMS.register("spear", () -> new SpearItem(new Item.Properties().defaultDurability(250)));
+    public static final Supplier<SpearItem> SPEAR = ITEMS.register("spear", () -> new SpearItem(new Item.Properties().defaultDurability(250)));
 
-    public static final Supplier<HoeItem> SCYTHE = (Supplier<HoeItem>) ITEMS.register("scythe", () -> new HoeItem(new Tier() {
+    public static final Supplier<HoeItem> SCYTHE = ITEMS.register("scythe", () -> new HoeItem(new Tier() {
         @Override
         public int getUses() {
             return 500;
@@ -94,7 +94,7 @@ public class ModItems {
         }
     }, 0, -1.0f, new Item.Properties()));
 
-    public static final Supplier<SwordItem> KNIFE = (Supplier<SwordItem>) ITEMS.register("knife", () -> new SwordItem(new Tier() {
+    public static final Supplier<SwordItem> KNIFE = ITEMS.register("knife", () -> new SwordItem(new Tier() {
 
         @Override
         public int getUses() {
@@ -127,7 +127,7 @@ public class ModItems {
         }
     }, 0, -1.0f, new Item.Properties()));
 
-    public static final Supplier<MoltenAxeItem> MOLTEN_AXE = (Supplier<MoltenAxeItem>) ITEMS.register("molten_axe", () -> new MoltenAxeItem(new Tier() {
+    public static final Supplier<MoltenAxeItem> MOLTEN_AXE = ITEMS.register("molten_axe", () -> new MoltenAxeItem(new Tier() {
         @Override
         public int getUses() {
             return 64;
@@ -159,7 +159,7 @@ public class ModItems {
         }
     }, 0, -3.0f, new Item.Properties().rarity(ModItems.NETHER).fireResistant()));
 
-    public static final Supplier<DamnedAxeItem> DAMNED_AXE = (Supplier<DamnedAxeItem>) ITEMS.register("damned_axe", () -> new DamnedAxeItem(new Tier() {
+    public static final Supplier<DamnedAxeItem> DAMNED_AXE = ITEMS.register("damned_axe", () -> new DamnedAxeItem(new Tier() {
         @Override
         public int getUses() {
             return 2031;
@@ -191,23 +191,23 @@ public class ModItems {
         }
     }, 0, -3.0f, new Item.Properties().rarity(ModItems.ENDGAME).fireResistant()));
 
-    public static final Supplier<ArmorItem> COPPER_HELMET = (Supplier<ArmorItem>) ITEMS.register("copper_helmet", () -> new ArmorItem(ArmorTiers.COPPER, ArmorItem.Type.HELMET, new Item.Properties()));
-    public static final Supplier<ArmorItem> COPPER_CHESTPLATE = (Supplier<ArmorItem>) ITEMS.register("copper_chestplate", () -> new ArmorItem(ArmorTiers.COPPER, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
-    public static final Supplier<ArmorItem> COPPER_LEGGINGS = (Supplier<ArmorItem>) ITEMS.register("copper_leggings", () -> new ArmorItem(ArmorTiers.COPPER, ArmorItem.Type.LEGGINGS, new Item.Properties()));
-    public static final Supplier<ArmorItem> COPPER_BOOTS = (Supplier<ArmorItem>) ITEMS.register("copper_boots", () -> new ArmorItem(ArmorTiers.COPPER, ArmorItem.Type.BOOTS, new Item.Properties()));
-    public static final Supplier<ArmorItem> LAVA_DIVING_HELMET = (Supplier<ArmorItem>) ITEMS.register("lava_diving_helmet", () -> new ArmorItem(ArmorTiers.LAVA_DIVING, ArmorItem.Type.HELMET, new Item.Properties().fireResistant()));
-    public static final Supplier<ArmorItem> LAVA_DIVING_CHESTPLATE = (Supplier<ArmorItem>) ITEMS.register("lava_diving_chestplate", () -> new ArmorItem(ArmorTiers.LAVA_DIVING, ArmorItem.Type.CHESTPLATE, new Item.Properties().fireResistant()));
-    public static final Supplier<ArmorItem> LAVA_DIVING_LEGGINGS = (Supplier<ArmorItem>) ITEMS.register("lava_diving_leggings", () -> new ArmorItem(ArmorTiers.LAVA_DIVING, ArmorItem.Type.LEGGINGS, new Item.Properties().fireResistant()));
-    public static final Supplier<ArmorItem> LAVA_DIVING_BOOTS = (Supplier<ArmorItem>) ITEMS.register("lava_diving_boots", () -> new ArmorItem(ArmorTiers.LAVA_DIVING, ArmorItem.Type.BOOTS, new Item.Properties().fireResistant()));
-    public static final Supplier<SlimeBootsItem> SLIME_BOOTS = (Supplier<SlimeBootsItem>) ITEMS.register("slime_boots", () -> new SlimeBootsItem(ArmorTiers.SLIME, ArmorItem.Type.BOOTS, new Item.Properties().rarity(Rarity.UNCOMMON)));
-    public static final Supplier<ParadoxBootsItem> PARADOX_BOOTS = (Supplier<ParadoxBootsItem>) ITEMS.register("paradox_boots", () -> new ParadoxBootsItem(ArmorMaterials.CHAIN, ArmorItem.Type.BOOTS, new Item.Properties().rarity(Rarity.UNCOMMON)));
-    public static final Supplier<ArmorItem> BRUTE_CHESTPLATE = (Supplier<ArmorItem>) ITEMS.register("brute_chestplate", () -> new ArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().rarity(NETHER).fireResistant()));
-    public static final Supplier<EnderDragonHead> ENDER_DRAGON_HEAD = (Supplier<EnderDragonHead>) ITEMS.register("ender_dragon_head", () -> new EnderDragonHead(ArmorTiers.DRAGON, ArmorItem.Type.HELMET, new Item.Properties().rarity(END).fireResistant()));
-    public static final Supplier<WitherSkull> WITHER_SKULL = (Supplier<WitherSkull>) ITEMS.register("wither_skull", () -> new WitherSkull(ArmorTiers.WITHER, ArmorItem.Type.HELMET, new Item.Properties().rarity(ENDGAME).fireResistant()));
-    public static final Supplier<GildedTridentItem> GILDED_TRIDENT = (Supplier<GildedTridentItem>) ITEMS.register("gilded_trident", () -> new GildedTridentItem(new Item.Properties().durability(375).rarity(GUARDIAN).fireResistant()));
-    public static final Supplier<FakeGildedTridentItem> FAKE_GILDED_TRIDENT = (Supplier<FakeGildedTridentItem>) ITEMS.register("fake_gilded_trident", () -> new FakeGildedTridentItem(new Item.Properties().durability(250)));
-    public static final Supplier<PoseidonTridentItem> POSEIDON_TRIDENT = (Supplier<PoseidonTridentItem>) ITEMS.register("poseidon_trident", () -> new PoseidonTridentItem(new Item.Properties().durability(500).rarity(ENDGAME).fireResistant()));
-    public static final Supplier<JitterShotbowItem> JITTER_SHOTBOW = (Supplier<JitterShotbowItem>) ITEMS.register("jitter_shotbow", () -> new JitterShotbowItem(new Item.Properties().durability(930).rarity(DEEP_DARK).fireResistant()));
+    public static final Supplier<ArmorItem> COPPER_HELMET = ITEMS.register("copper_helmet", () -> new ArmorItem(ArmorTiers.COPPER, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final Supplier<ArmorItem> COPPER_CHESTPLATE = ITEMS.register("copper_chestplate", () -> new ArmorItem(ArmorTiers.COPPER, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final Supplier<ArmorItem> COPPER_LEGGINGS = ITEMS.register("copper_leggings", () -> new ArmorItem(ArmorTiers.COPPER, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final Supplier<ArmorItem> COPPER_BOOTS = ITEMS.register("copper_boots", () -> new ArmorItem(ArmorTiers.COPPER, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final Supplier<ArmorItem> LAVA_DIVING_HELMET = ITEMS.register("lava_diving_helmet", () -> new ArmorItem(ArmorTiers.LAVA_DIVING, ArmorItem.Type.HELMET, new Item.Properties().fireResistant()));
+    public static final Supplier<ArmorItem> LAVA_DIVING_CHESTPLATE = ITEMS.register("lava_diving_chestplate", () -> new ArmorItem(ArmorTiers.LAVA_DIVING, ArmorItem.Type.CHESTPLATE, new Item.Properties().fireResistant()));
+    public static final Supplier<ArmorItem> LAVA_DIVING_LEGGINGS = ITEMS.register("lava_diving_leggings", () -> new ArmorItem(ArmorTiers.LAVA_DIVING, ArmorItem.Type.LEGGINGS, new Item.Properties().fireResistant()));
+    public static final Supplier<ArmorItem> LAVA_DIVING_BOOTS = ITEMS.register("lava_diving_boots", () -> new ArmorItem(ArmorTiers.LAVA_DIVING, ArmorItem.Type.BOOTS, new Item.Properties().fireResistant()));
+    public static final Supplier<SlimeBootsItem> SLIME_BOOTS = ITEMS.register("slime_boots", () -> new SlimeBootsItem(ArmorTiers.SLIME, ArmorItem.Type.BOOTS, new Item.Properties().rarity(Rarity.UNCOMMON)));
+    public static final Supplier<ParadoxBootsItem> PARADOX_BOOTS = ITEMS.register("paradox_boots", () -> new ParadoxBootsItem(ArmorMaterials.CHAIN, ArmorItem.Type.BOOTS, new Item.Properties().rarity(Rarity.UNCOMMON)));
+    public static final Supplier<ArmorItem> BRUTE_CHESTPLATE = ITEMS.register("brute_chestplate", () -> new ArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().rarity(NETHER).fireResistant()));
+    public static final Supplier<EnderDragonHead> ENDER_DRAGON_HEAD = ITEMS.register("ender_dragon_head", () -> new EnderDragonHead(ArmorTiers.DRAGON, ArmorItem.Type.HELMET, new Item.Properties().rarity(END).fireResistant()));
+    public static final Supplier<WitherSkull> WITHER_SKULL = ITEMS.register("wither_skull", () -> new WitherSkull(ArmorTiers.WITHER, ArmorItem.Type.HELMET, new Item.Properties().rarity(ENDGAME).fireResistant()));
+    public static final Supplier<GildedTridentItem> GILDED_TRIDENT = ITEMS.register("gilded_trident", () -> new GildedTridentItem(new Item.Properties().durability(375).rarity(GUARDIAN).fireResistant()));
+    public static final Supplier<FakeGildedTridentItem> FAKE_GILDED_TRIDENT = ITEMS.register("fake_gilded_trident", () -> new FakeGildedTridentItem(new Item.Properties().durability(250)));
+    public static final Supplier<PoseidonTridentItem> POSEIDON_TRIDENT = ITEMS.register("poseidon_trident", () -> new PoseidonTridentItem(new Item.Properties().durability(500).rarity(ENDGAME).fireResistant()));
+    public static final Supplier<JitterShotbowItem> JITTER_SHOTBOW = ITEMS.register("jitter_shotbow", () -> new JitterShotbowItem(new Item.Properties().durability(930).rarity(DEEP_DARK).fireResistant()));
 
     public static class ArmorTiers {
         static final int[] copper_armor_points = {1, 4, 5, 1};
@@ -225,9 +225,10 @@ public class ModItems {
         public static final ArmorMaterial SLIME = new ModArmorMaterials("slime", 1, slime_armor_point, 1, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0f, 0.0f, () -> Ingredient.of(Items.SLIME_BALL));
     }
 
-    public static final Supplier<FireStaffItem> FIRE_STAFF = (Supplier<FireStaffItem>) ITEMS.register("fire_staff", () -> new FireStaffItem(new Item.Properties().defaultDurability(32).rarity(Rarity.UNCOMMON)));
-    public static final Supplier<IceStaffItem> ICE_STAFF = (Supplier<IceStaffItem>) ITEMS.register("ice_staff", () -> new IceStaffItem(new Item.Properties().defaultDurability(32).rarity(Rarity.UNCOMMON)));
-    public static final Supplier<LightningStaffItem> LIGHTNING_STAFF = (Supplier<LightningStaffItem>) ITEMS.register("lightning_staff", () -> new LightningStaffItem(new Item.Properties().defaultDurability(32).rarity(Rarity.UNCOMMON)));
+    public static final Supplier<FireStaffItem> FIRE_STAFF = ITEMS.register("fire_staff", () -> new FireStaffItem(new Item.Properties().defaultDurability(32).rarity(Rarity.UNCOMMON)));
+    public static final Supplier<IceStaffItem> ICE_STAFF = ITEMS.register("ice_staff", () -> new IceStaffItem(new Item.Properties().defaultDurability(32).rarity(Rarity.UNCOMMON)));
+    public static final Supplier<LightningStaffItem> LIGHTNING_STAFF = ITEMS.register("lightning_staff", () -> new LightningStaffItem(new Item.Properties().defaultDurability(32).rarity(Rarity.UNCOMMON)));
+    public static final Supplier<ThiefGloveItem> THIEF_GLOVE = ITEMS.register("thief_glove", () -> new ThiefGloveItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
