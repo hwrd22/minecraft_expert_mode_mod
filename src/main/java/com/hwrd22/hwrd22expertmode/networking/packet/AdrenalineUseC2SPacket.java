@@ -12,8 +12,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.neoforged.neoforge.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
 public class AdrenalineUseC2SPacket {
     public AdrenalineUseC2SPacket() {
     }
@@ -25,6 +23,7 @@ public class AdrenalineUseC2SPacket {
     public void handle(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
+            assert player != null;
             ServerLevel level = player.serverLevel();
             player.getCapability(PlayerAdrenalineProvider.PLAYER_ADRENALINE).ifPresent(adrenaline -> {
                 if (adrenaline.getAdrenaline() == 600) {
@@ -32,6 +31,7 @@ public class AdrenalineUseC2SPacket {
                     adrenaline.useAdrenaline();
                 }
                 else {
+                    assert Minecraft.getInstance().player != null;
                     Minecraft.getInstance().player.displayClientMessage(Component.literal("The Adrenaline Meter is not full.").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD), true);
                     ModMessages.sendToPlayer(new AdrenalineDataSyncS2CPacket(adrenaline.getAdrenaline()), player);
                 }

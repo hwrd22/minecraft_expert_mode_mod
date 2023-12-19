@@ -1,13 +1,8 @@
 package com.hwrd22.hwrd22expertmode.client;
 
 import com.hwrd22.hwrd22expertmode.ExpertMode;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
-import org.jetbrains.annotations.NotNull;
 
 public class AdrenalineHudOverlay {
     public static final ResourceLocation FILLED_ADRENALINE = new ResourceLocation(ExpertMode.MODID, "textures/adrenaline/adrenaline_full.png");

@@ -16,7 +16,7 @@ public class BleedingEffect extends MobEffect {
         }
     }
 
-    public boolean isDurationEffectTick(int p_19455_, int p_19456_) {
+    public boolean shouldApplyEffectTickThisTick(int p_19455_, int p_19456_) {
         int j = 25 >> p_19456_;
         if (j > 0)
             return p_19455_ % j == 0;

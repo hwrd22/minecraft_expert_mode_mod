@@ -8,7 +8,6 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -51,7 +50,7 @@ public class EnderDragonHead extends ArmorItem {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot p_40390_) {
+    public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot p_40390_) {
         return p_40390_ == this.type.getSlot() ? this.defaultModifiers : super.getDefaultAttributeModifiers(p_40390_);
     }
 
@@ -68,7 +67,7 @@ public class EnderDragonHead extends ArmorItem {
     }
     static class ModelSupplier implements IClientItemExtensions {
         public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
-            return new EnderDragonHeadModel(Minecraft.getInstance().getEntityModels().bakeLayer(EnderDragonHeadModel.LAYER_LOCATION));
+            return new EnderDragonHeadModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(EnderDragonHeadModel.LAYER_LOCATION));
         }
     }
 
@@ -77,7 +76,7 @@ public class EnderDragonHead extends ArmorItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
+    public void appendHoverText(@NotNull ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, @NotNull TooltipFlag p_41424_) {
         p_41423_.add(Component.literal("The head of the Ender Dragon. Wearing this increases max health and provides strength.\nCounts as a Diamond or Netherite Helmet for the set bonuses.").withStyle(ChatFormatting.YELLOW, ChatFormatting.ITALIC));
         super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
     }

@@ -34,16 +34,14 @@ public class GildedTridentItem extends TridentItem {
         this.defaultModifiers = builder.build();
     }
 
-    public void releaseUsing(ItemStack p_43394_, Level p_43395_, LivingEntity p_43396_, int p_43397_) {
+    public void releaseUsing(@NotNull ItemStack p_43394_, @NotNull Level p_43395_, @NotNull LivingEntity p_43396_, int p_43397_) {
         if (p_43396_ instanceof Player player) {
             int i = this.getUseDuration(p_43394_) - p_43397_;
             if (i >= 10) {
                 int j = EnchantmentHelper.getRiptide(p_43394_);
                 if (j <= 0 || player.isInWaterOrRain()) {
                     if (!p_43395_.isClientSide) {
-                        p_43394_.hurtAndBreak(1, player, (p_43388_) -> {
-                            p_43388_.broadcastBreakEvent(p_43396_.getUsedItemHand());
-                        });
+                        p_43394_.hurtAndBreak(1, player, (p_43388_) -> p_43388_.broadcastBreakEvent(p_43396_.getUsedItemHand()));
                         if (j == 0) {
                             ThrownGildedTrident throwntrident = new ThrownGildedTrident(p_43395_, player, p_43394_);
                             throwntrident.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F + (float)j * 0.5F, 1.0F);
@@ -52,7 +50,7 @@ public class GildedTridentItem extends TridentItem {
                             }
 
                             p_43395_.addFreshEntity(throwntrident);
-                            p_43395_.playSound((Player)null, throwntrident, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            p_43395_.playSound(null, throwntrident, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
                             if (!player.getAbilities().instabuild) {
                                 player.getInventory().removeItem(p_43394_);
                             }
@@ -71,11 +69,11 @@ public class GildedTridentItem extends TridentItem {
                         f1 *= f5 / f4;
                         f2 *= f5 / f4;
                         f3 *= f5 / f4;
-                        player.push((double)f1, (double)f2, (double)f3);
+                        player.push(f1, f2, f3);
                         player.startAutoSpinAttack(20);
                         if (player.onGround()) {
                             float f6 = 1.1999999F;
-                            player.move(MoverType.SELF, new Vec3(0.0D, (double)1.1999999F, 0.0D));
+                            player.move(MoverType.SELF, new Vec3(0.0D, f6, 0.0D));
                         }
 
                         SoundEvent soundevent;
@@ -87,7 +85,7 @@ public class GildedTridentItem extends TridentItem {
                             soundevent = SoundEvents.TRIDENT_RIPTIDE_1;
                         }
 
-                        p_43395_.playSound((Player)null, player, soundevent, SoundSource.PLAYERS, 1.0F, 1.0F);
+                        p_43395_.playSound(null, player, soundevent, SoundSource.PLAYERS, 1.0F, 1.0F);
                     }
 
                 }
@@ -95,7 +93,7 @@ public class GildedTridentItem extends TridentItem {
         }
     }
 
-    public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot p_43383_) {
+    public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot p_43383_) {
         return p_43383_ == EquipmentSlot.MAINHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(p_43383_);
     }
 }

@@ -2,12 +2,12 @@ package com.hwrd22.hwrd22expertmode.entity.projectile;
 
 import com.hwrd22.hwrd22expertmode.entity.ArrowBolt;
 import com.hwrd22.hwrd22expertmode.entity.ModEntityType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -28,6 +28,7 @@ public class LightningArrow extends Arrow {
             Entity entity1 = this.getOwner();
             if (entity1 instanceof LivingEntity) {
                 ArrowBolt bolt = ModEntityType.LIGHTNING_BOLT_ARROW.get().create(this.level());
+                assert bolt != null;
                 bolt.setPos(this.getX(), this.getY(), this.getZ());
                 bolt.addTag("from_copper");
                 this.level().addFreshEntity(bolt);
@@ -36,11 +37,12 @@ public class LightningArrow extends Arrow {
         }
     }
 
-    protected void onHitBlock(BlockHitResult result) {
+    protected void onHitBlock(@NotNull BlockHitResult result) {
         if (!this.level().isClientSide) {
             Entity entity = this.getOwner();
             if (!(entity instanceof Mob) || net.neoforged.neoforge.event.EventHooks.getMobGriefingEvent(this.level(), entity)) {
                 ArrowBolt bolt = ModEntityType.LIGHTNING_BOLT_ARROW.get().create(this.level());
+                assert bolt != null;
                 bolt.setPos(this.getBlockX(), this.getBlockY(), this.getBlockZ());
                 this.level().addFreshEntity(bolt);
             }

@@ -4,6 +4,8 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.NotNull;
+
 public class EndgameSaveData extends SavedData {
 
     private boolean endgameEnabled;
@@ -28,8 +30,7 @@ public class EndgameSaveData extends SavedData {
     }
 
     @Override
-    @MethodsReturnNonnullByDefault
-    public CompoundTag save(CompoundTag nbt) {
+    public @NotNull CompoundTag save(CompoundTag nbt) {
         nbt.putBoolean("endgameEnabled", endgameEnabled);
         return nbt;
     }

@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class ThrownSpearRenderer extends EntityRenderer<ThrownSpear> {
@@ -25,7 +26,7 @@ public class ThrownSpearRenderer extends EntityRenderer<ThrownSpear> {
         this.model = new ThrownSpearModel(context.bakeLayer(ThrownSpearModel.LAYER_LOCATION));
     }
 
-    public void render(ThrownSpear p_116111_, float p_116112_, float p_116113_, PoseStack p_116114_, MultiBufferSource p_116115_, int p_116116_) {
+    public void render(ThrownSpear p_116111_, float p_116112_, float p_116113_, PoseStack p_116114_, @NotNull MultiBufferSource p_116115_, int p_116116_) {
         p_116114_.pushPose();
         p_116114_.mulPose(Axis.YP.rotationDegrees(Mth.lerp(p_116113_, p_116111_.yRotO, p_116111_.getYRot()) - 90.0F));
         p_116114_.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(p_116113_, p_116111_.xRotO, p_116111_.getXRot()) + 90.0F));
@@ -36,7 +37,7 @@ public class ThrownSpearRenderer extends EntityRenderer<ThrownSpear> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ThrownSpear p_114482_) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull ThrownSpear p_114482_) {
         return TEXTURE;
     }
 }

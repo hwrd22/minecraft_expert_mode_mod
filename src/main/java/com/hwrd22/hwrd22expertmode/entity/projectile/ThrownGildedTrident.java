@@ -24,12 +24,13 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
 public class ThrownGildedTrident extends AbstractArrow {
-    private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(ThrownTrident.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(ThrownTrident.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> ID_LOYALTY = SynchedEntityData.defineId(ThrownGildedTrident.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> ID_FOIL = SynchedEntityData.defineId(ThrownGildedTrident.class, EntityDataSerializers.BOOLEAN);
     private ItemStack tridentItem = new ItemStack(ModItems.GILDED_TRIDENT.get());
     private boolean dealtDamage;
     public int clientSideReturnTridentTickCount;
@@ -95,7 +96,7 @@ public class ThrownGildedTrident extends AbstractArrow {
         }
     }
 
-    protected ItemStack getPickupItem() {
+    protected @NotNull ItemStack getPickupItem() {
         return this.tridentItem.copy();
     }
 
@@ -104,7 +105,7 @@ public class ThrownGildedTrident extends AbstractArrow {
     }
 
     @Nullable
-    protected EntityHitResult findHitEntity(Vec3 p_37575_, Vec3 p_37576_) {
+    protected EntityHitResult findHitEntity(@NotNull Vec3 p_37575_, @NotNull Vec3 p_37576_) {
         return this.dealtDamage ? null : super.findHitEntity(p_37575_, p_37576_);
     }
 
@@ -116,7 +117,7 @@ public class ThrownGildedTrident extends AbstractArrow {
         }
 
         Entity entity1 = this.getOwner();
-        DamageSource damagesource = this.damageSources().trident(this, (Entity)(entity1 == null ? this : entity1));
+        DamageSource damagesource = this.damageSources().trident(this, (entity1 == null ? this : entity1));
         this.dealtDamage = true;
         SoundEvent soundevent = SoundEvents.TRIDENT_HIT;
         if (entity.hurt(damagesource, f)) {
@@ -157,22 +158,22 @@ public class ThrownGildedTrident extends AbstractArrow {
         return EnchantmentHelper.hasChanneling(this.tridentItem);
     }
 
-    protected boolean tryPickup(Player p_150196_) {
+    protected boolean tryPickup(@NotNull Player p_150196_) {
         return super.tryPickup(p_150196_) || this.isNoPhysics() && this.ownedBy(p_150196_) && p_150196_.getInventory().add(this.getPickupItem());
     }
 
-    protected SoundEvent getDefaultHitGroundSoundEvent() {
+    protected @NotNull SoundEvent getDefaultHitGroundSoundEvent() {
         return SoundEvents.TRIDENT_HIT_GROUND;
     }
 
-    public void playerTouch(Player p_37580_) {
+    public void playerTouch(@NotNull Player p_37580_) {
         if (this.ownedBy(p_37580_) || this.getOwner() == null) {
             super.playerTouch(p_37580_);
         }
 
     }
 
-    public void readAdditionalSaveData(CompoundTag p_37578_) {
+    public void readAdditionalSaveData(@NotNull CompoundTag p_37578_) {
         super.readAdditionalSaveData(p_37578_);
         if (p_37578_.contains("Gilded Trident", 10)) {
             this.tridentItem = ItemStack.of(p_37578_.getCompound("Gilded Trident"));
@@ -182,7 +183,7 @@ public class ThrownGildedTrident extends AbstractArrow {
         this.entityData.set(ID_LOYALTY, (byte)EnchantmentHelper.getLoyalty(this.tridentItem));
     }
 
-    public void addAdditionalSaveData(CompoundTag p_37582_) {
+    public void addAdditionalSaveData(@NotNull CompoundTag p_37582_) {
         super.addAdditionalSaveData(p_37582_);
         p_37582_.put("Gilded Trident", this.tridentItem.save(new CompoundTag()));
         p_37582_.putBoolean("DealtDamage", this.dealtDamage);

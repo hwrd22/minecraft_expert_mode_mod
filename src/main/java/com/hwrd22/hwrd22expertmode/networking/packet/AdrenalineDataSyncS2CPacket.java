@@ -4,8 +4,6 @@ import com.hwrd22.hwrd22expertmode.client.ClientAdrenalineData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.neoforged.neoforge.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
 public class AdrenalineDataSyncS2CPacket {
     private final int adrenaline;
 

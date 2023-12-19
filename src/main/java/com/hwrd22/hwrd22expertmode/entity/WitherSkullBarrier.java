@@ -16,7 +16,7 @@ public class WitherSkullBarrier extends WitherSkull {
 
     public void tick() {
         Entity entity = this.getOwner();
-        if (this.level().isClientSide || (entity == null || !entity.isRemoved()) && this.level().hasChunkAt(this.blockPosition())) {
+        if (this.level().isClientSide || (entity == null || !entity.isRemoved()) && this.level().isLoaded(this.blockPosition())) {
             if (entity != null) {
                 this.moveTo(entity.getX() + 3 * Math.cos(this.tickCount % 360), entity.getY() + 1, entity.getZ() + 3 * Math.sin(this.tickCount % 360));  // orbits owner
                 if (this.isInWall()) {  // block collision

@@ -14,8 +14,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.neoforged.neoforge.network.NetworkEvent;
 
-import java.util.function.Supplier;
-
 public class RageUseC2SPacket {
     public RageUseC2SPacket() {
     }
@@ -30,6 +28,7 @@ public class RageUseC2SPacket {
     public void handle(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
+            assert player != null;
             ServerLevel level = player.serverLevel();
             player.getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(rage -> {
                 if (rage.getRage() == 10000) {
@@ -39,6 +38,7 @@ public class RageUseC2SPacket {
                     rage.useRage();
                 }
                 else {
+                    assert Minecraft.getInstance().player != null;
                     Minecraft.getInstance().player.displayClientMessage(Component.literal("The Rage Meter is not full.").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), true);
                     ModMessages.sendToPlayer(new RageDataSyncS2CPacket(rage.getRage()), player);
                 }
