@@ -2,7 +2,7 @@ package com.hwrd22.hwrd22expertmode.networking.packet;
 
 import com.hwrd22.hwrd22expertmode.client.ClientAdrenalineData;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -21,8 +21,7 @@ public class AdrenalineDataSyncS2CPacket {
         buf.writeInt(adrenaline);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
+    public void handle(NetworkEvent.Context context) {
         context.enqueueWork(() -> ClientAdrenalineData.set(adrenaline));
     }
 }

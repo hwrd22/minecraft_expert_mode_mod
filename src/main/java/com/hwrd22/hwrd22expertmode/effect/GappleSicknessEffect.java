@@ -3,12 +3,12 @@ package com.hwrd22.hwrd22expertmode.effect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.extensions.IForgeMobEffect;
+import net.neoforged.neoforge.common.extensions.IMobEffectExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GappleSicknessEffect extends MobEffect implements IForgeMobEffect {
+public class GappleSicknessEffect extends MobEffect implements IMobEffectExtension{
     protected GappleSicknessEffect() {
         super(MobEffectCategory.HARMFUL, 8228616);
     }

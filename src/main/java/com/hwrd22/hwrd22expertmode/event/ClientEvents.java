@@ -10,13 +10,14 @@ import com.hwrd22.hwrd22expertmode.networking.packet.AdrenalineUseC2SPacket;
 import com.hwrd22.hwrd22expertmode.networking.packet.RageUseC2SPacket;
 import com.hwrd22.hwrd22expertmode.util.KeyBinding;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = ExpertMode.MODID, value = Dist.CLIENT)
@@ -95,8 +96,8 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAboveAll("rage", RageHudOverlay.HUD_RAGE);
-            event.registerAboveAll("adrenaline", AdrenalineHudOverlay.HUD_ADRENALINE);
+            event.registerAboveAll(new ResourceLocation("rage"), RageHudOverlay.HUD_RAGE);
+            event.registerAboveAll(new ResourceLocation("adrenaline"), AdrenalineHudOverlay.HUD_ADRENALINE);
         }
     }
 

@@ -4,6 +4,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 
 public class DragonKilledSaveData extends SavedData {
 
@@ -36,6 +37,7 @@ public class DragonKilledSaveData extends SavedData {
     }
 
     public static DragonKilledSaveData manage(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(DragonKilledSaveData::load, DragonKilledSaveData::create, "dragonKilled");
+        Factory<DragonKilledSaveData> dragonKilledSaveDataFactory = new Factory<>(DragonKilledSaveData::create, DragonKilledSaveData::load);
+        return server.overworld().getDataStorage().computeIfAbsent(dragonKilledSaveDataFactory, "dragonKilled");
     }
 }

@@ -37,7 +37,7 @@ public class DragonArrow extends AbstractArrow {
         double d0 = this.getX() + vec3.x;
         double d1 = this.getY() + vec3.y;
         double d2 = this.getZ() + vec3.z;
-        this.level.addParticle(ParticleTypes.DRAGON_BREATH, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
+        this.level().addParticle(ParticleTypes.DRAGON_BREATH, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
         super.tick();
     }
 
@@ -57,9 +57,9 @@ public class DragonArrow extends AbstractArrow {
     protected void onHit(HitResult p_36913_) {
         super.onHit(p_36913_);
         if (p_36913_.getType() != HitResult.Type.ENTITY || !this.ownedBy(((EntityHitResult)p_36913_).getEntity())) {
-            if (!this.level.isClientSide) {
-                List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(4.0D, 2.0D, 4.0D));
-                AreaEffectCloud areaeffectcloud = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
+            if (!this.level().isClientSide) {
+                List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(4.0D, 2.0D, 4.0D));
+                AreaEffectCloud areaeffectcloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
                 Entity entity = this.getOwner();
                 if (entity instanceof LivingEntity) {
                     areaeffectcloud.setOwner((LivingEntity)entity);
@@ -80,8 +80,8 @@ public class DragonArrow extends AbstractArrow {
                     }
                 }
 
-                this.level.levelEvent(2006, this.blockPosition(), this.isSilent() ? -1 : 1);
-                this.level.addFreshEntity(areaeffectcloud);
+                this.level().levelEvent(2006, this.blockPosition(), this.isSilent() ? -1 : 1);
+                this.level().addFreshEntity(areaeffectcloud);
                 this.discard();
             }
         }

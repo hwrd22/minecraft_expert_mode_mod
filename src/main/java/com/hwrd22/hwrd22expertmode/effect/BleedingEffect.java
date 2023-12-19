@@ -11,7 +11,7 @@ public class BleedingEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity entity, int Amplifier) {
-        if(!entity.level.isClientSide()) {
+        if(!entity.level().isClientSide()) {
             entity.hurt(entity.damageSources().generic(), 1.25f);
         }
     }

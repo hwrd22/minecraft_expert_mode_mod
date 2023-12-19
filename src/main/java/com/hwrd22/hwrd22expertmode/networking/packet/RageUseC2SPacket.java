@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -27,11 +27,10 @@ public class RageUseC2SPacket {
 
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
+    public void handle(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
-            ServerLevel level = player.getLevel();
+            ServerLevel level = player.serverLevel();
             player.getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(rage -> {
                 if (rage.getRage() == 10000) {
                     player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 180, 4));

@@ -12,7 +12,7 @@ public class FrostburnEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity entity, int Amplifier) {
-        if(!entity.level.isClientSide()) {
+        if(!entity.level().isClientSide()) {
             if (entity instanceof Skeleton)  // ignoring skeletons and strays since they're not affected by freeze
                 entity.hurt(entity.damageSources().magic(), 1.5f);
             else

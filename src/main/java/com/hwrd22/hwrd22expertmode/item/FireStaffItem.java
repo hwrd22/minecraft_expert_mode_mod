@@ -74,7 +74,7 @@ public class FireStaffItem extends ProjectileWeaponItem implements Vanishable {
 
     public InteractionResultHolder<ItemStack> use(Level p_40672_, Player p_40673_, InteractionHand p_40674_) {
         ItemStack itemstack = p_40673_.getItemInHand(p_40674_);
-        InteractionResultHolder<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, p_40672_, p_40673_, p_40674_, true);
+        InteractionResultHolder<ItemStack> ret = net.neoforged.neoforge.event.EventHooks.onArrowNock(itemstack, p_40672_, p_40673_, p_40674_, true);
         if (ret != null) return ret;
         p_40673_.startUsingItem(p_40674_);
         return InteractionResultHolder.pass(itemstack);

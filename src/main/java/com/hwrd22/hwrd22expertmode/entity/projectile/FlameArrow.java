@@ -24,7 +24,7 @@ public class FlameArrow extends Arrow {
         double d0 = this.getX() + vec3.x;
         double d1 = this.getY() + vec3.y;
         double d2 = this.getZ() + vec3.z;
-        this.level.addParticle(ParticleTypes.FLAME, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);  // why the fuck isn't the particle spawning
+        this.level().addParticle(ParticleTypes.FLAME, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);  // why the fuck isn't the particle spawning
         super.tick();
     }
 

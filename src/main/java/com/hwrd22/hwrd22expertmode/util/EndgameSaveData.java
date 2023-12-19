@@ -35,6 +35,7 @@ public class EndgameSaveData extends SavedData {
     }
 
     public static EndgameSaveData manage(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(EndgameSaveData::load, EndgameSaveData::create, "endgameEnabled");
+        Factory<EndgameSaveData> endgameSaveDataFactory = new Factory<>(EndgameSaveData::create, EndgameSaveData::load);
+        return server.overworld().getDataStorage().computeIfAbsent(endgameSaveDataFactory, "endgameEnabled");
     }
 }

@@ -34,6 +34,7 @@ public class WitherKilledSaveData extends SavedData {
     }
 
     public static WitherKilledSaveData manage(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(WitherKilledSaveData::load, WitherKilledSaveData::create, "witherKilled");
+        Factory<WitherKilledSaveData> witherKilledSaveDataFactory = new Factory<>(WitherKilledSaveData::create, WitherKilledSaveData::load);
+        return server.overworld().getDataStorage().computeIfAbsent(witherKilledSaveDataFactory, "witherKilled");
     }
 }

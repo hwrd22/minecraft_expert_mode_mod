@@ -2,7 +2,7 @@ package com.hwrd22.hwrd22expertmode.networking.packet;
 
 import com.hwrd22.hwrd22expertmode.client.ClientRageData;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -21,8 +21,7 @@ public class RageDataSyncS2CPacket {
         buf.writeInt(rage);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
+    public void handle(NetworkEvent.Context context) {
         context.enqueueWork(() -> ClientRageData.set(rage));
     }
 }

@@ -43,6 +43,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -67,16 +68,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
+import net.neoforged.neoforge.event.entity.living.*;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -114,7 +115,7 @@ public class ModEvents {
         if (event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END) {
             event.player.getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(rage -> {
                 boolean nearbyHostiles = false;
-                List<Entity> entities = event.player.getLevel().getEntities(event.player, event.player.getBoundingBox().inflate(16.0D, 8.0D, 16.0D));
+                List<Entity> entities = event.player.level().getEntities(event.player, event.player.getBoundingBox().inflate(16.0D, 8.0D, 16.0D));
                 for (Entity value : entities) {
                     if (value instanceof Enemy) {
                         nearbyHostiles = true;
@@ -144,7 +145,7 @@ public class ModEvents {
                     }
                     ModMessages.sendToPlayer(new RageDataSyncS2CPacket(rage.getRage()), ((ServerPlayer) event.player));
                     if (rage.getRage() == 10000)
-                        event.player.getLevel().playSound(null, event.player.getOnPos(), ModSounds.RAGE_FILLED.get(), SoundSource.PLAYERS, 0.9f, 1.0f);
+                        event.player.level().playSound(null, event.player.getOnPos(), ModSounds.RAGE_FILLED.get(), SoundSource.PLAYERS, 0.9f, 1.0f);
                 }
                 if (rage.getRage() > 0 && rage.getRageUse()) {
 
@@ -156,15 +157,15 @@ public class ModEvents {
                     ModMessages.sendToPlayer(new RageDataSyncS2CPacket(rage.getRage()), ((ServerPlayer) event.player));
                 }
                 else if (rage.getRageUse()){
-                    event.player.getLevel().playSound(null, event.player.getOnPos(), ModSounds.RAGE_EMPTIED.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
+                    event.player.level().playSound(null, event.player.getOnPos(), ModSounds.RAGE_EMPTIED.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
                     rage.resetRageUse();
                     ModMessages.sendToPlayer(new RageDataSyncS2CPacket(rage.getRage()), ((ServerPlayer) event.player));
                 }
             });
             event.player.getCapability(PlayerAdrenalineProvider.PLAYER_ADRENALINE).ifPresent(adrenaline -> {
                 boolean nearbyBosses = false;
-                List<Entity> bossScan = event.player.getLevel().getEntities(event.player, event.player.getBoundingBox().inflate(160.0D, 160.0D, 160.0D));  // Long range for bosses with health bars (Dragon/Wither)
-                List<Entity> minibossScan = event.player.getLevel().getEntities(event.player, event.player.getBoundingBox().inflate(29.0D, 29.0D, 29.0D));  // Shorter range for "bosses" without health bars
+                List<Entity> bossScan = event.player.level().getEntities(event.player, event.player.getBoundingBox().inflate(160.0D, 160.0D, 160.0D));  // Long range for bosses with health bars (Dragon/Wither)
+                List<Entity> minibossScan = event.player.level().getEntities(event.player, event.player.getBoundingBox().inflate(29.0D, 29.0D, 29.0D));  // Shorter range for "bosses" without health bars
                 for (Entity entity : bossScan) {
                     if (entity instanceof WitherBoss || entity instanceof EnderDragon) {
                         nearbyBosses = true;
@@ -182,7 +183,7 @@ public class ModEvents {
                     adrenaline.addAdrenaline(1);
                     ModMessages.sendToPlayer(new AdrenalineDataSyncS2CPacket(adrenaline.getAdrenaline()), ((ServerPlayer) event.player));
                     if (adrenaline.getAdrenaline() == 600)
-                        event.player.getLevel().playSound(null, event.player.getOnPos(), ModSounds.ADRENALINE_FILLED.get(), SoundSource.PLAYERS, 0.9f, 1.0f);
+                        event.player.level().playSound(null, event.player.getOnPos(), ModSounds.ADRENALINE_FILLED.get(), SoundSource.PLAYERS, 0.9f, 1.0f);
                 }
                 else if(adrenaline.getAdrenaline() == 600 && !adrenaline.getAdrenalineUse()) {
                     event.player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 2));
@@ -196,7 +197,7 @@ public class ModEvents {
                     ModMessages.sendToPlayer(new AdrenalineDataSyncS2CPacket(adrenaline.getAdrenaline()), ((ServerPlayer) event.player));
                 }
                 else if (adrenaline.getAdrenalineUse()){
-                    event.player.getLevel().playSound(null, event.player.getOnPos(), ModSounds.ADRENALINE_EMPTIED.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
+                    event.player.level().playSound(null, event.player.getOnPos(), ModSounds.ADRENALINE_EMPTIED.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
                     adrenaline.resetAdrenalineUse();
                     ModMessages.sendToPlayer(new AdrenalineDataSyncS2CPacket(adrenaline.getAdrenaline()), ((ServerPlayer) event.player));
                 }
@@ -207,7 +208,7 @@ public class ModEvents {
             else if (event.player.getY() < 0 && !event.player.hasEffect(MobEffects.NIGHT_VISION)) {
                 event.player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60));
             }
-            if (event.player.level.dimension() == Level.NETHER && !event.player.hasEffect(MobEffects.NIGHT_VISION))
+            if (event.player.level().dimension() == Level.NETHER && !event.player.hasEffect(MobEffects.NIGHT_VISION))
                 event.player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60));
             ServerPlayer advancementChecker = (ServerPlayer) event.player;
             AdvancementProgress progress = advancementChecker.getAdvancements().getOrStartProgress(advancementChecker.createCommandSourceStack().getAdvancement(new ResourceLocation("minecraft", "nether/root")));
@@ -312,7 +313,7 @@ public class ModEvents {
             data = EndgameSaveData.manage(Objects.requireNonNull(event.getLevel().getServer()));
         }
         if (event.getEntity() instanceof Bat bat) {
-            List<Entity> nearbyEntities = bat.getLevel().getEntities(bat, bat.getBoundingBox().inflate(16d));
+            List<Entity> nearbyEntities = bat.level().getEntities(bat, bat.getBoundingBox().inflate(16d));
             for (Entity entity : nearbyEntities) {
                 if (entity instanceof ServerPlayer player) {
                     bat.setTarget(player);
@@ -322,7 +323,7 @@ public class ModEvents {
             bat.setAggressive(true);
         }
         if (event.getEntity() instanceof EnderDragon dragon) {
-            List<? extends Player> players = dragon.getLevel().players();
+            List<? extends Player> players = dragon.level().players();
             int numPlayers = players.size() - 1;  // not counting 1 player
             Objects.requireNonNull(dragon.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(400.0f + numPlayers * 132);
             dragon.setHealth((float) Objects.requireNonNull(dragon.getAttribute(Attributes.MAX_HEALTH)).getValue());
@@ -331,14 +332,14 @@ public class ModEvents {
         if (event.getEntity() instanceof WitherBoss wither) {
             if (wither.addTag("phase2")) {
                 wither.removeTag("phase2");
-                List<? extends Player> players = wither.getLevel().players();
+                List<? extends Player> players = wither.level().players();
                 int numPlayers = players.size() - 1;  // not counting 1 player
                 Objects.requireNonNull(wither.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(300 + numPlayers * 100);
                 wither.setHealth((float) Objects.requireNonNull(wither.getAttribute(Attributes.MAX_HEALTH)).getValue());
                 wither.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
             }
             else {
-                List<? extends Player> players = wither.getLevel().players();
+                List<? extends Player> players = wither.level().players();
                 int numPlayers = players.size() - 1;  // not counting 1 player
                 Objects.requireNonNull(wither.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(750 + numPlayers * 100);  // maxes out at 1024 due to memory limit
                 wither.setHealth((float) Objects.requireNonNull(wither.getAttribute(Attributes.MAX_HEALTH)).getValue());
@@ -643,7 +644,7 @@ public class ModEvents {
                 Objects.requireNonNull(enderMan.getAttribute(Attributes.ATTACK_DAMAGE)).setBaseValue(10.5);
             }
             enderMan.setHealth(70f);
-            if (enderMan.level.dimension() != Level.END) {
+            if (enderMan.level().dimension() != Level.END) {
                 enderMan.setCarriedBlock(Blocks.TNT.defaultBlockState());
             }
         }
@@ -894,7 +895,7 @@ public class ModEvents {
             Entity owner1 = arrow.getOwner();
             // Converts arrows to lightning arrows if it is storming in the level.
             if (owner1 instanceof LivingEntity owner && owner.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.COPPER_HELMET.get() && owner.getItemBySlot(EquipmentSlot.CHEST).getItem() == ModItems.COPPER_CHESTPLATE.get() && owner.getItemBySlot(EquipmentSlot.LEGS).getItem() == ModItems.COPPER_LEGGINGS.get() && owner.getItemBySlot(EquipmentSlot.FEET).getItem() == ModItems.COPPER_BOOTS.get() && event.getLevel().isThundering()) {
-                LightningArrow lightningArrow = new LightningArrow(arrow.getLevel(), owner);
+                LightningArrow lightningArrow = new LightningArrow(arrow.level(), owner);
                 lightningArrow.setPos(arrow.getX(), arrow.getY(), arrow.getZ());
                 int ticks = owner.getTicksUsingItem();
                 if (ticks > 22) {
@@ -924,7 +925,7 @@ public class ModEvents {
             }
         }
 
-        if (event.getEntity() instanceof PrimedTnt tnt && tnt.level.dimension() == Level.NETHER) {
+        if (event.getEntity() instanceof PrimedTnt tnt && tnt.level().dimension() == Level.NETHER) {
             tnt.setFuse(0);  // instant tnt explosion
         }
     }
@@ -968,14 +969,14 @@ public class ModEvents {
     public static void ridingEntityTick(LivingEvent.LivingTickEvent event) {
         if (!event.getEntity().isPassenger()) {
             if (event.getEntity() instanceof Zombie || event.getEntity() instanceof AbstractSkeleton) {
-                List<Entity> nearbyEntities = event.getEntity().getLevel().getEntities(event.getEntity(), event.getEntity().getBoundingBox().inflate(1.0));
+                List<Entity> nearbyEntities = event.getEntity().level().getEntities(event.getEntity(), event.getEntity().getBoundingBox().inflate(1.0));
                 if (event.getEntity() instanceof AbstractSkeleton skeleton) {
                     for (Entity entity : nearbyEntities) {
                         if (entity.getPassengers().isEmpty() && (/*entity instanceof AbstractHorse || entity instanceof Pig ||*/ entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear || entity instanceof Spider || entity instanceof Bat)) {
                             skeleton.startRiding(entity);
                             // Entities controlling horses/pigs is broken in 1.19.4. Will restore when porting to 1.20.1
-                            /*if (entity instanceof AbstractHorse horse)
-                                horse.setTamed(true);*/
+                            if (entity instanceof AbstractHorse horse)
+                                horse.setTamed(true);
                             break;
                         }
                     }
@@ -985,8 +986,8 @@ public class ModEvents {
                         if (entity.getPassengers().isEmpty() && (/*entity instanceof AbstractHorse || entity instanceof Pig ||*/ entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear)) {
                             zombie.startRiding(entity);
                             // Entities controlling horses/pigs is broken in 1.19.4. Will restore when porting to 1.20.1
-                            /*if (entity instanceof AbstractHorse horse)
-                                horse.setTamed(true);*/
+                            if (entity instanceof AbstractHorse horse)
+                                horse.setTamed(true);
                             break;
                         }
                     }
@@ -998,7 +999,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void zombieBlockTick(LivingEvent.LivingTickEvent event) {
         if (event.getEntity() instanceof Zombie zombie) {
-            if (zombie.getLevel().getBlockState(new BlockPos(zombie.getBlockX(), zombie.getBlockY() + 1, zombie.getBlockZ())).getBlock() == Blocks.AIR) {
+            if (zombie.level().getBlockState(new BlockPos(zombie.getBlockX(), zombie.getBlockY() + 1, zombie.getBlockZ())).getBlock() == Blocks.AIR) {
                 zombie.addEffect(new MobEffectInstance(MobEffects.GLOWING));
             }
         }
@@ -1008,8 +1009,8 @@ public class ModEvents {
     public static void onEntityTick(LivingEvent.LivingTickEvent event) {
         Random rand = new Random();
         EndgameSaveData data;
-        if (!event.getEntity().getLevel().isClientSide) {
-            data = EndgameSaveData.manage(Objects.requireNonNull(event.getEntity().getLevel().getServer()));
+        if (!event.getEntity().level().isClientSide) {
+            data = EndgameSaveData.manage(Objects.requireNonNull(event.getEntity().level().getServer()));
 
             if (event.getEntity() instanceof ZombieVillager zombieVillager) {  // moving equipment event here because the on join level event is broken with professions
                 if (zombieVillager.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR) {
@@ -1108,11 +1109,11 @@ public class ModEvents {
             if (event.getEntity() instanceof WitherBoss wither) {
                 if (!wither.addTag("phase2")) {  // only applies to phase 2
                     if (wither.tickCount % 200 == 0) {  // every 10 seconds (20 ticks * 10 seconds = 200 ticks)
-                        WitherSkullBarrier skullBarrier = new WitherSkullBarrier(ModEntityType.SKULL_BARRIER.get(), wither.getLevel());
+                        WitherSkullBarrier skullBarrier = new WitherSkullBarrier(ModEntityType.SKULL_BARRIER.get(), wither.level());
                         skullBarrier.teleportTo(wither.getX() + 3 * (Math.pow(-1, rand.nextInt(2))), wither.getY() + 1, wither.getZ() + 3 * (Math.pow(-1, rand.nextInt(2)))); // randomly spawn?
                         skullBarrier.setPos(wither.getX() + 3, wither.getY() + 1, wither.getZ() + 3);
                         skullBarrier.setOwner(wither);
-                        wither.getLevel().addFreshEntity(skullBarrier);
+                        wither.level().addFreshEntity(skullBarrier);
                     }
                 } else
                     wither.removeTag("phase2");
@@ -1122,7 +1123,7 @@ public class ModEvents {
             }
 
             if (event.getEntity() instanceof Creeper creeper && rand.nextInt(100) == rand.nextInt(100)) {
-                List<Entity> entities = creeper.getLevel().getEntities(creeper, creeper.getBoundingBox().inflate(16.0D, 16.0D, 16.0D));  // I am assuming this will randomly select a villager
+                List<Entity> entities = creeper.level().getEntities(creeper, creeper.getBoundingBox().inflate(16.0D, 16.0D, 16.0D));  // I am assuming this will randomly select a villager
                 for (Entity entity : entities) {
                     if (entity instanceof Villager villager) {
                         creeper.setTarget(villager);
@@ -1132,7 +1133,7 @@ public class ModEvents {
             }
 
             if (event.getEntity() instanceof EnderMan enderMan) {
-                List<Entity> entities = enderMan.getLevel().getEntities(enderMan, enderMan.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
+                List<Entity> entities = enderMan.level().getEntities(enderMan, enderMan.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
                 for (Entity entity : entities) {
                     if (entity instanceof ServerPlayer player) {
                         player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 40));  // 2 secs
@@ -1146,7 +1147,7 @@ public class ModEvents {
 
             if (event.getEntity() instanceof Skeleton skeleton) {
                 boolean nearbyPlayer = false;
-                List<Entity> entities = skeleton.getLevel().getEntities(skeleton, skeleton.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
+                List<Entity> entities = skeleton.level().getEntities(skeleton, skeleton.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
                 for (Entity entity : entities) {
                     if (entity instanceof ServerPlayer player && !(player.isCreative() || player.isSpectator())) {
                         nearbyPlayer = true;
@@ -1179,7 +1180,7 @@ public class ModEvents {
 
             if (event.getEntity() instanceof WitherSkeleton witherSkeleton) {
                 boolean nearbyPlayer = false;
-                List<Entity> entities = witherSkeleton.getLevel().getEntities(witherSkeleton, witherSkeleton.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
+                List<Entity> entities = witherSkeleton.level().getEntities(witherSkeleton, witherSkeleton.getBoundingBox().inflate(5.0D, 5.0D, 5.0D));
                 for (Entity entity : entities) {
                     if (entity instanceof ServerPlayer player && !(player.isCreative() || player.isSpectator())) {
                         nearbyPlayer = true;
@@ -1204,7 +1205,7 @@ public class ModEvents {
 
             if (event.getEntity() instanceof Guardian guardian) {
                 if (guardian.tickCount % 10 == 0) {
-                    List<Entity> entities = guardian.getLevel().getEntities(guardian, guardian.getBoundingBox().inflate(1.0D, 1.0D, 1.0D));
+                    List<Entity> entities = guardian.level().getEntities(guardian, guardian.getBoundingBox().inflate(1.0D, 1.0D, 1.0D));
                     if (guardian instanceof ElderGuardian) {
                         for (Entity entity : entities) {
                             if (entity instanceof ServerPlayer player) {
@@ -1230,21 +1231,21 @@ public class ModEvents {
 
             if (event.getEntity() instanceof ElderGuardian elderGuardian) {
                 if (elderGuardian.tickCount % 200 == 0) {
-                    ServerPlayer player = (ServerPlayer) elderGuardian.getLevel().getNearestPlayer(elderGuardian, 10.0);
+                    ServerPlayer player = (ServerPlayer) elderGuardian.level().getNearestPlayer(elderGuardian, 10.0);
                     if (player != null) {
                         ItemStack gildedTrident = new ItemStack(ModItems.GILDED_TRIDENT.get());
                         gildedTrident.enchant(Enchantments.CHANNELING, 1);
                         gildedTrident.enchant(Enchantments.IMPALING, 2);
-                        ThrownGildedTrident trident = new ThrownGildedTrident(elderGuardian.level, elderGuardian, gildedTrident);
+                        ThrownGildedTrident trident = new ThrownGildedTrident(elderGuardian.level(), elderGuardian, gildedTrident);
                         trident.setPos(elderGuardian.getX(), elderGuardian.getY(), elderGuardian.getZ());
                         trident.teleportTo(elderGuardian.getX(), elderGuardian.getY(), elderGuardian.getZ());
                         double d0 = player.getX() - elderGuardian.getX();
                         double d1 = player.getY(0.3333333333333333D) - trident.getY();
                         double d2 = player.getZ() - elderGuardian.getZ();
                         double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-                        trident.shoot(d0, d1 + d3 * (double) 0.2F, d2, 1.6F, (float) (14 - elderGuardian.level.getDifficulty().getId() * 4));
+                        trident.shoot(d0, d1 + d3 * (double) 0.2F, d2, 1.6F, (float) (14 - elderGuardian.level().getDifficulty().getId() * 4));
                         elderGuardian.playSound(SoundEvents.TRIDENT_THROW, 1.0F, 1.0F / (elderGuardian.getRandom().nextFloat() * 0.4F + 0.8F));
-                        elderGuardian.level.addFreshEntity(trident);
+                        elderGuardian.level().addFreshEntity(trident);
                     }
                 }
             }
@@ -1252,7 +1253,7 @@ public class ModEvents {
             if (event.getEntity() instanceof EnderDragon dragon && dragon.getHealth() > 0f) {
                 boolean noCrystals = true;  // checking for crystals
                 Random randPlayer = new Random();
-                List<? extends Player> players = dragon.getLevel().players();
+                List<? extends Player> players = dragon.level().players();
                 List<Player> survivalPlayers = new ArrayList<>();
                 if (!players.isEmpty()) {
                     for (Player player : players) {
@@ -1261,7 +1262,7 @@ public class ModEvents {
                         }
                     }
                 }
-                List<Entity> nearbyEntities = dragon.getLevel().getEntities(dragon, dragon.getBoundingBox().inflate(200f));
+                List<Entity> nearbyEntities = dragon.level().getEntities(dragon, dragon.getBoundingBox().inflate(200f));
                 for (Entity entity : nearbyEntities) {
                     if (entity instanceof EndCrystal) {  // checking for crystals
                         noCrystals = false;
@@ -1276,35 +1277,35 @@ public class ModEvents {
                         double d2 = randomPlayer.getX() - (dragon.getX() + vec3.x * 16.0D);
                         double d3 = randomPlayer.getY(0.5D) - (dragon.getEyeY());
                         double d4 = randomPlayer.getZ() - (dragon.getZ() + vec3.z * 16.0D);
-                        DragonFireball fireball = new DragonFireball(dragon.level, dragon, d2, d3, d4);
+                        DragonFireball fireball = new DragonFireball(dragon.level(), dragon, d2, d3, d4);
                         fireball.setPos(dragon.getX() + vec3.x * 16.0D, dragon.getEyeY(), fireball.getZ() + vec3.z * 16.0D);
                         dragon.playSound(SoundEvents.ENDER_DRAGON_SHOOT, 1.0F, 1.0F / (dragon.getRandom().nextFloat() * 0.4F + 0.8F));
-                        dragon.level.addFreshEntity(fireball);
+                        dragon.level().addFreshEntity(fireball);
                     } else if (dragon.tickCount % 200 == 40) {
                         Vec3 vec3 = dragon.getViewVector(1.0F);
                         double d2 = randomPlayer.getX() - (dragon.getX() + vec3.x * 16.0D);
                         double d3 = randomPlayer.getY(0.5D) - (dragon.getEyeY());
                         double d4 = randomPlayer.getZ() - (dragon.getZ() + vec3.z * 16.0D);
-                        LargeFireball fireball = new LargeFireball(dragon.level, dragon, d2, d3, d4, 2);
+                        LargeFireball fireball = new LargeFireball(dragon.level(), dragon, d2, d3, d4, 2);
                         fireball.setPos(dragon.getX() + vec3.x * 16.0D, dragon.getEyeY(), fireball.getZ() + vec3.z * 16.0D);
                         dragon.playSound(SoundEvents.ENDER_DRAGON_SHOOT, 1.0F, 1.0F / (dragon.getRandom().nextFloat() * 0.4F + 0.8F));
-                        dragon.level.addFreshEntity(fireball);
+                        dragon.level().addFreshEntity(fireball);
                     }
                     if (dragon.tickCount % 200 == 0 && noCrystals) {  // Shulker bullet on player
-                        ShulkerBullet bullet = new ShulkerBullet(dragon.level, dragon, randomPlayer, Direction.Axis.Y);
+                        ShulkerBullet bullet = new ShulkerBullet(dragon.level(), dragon, randomPlayer, Direction.Axis.Y);
                         bullet.setPos(randomPlayer.getX(), randomPlayer.getY() + 10, randomPlayer.getZ());
                         bullet.setDeltaMovement(0.0, -2.5, 0.0);
                         bullet.playSound(SoundEvents.SHULKER_SHOOT);
-                        dragon.level.addFreshEntity(bullet);
+                        dragon.level().addFreshEntity(bullet);
                     }
                     if (dragon.tickCount % 20 == 0 && noCrystals) {
                         Vec3 vec3 = dragon.getViewVector(1.0F);
                         Random randDirection = new Random();
-                        DragonFireball fireball = new DragonFireball(dragon.level, dragon, 0, 0, 0);
+                        DragonFireball fireball = new DragonFireball(dragon.level(), dragon, 0, 0, 0);
                         fireball.setPos(dragon.getX() + vec3.x * 16.0D, dragon.getEyeY(), fireball.getZ() + vec3.z * 16.0D);
                         fireball.setDeltaMovement(randDirection.nextDouble(-1.0, 1.0), randDirection.nextDouble(-10, -5), randDirection.nextDouble(-1.0, 1.0));
                         dragon.playSound(SoundEvents.ENDER_DRAGON_SHOOT, 1.0F, 1.0F / (dragon.getRandom().nextFloat() * 0.4F + 0.8F));
-                        dragon.level.addFreshEntity(fireball);
+                        dragon.level().addFreshEntity(fireball);
                     }
                 }
             }
@@ -1338,7 +1339,7 @@ public class ModEvents {
                 Random rand = new Random();
                 if (rand.nextInt(10) < 1) {
                     event.setAmount(0);  // 10% chance to negate damage
-                    player.getLevel().playSound(null, player.getOnPos(), ModSounds.GOLD_DAMAGE_NEGATE.get(), SoundSource.PLAYERS, 1.0f, 0.75f);
+                    player.level().playSound(null, player.getOnPos(), ModSounds.GOLD_DAMAGE_NEGATE.get(), SoundSource.PLAYERS, 1.0f, 0.75f);
                 }
             }
             player.getCapability(PlayerRageProvider.PLAYER_RAGE).ifPresent(rage -> {
@@ -1346,13 +1347,13 @@ public class ModEvents {
                     rage.addRage((int) (event.getAmount()) * 50);
                     ModMessages.sendToPlayer(new RageDataSyncS2CPacket(rage.getRage()), player);
                     if (rage.getRage() == 10000)
-                        player.getLevel().playSound(null, player.getOnPos(), ModSounds.RAGE_FILLED.get(), SoundSource.PLAYERS, 0.9f, 1.0f);
+                        player.level().playSound(null, player.getOnPos(), ModSounds.RAGE_FILLED.get(), SoundSource.PLAYERS, 0.9f, 1.0f);
                 }
             });
             player.getCapability(PlayerAdrenalineProvider.PLAYER_ADRENALINE).ifPresent(adrenaline -> {
                 if (!adrenaline.getAdrenalineUse()) {
                     if (adrenaline.getAdrenaline() == 600)
-                        player.getLevel().playSound(null, player.getOnPos(), ModSounds.ADRENALINE_EMPTIED.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
+                        player.level().playSound(null, player.getOnPos(), ModSounds.ADRENALINE_EMPTIED.get(), SoundSource.PLAYERS, 0.5f, 1.0f);
                     adrenaline.resetAdrenaline();
                     ModMessages.sendToPlayer(new AdrenalineDataSyncS2CPacket(adrenaline.getAdrenaline()), player);
                 }
@@ -1360,7 +1361,7 @@ public class ModEvents {
             if (event.getSource().getEntity() instanceof Spider) {
                 BlockPos playerPos = player.getOnPos();
                 BlockPos cobwebPos = new BlockPos(playerPos.getX(), playerPos.getY() + 1, playerPos.getZ());
-                player.getLevel().setBlockAndUpdate(cobwebPos, Blocks.COBWEB.defaultBlockState());
+                player.level().setBlockAndUpdate(cobwebPos, Blocks.COBWEB.defaultBlockState());
             }
             if (event.getSource().getEntity() instanceof EnderMan) {
                 Random random = new Random();
@@ -1374,7 +1375,7 @@ public class ModEvents {
                 double new_z = playerPos.getZ() + z_change;
                 player.teleportTo(new_x, new_y, new_z);
                 player.setPos(new_x, new_y, new_z);
-                player.getLevel().playSound(null, player.getOnPos(), ModSounds.PLAYER_TELEPORTED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                player.level().playSound(null, player.getOnPos(), ModSounds.PLAYER_TELEPORTED.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
             }
             if (event.getSource().getEntity() instanceof PiglinBrute)
                 player.setSecondsOnFire(16);  // molten axe for some reason doesn't work when a non-player hits with it
@@ -1406,7 +1407,7 @@ public class ModEvents {
         Random mendChance2 = new Random();
         boolean dropMending = mendChance1.nextInt(10) == mendChance2.nextInt(10); // 1 in 10 chance
         EndgameSaveData data = new EndgameSaveData();
-        if (!event.getEntity().getLevel().isClientSide) {
+        if (!event.getEntity().level().isClientSide) {
             data = EndgameSaveData.manage(Objects.requireNonNull(event.getEntity().getServer()));
         }
         if (event.getEntity() instanceof WitherBoss wither && event.getSource().getEntity() instanceof ServerPlayer) {
@@ -1514,11 +1515,11 @@ public class ModEvents {
             magmaCube.spawnAtLocation(armors.get(armorDropped));
         }
 
-        if (event.getEntity() instanceof MagmaCube magmaCube && magmaCube.getSize() == 1 && !magmaCube.getLevel().isClientSide) {
+        if (event.getEntity() instanceof MagmaCube magmaCube && magmaCube.getSize() == 1 && !magmaCube.level().isClientSide) {
             BlockPos cubePos = magmaCube.getOnPos();
             BlockPos lavaPos = new BlockPos(cubePos.getX(), cubePos.getY() + 1, cubePos.getZ());
             // Spawn temporary lava
-            magmaCube.getLevel().setBlockAndUpdate(lavaPos, Blocks.LAVA.defaultBlockState().setValue(BlockStateProperties.LEVEL, 1));
+            magmaCube.level().setBlockAndUpdate(lavaPos, Blocks.LAVA.defaultBlockState().setValue(BlockStateProperties.LEVEL, 1));
         }
     }
 }
