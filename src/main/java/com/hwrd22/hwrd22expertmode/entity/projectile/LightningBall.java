@@ -2,7 +2,6 @@ package com.hwrd22.hwrd22expertmode.entity.projectile;
 
 import com.hwrd22.hwrd22expertmode.entity.ArrowBolt;
 import com.hwrd22.hwrd22expertmode.entity.ModEntityType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.damagesource.DamageSource;
