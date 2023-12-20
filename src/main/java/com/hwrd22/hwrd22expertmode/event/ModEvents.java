@@ -26,6 +26,7 @@ import com.hwrd22.hwrd22expertmode.util.EndgameSaveData;
 import com.hwrd22.hwrd22expertmode.util.WitherKilledSaveData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -55,6 +56,7 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.*;
@@ -80,6 +82,9 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = ExpertMode.MODID)
@@ -296,6 +301,103 @@ public class ModEvents {
         }
     }
 
+    private static void checkProfession(ZombieVillager zombieVillager) {
+        // Check the profession using reflection or other means
+        try {
+            VillagerData villagerData = zombieVillager.getVillagerData();
+            VillagerProfession profession = villagerData.getProfession();
+
+            // Now you have the profession, you can do something with it
+            System.out.println("Zombie Villager spawned with profession: " + profession);
+            if (zombieVillager.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR) {
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.ARMORER)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.BUTCHER)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CARTOGRAPHER)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CLERIC)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FARMER)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CARVED_PUMPKIN));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FISHERMAN)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.BARREL));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FLETCHER)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LIBRARIAN)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.MASON)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LEATHERWORKER)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.NITWIT)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIRT, 1));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.SHEPHERD)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.WHITE_WOOL, 1));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.TOOLSMITH)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.WEAPONSMITH)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.NONE)
+                    zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.OAK_LEAVES, 1));
+            }
+            if (zombieVillager.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.AIR) {
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.ARMORER)
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.BUTCHER)
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CARTOGRAPHER) {
+                    ItemStack sharpPaper = new ItemStack(Items.PAPER, 1);
+                    sharpPaper.enchant(Enchantments.SHARPNESS, 5);
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, sharpPaper);
+                }
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CLERIC) {
+                    Random rand = new Random();
+                    int staff = rand.nextInt(3);
+                    if (staff == 0) {
+                        ItemStack fireStaff = new ItemStack(ModItems.FIRE_STAFF.get());  // create new item
+                        fireStaff.enchant(Enchantments.FIRE_ASPECT, 2); // enchant created item
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, fireStaff);
+                    }
+                    if (staff == 1)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.ICE_STAFF.get()));
+                    if (staff == 2)
+                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.LIGHTNING_STAFF.get()));
+                }
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FARMER)
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.SCYTHE.get()));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FISHERMAN)
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.SPEAR.get()));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FLETCHER) {
+                    ItemStack arrow = new ItemStack(Items.ARROW, 1);
+                    arrow.enchant(Enchantments.SHARPNESS, 5);
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, arrow);
+                }
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LEATHERWORKER)
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KNIFE.get()));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LIBRARIAN) {
+                    ItemStack sharpBook = new ItemStack(Items.BOOK, 1);  // create a new item
+                    sharpBook.enchant(Enchantments.SHARPNESS, 5);  // enchant the created item
+                    sharpBook.enchant(Enchantments.FIRE_ASPECT, 2);  // enchant the created item
+                    sharpBook.enchant(Enchantments.KNOCKBACK, 1);  // enchant the created item
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, sharpBook);  // set equipment for librarian z.villager
+                }
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.MASON)
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KNIFE.get()));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.NITWIT)
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STICK, 1));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.SHEPHERD)
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.TOOLSMITH)
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_PICKAXE));
+                if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.WEAPONSMITH)
+                    zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @SubscribeEvent
     public static void onPlayerJoinWorld(EntityJoinLevelEvent event) {
         if (!event.getLevel().isClientSide()) {
@@ -395,6 +497,14 @@ public class ModEvents {
             Objects.requireNonNull(zombie.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.345);
         }
         if (event.getEntity() instanceof ZombieVillager zombieVillager) {
+            zombieVillager.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 5));  // temporary fire res
+            ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+            int delayInMilliseconds = 100;
+            executorService.schedule(() -> {
+                // Your code to be executed after the delay
+                Minecraft.getInstance().execute(() -> checkProfession(zombieVillager));
+            }, delayInMilliseconds, TimeUnit.MILLISECONDS);
+            executorService.shutdown();
             Objects.requireNonNull(zombieVillager.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(0.4025);
             if (data.get()) {
                 Objects.requireNonNull(zombieVillager.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(40.0);
@@ -972,22 +1082,16 @@ public class ModEvents {
                 List<Entity> nearbyEntities = event.getEntity().getLevel().getEntities(event.getEntity(), event.getEntity().getBoundingBox().inflate(1.0));
                 if (event.getEntity() instanceof AbstractSkeleton skeleton) {
                     for (Entity entity : nearbyEntities) {
-                        if (entity.getPassengers().isEmpty() && (/*entity instanceof AbstractHorse || entity instanceof Pig ||*/ entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear || entity instanceof Spider || entity instanceof Bat)) {
+                        if (entity.getPassengers().isEmpty() && (entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear || entity instanceof Spider || entity instanceof Bat)) {
                             skeleton.startRiding(entity);
-                            // Entities controlling horses/pigs is broken in 1.19.4. Will restore when porting to 1.20.1
-                            /*if (entity instanceof AbstractHorse horse)
-                                horse.setTamed(true);*/
                             break;
                         }
                     }
                 }
                 if (event.getEntity() instanceof Zombie zombie) {
                     for (Entity entity : nearbyEntities) {
-                        if (entity.getPassengers().isEmpty() && (/*entity instanceof AbstractHorse || entity instanceof Pig ||*/ entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear)) {
+                        if (entity.getPassengers().isEmpty() && (entity instanceof Chicken || entity instanceof Cow || entity instanceof Fox || entity instanceof Ocelot || entity instanceof Rabbit || entity instanceof Sheep || entity instanceof Turtle || entity instanceof AbstractVillager || entity instanceof Dolphin || entity instanceof Goat || entity instanceof PolarBear)) {
                             zombie.startRiding(entity);
-                            // Entities controlling horses/pigs is broken in 1.19.4. Will restore when porting to 1.20.1
-                            /*if (entity instanceof AbstractHorse horse)
-                                horse.setTamed(true);*/
                             break;
                         }
                     }
@@ -1012,91 +1116,6 @@ public class ModEvents {
         if (!event.getEntity().getLevel().isClientSide) {
             data = EndgameSaveData.manage(Objects.requireNonNull(event.getEntity().getLevel().getServer()));
 
-            if (event.getEntity() instanceof ZombieVillager zombieVillager) {  // moving equipment event here because the on join level event is broken with professions
-                if (zombieVillager.getItemBySlot(EquipmentSlot.HEAD).getItem() == Items.AIR) {
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.ARMORER)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.BUTCHER)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CARTOGRAPHER)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CLERIC)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FARMER)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CARVED_PUMPKIN));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FISHERMAN)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.BARREL));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FLETCHER)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LIBRARIAN)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.MASON)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LEATHERWORKER)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.NITWIT)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIRT, 1));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.SHEPHERD)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.WHITE_WOOL, 1));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.TOOLSMITH)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.WEAPONSMITH)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.NONE)
-                        zombieVillager.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.OAK_LEAVES, 1));
-                }
-                if (zombieVillager.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Items.AIR) {
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.ARMORER)
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.BUTCHER)
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CARTOGRAPHER) {
-                        ItemStack sharpPaper = new ItemStack(Items.PAPER, 1);
-                        sharpPaper.enchant(Enchantments.SHARPNESS, 5);
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, sharpPaper);
-                    }
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.CLERIC) {
-                        int staff = rand.nextInt(3);
-                        if (staff == 0) {
-                            ItemStack fireStaff = new ItemStack(ModItems.FIRE_STAFF.get());  // create new item
-                            fireStaff.enchant(Enchantments.FIRE_ASPECT, 2); // enchant created item
-                            zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, fireStaff);
-                        }
-                        if (staff == 1)
-                            zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.ICE_STAFF.get()));
-                        if (staff == 2)
-                            zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.LIGHTNING_STAFF.get()));
-                    }
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FARMER)
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.SCYTHE.get()));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FISHERMAN)
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.SPEAR.get()));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.FLETCHER) {
-                        ItemStack arrow = new ItemStack(Items.ARROW, 1);
-                        arrow.enchant(Enchantments.SHARPNESS, 5);
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, arrow);
-                    }
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LEATHERWORKER)
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KNIFE.get()));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.LIBRARIAN) {
-                        ItemStack sharpBook = new ItemStack(Items.BOOK, 1);  // create a new item
-                        sharpBook.enchant(Enchantments.SHARPNESS, 5);  // enchant the created item
-                        sharpBook.enchant(Enchantments.FIRE_ASPECT, 2);  // enchant the created item
-                        sharpBook.enchant(Enchantments.KNOCKBACK, 1);  // enchant the created item
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, sharpBook);  // set equipment for librarian z.villager
-                    }
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.MASON)
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.KNIFE.get()));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.NITWIT)
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STICK, 1));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.SHEPHERD)
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.TOOLSMITH)
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_PICKAXE));
-                    if (zombieVillager.getVillagerData().getProfession() == VillagerProfession.WEAPONSMITH)
-                        zombieVillager.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-                }
-            }
             if (event.getEntity() instanceof Husk husk) {
                 if (husk.getBlockStateOn().getBlock() == Blocks.SAND || husk.getBlockStateOn().getBlock() == Blocks.SUSPICIOUS_SAND || husk.getBlockStateOn().getBlock() == Blocks.RED_SAND) {
                     husk.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 1, 2));  // Husks are faster on sand
@@ -1401,16 +1420,16 @@ public class ModEvents {
         if (event.getEntity() instanceof Villager villager && event.getSource().getEntity() instanceof ZombieVillager)
             villager.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN));
         if (event.getSource().getEntity() instanceof LivingEntity damagingEntity) {
-            if (event.getEntity().getItemInHand(InteractionHand.MAIN_HAND).getItem() != Items.AIR && damagingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ThiefGloveItem && !(event.getEntity() instanceof ServerPlayer)) {
-                damagingEntity.setItemInHand(InteractionHand.MAIN_HAND, event.getEntity().getItemInHand(InteractionHand.MAIN_HAND));
-                event.getEntity().setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.AIR));
-                damagingEntity.playSound(SoundEvents.ITEM_PICKUP);
-            }
             if (damagingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof SwordItem || damagingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof AxeItem) {
                 Random random = new Random();
                 if (random.nextInt(100) < 5) {
                     event.getEntity().addEffect(new MobEffectInstance(ModEffects.BLEEDING.get(), random.nextInt(100, 600)));
                 }
+            }
+            if (event.getEntity().getItemInHand(InteractionHand.MAIN_HAND).getItem() != Items.AIR && damagingEntity.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ThiefGloveItem && !(event.getEntity() instanceof ServerPlayer)) {
+                damagingEntity.setItemInHand(InteractionHand.MAIN_HAND, event.getEntity().getItemInHand(InteractionHand.MAIN_HAND));
+                event.getEntity().setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.AIR));
+                damagingEntity.playSound(SoundEvents.ITEM_PICKUP);
             }
         }
     }
